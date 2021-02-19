@@ -1,0 +1,13 @@
+{
+	"id" : "volvooncall",
+	"name" : "Volvo On Call",
+	"description" : "Plugin permettent de récupéer les fonctionnalités de Volvo On Call",
+	"licence" : "AGPL",
+	"author" : "Bruce LIOU",
+	"require" : "4.0",
+	"language": "fr_FR",
+	"category" : "devicecommunication",
+	"compatibility" : ["miniplus","smart","rpi","docker","diy","mobile","v4"],
+	"documentation" : "https://bruce-liou.github.io/Documentations/volvooncall/#language#/",
+	"changelog" : "https://bruce-liou.github.io/Documentations/volvooncall/#language#/changelog"
+}

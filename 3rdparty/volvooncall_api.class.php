@@ -1,10 +1,10 @@
 <?php
 // Function VOC
-class vocapi
+class volvooncall_api
 {
-    private $VocUsername = '';
-    private $VocPassword = '';
-    private $VocRegion = '';
+    private $VocUsername;
+    private $VocPassword;
+    private $VocRegion;
 
 
     private $api_url = 'https://vocapi.wirelesscar.net/customerapi/rest/v3.0';

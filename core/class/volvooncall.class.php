@@ -18,7 +18,7 @@
 
 /* * ***************************Includes********************************* */
 require_once __DIR__  . '/../../../../core/php/core.inc.php';
-require_once dirname(__FILE__) . '/../../3rdparty/vocapi.class.php';
+require_once dirname(__FILE__) . '/../../3rdparty/volvooncall_api.class.php';
 
 define("CARS_FILES_DIR", "/../../data/");
 
@@ -135,11 +135,7 @@ class volvooncall extends eqLogic
     $VocPassword = $this->getConfiguration('VocPassword');
     $VocRegion = $this->getConfiguration('VocRegion');
 
-    $this->$VocUsername = $VocUsername;
-    $this->$VocPassword = $VocPassword;
-    $this->$VocRegion = $VocRegion;
-
-    $session_volvooncall = new vocapi();
+    $session_volvooncall = new volvooncall_api();
 
     $account = $session_volvooncall->getAccount();   // Authentification
 
@@ -237,8 +233,8 @@ class volvooncall extends eqLogic
   // ==========================================================================================
   public static function pull()
   {
-    log::add('volvooncall_map', 'debug', 'Funcion pull');
-    if (config::byKey('VocUsername', 'volvooncall') != "" || config::byKey('VocPassword', 'volvooncall') != "") {
+    log::add('volvooncall', 'debug', 'Funcion pull');
+    if ($this->getConfiguration('VocUsername') != "" || $this->getConfiguration('VocPassword') != "") {
       log::add('volvooncall', 'debug', 'Mise à jour périodique');
       foreach (self::byType('volvooncall') as $eqLogic) {
         $eqLogic->periodic_state(0);
@@ -278,7 +274,7 @@ class volvooncall extends eqLogic
     $minute = intval(date("i"));
     $heure  = intval(date("G"));
     // Appel API pour le statut courant du vehicule
-    $session_volvooncall = new vocapi();
+    $session_volvooncall = new volvooncall_api();
     $vin = $session_volvooncall->getVin();
 
     $fn_car_gps   = dirname(__FILE__) . CARS_FILES_DIR . $vin . '/gps.log';
@@ -463,7 +459,7 @@ class volvooncallCmd extends cmd
   {
     if ($this->getLogicalId() == 'refresh') {
         log::add('volvooncall','info',"Refresh data");
-        if (config::byKey('VocUsername', 'volvooncall') != "" || config::byKey('VocPassword', 'volvooncall') != "" ) {
+        if ($this->getConfiguration('VocUsername') != "" || $this->getConfiguration('VocPassword') != "") {
           foreach (eqLogic::byType('volvooncall') as $eqLogic) {
             $eqLogic->periodic_state(1);
           }

@@ -10,6 +10,6 @@ Cette APi fonctionne avec une authentification basique.
 * Elle permet aussi de lancer des commandes de démarrage/chauffage/planification de pré-climatisation
 
 ## Documentation
-[Documentation](/blob/master/docs/fr_FR/documentation.md)
+[Documentation](/docs/fr_FR/documentation.md)
 ## Changelog
-[Changelog](blob/master/docs/fr_FR/changelog.md)
+[Changelog](/docs/fr_FR/changelog.md)

@@ -1,5 +1,6 @@
 # Documentation du plugin volvooncall
 <hr>
+
 ## Notes importantes
 --
 L'API utilisée est celle de Wirelesscar et n'a pas de documentation !
@@ -19,6 +20,7 @@ Mais je me suis dis qu'il serait bien que les propriétaires de VOLVO puissent e
 Ce plugin est largement inspiré de celui développé par Lelas pour les voitures Peugeot.
 Merci à lui !
 <hr>
+
 ## Fonctions
 
 Ce plugin permet d'accèder aux informations de votre voiture connectée Volvo :

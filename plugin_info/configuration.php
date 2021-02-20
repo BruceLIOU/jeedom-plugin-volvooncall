@@ -21,7 +21,7 @@ if (!isConnect('admin')) {
 	throw new Exception('{{401 - Accès non autorisé}}');
 }
 ?>
-
+<!--
 <form class="form-horizontal" id="config">
     <div class="form-group">
         <label class="col-lg-4 control-label">{{Compte Volvo On Call}}</label>
@@ -46,4 +46,5 @@ if (!isConnect('admin')) {
         </div>
     </div>
 </form>
+-->
 <?php include_file('desktop', 'volvooncall', 'js', 'volvooncall'); ?>

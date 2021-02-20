@@ -131,13 +131,9 @@ class volvooncall extends eqLogic
   public function postSave()
   {
     // Login API
-    $VocUsername = $this->getConfiguration('VocUsername');
-    $VocPassword = $this->getConfiguration('VocPassword');
-    $VocRegion = $this->getConfiguration('VocRegion');
-
-    $this->$VocUsername = $VocUsername;
-    $this->$VocPassword = $VocPassword;
-    $this->$VocRegion = $VocRegion;
+    $VocUsername = config::byKey('VocUsername', 'volvooncall');
+    $VocPassword = config::byKey('VocPassword', 'volvooncall');
+    $VocRegion = config::byKey('VocRegion', 'volvooncall');
 
     $session_volvooncall = new vocapi();
 

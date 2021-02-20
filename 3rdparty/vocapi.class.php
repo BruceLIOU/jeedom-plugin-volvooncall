@@ -1,5 +1,4 @@
 <?php
-
 // Function VOC
 class vocapi
 {
@@ -14,6 +13,7 @@ class vocapi
     private $ACCOUNT_RELATION = '/vehicle-account-relations/';
     private $VEHICLE = '/vehicles/';
 
+
     private function _request($url) {
         $ch = curl_init();
       
@@ -21,6 +21,7 @@ class vocapi
         curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
       	curl_setopt($ch, CURLOPT_USERPWD, $this->VocUsername . ":" . $this->VocPassword);
+      	//curl_setopt($ch, CURLOPT_USERPWD, $this->getConfiguration('VocUsername') . ":" . $this->getConfiguration('VocPassword'));
       	curl_setopt($ch, CURLOPT_URL, $url);
        	curl_setopt($ch, CURLOPT_HTTPHEADER, array(
             'Cache-control: no-cache',
@@ -40,6 +41,20 @@ class vocapi
         if (!$response)
           throw new \Exception('Unable to retrieve data');
     
+        /*
+        // Get response
+        $body = [];
+        $header_size = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
+        $header = substr($response, 0, $header_size);
+        $body[] = substr($response, $header_size);
+    
+        curl_close($ch);
+    
+        return (object)[
+          'headers' => $header,
+          'body' => $body
+        ];
+        */
         // Check if error
         if(curl_errno($ch)) {
             $info = [];

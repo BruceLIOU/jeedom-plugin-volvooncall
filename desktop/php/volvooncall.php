@@ -77,10 +77,10 @@ $eqLogics = eqLogic::byType($plugin->getId());
 						<div class="col-lg-7">
 							<legend><i class="fas fa-wrench"></i> {{Général}}</legend>
 							<div class="form-group">
-								<label class="col-sm-3 control-label">{{Nom de l'équipement}}</label>
+								<label class="col-sm-3 control-label">{{Nom de la voiture}}</label>
 								<div class="col-sm-7">
 									<input type="text" class="eqLogicAttr form-control" data-l1key="id" style="display : none;"/>
-									<input type="text" class="eqLogicAttr form-control" data-l1key="name" placeholder="{{Nom de l'équipement}}"/>
+									<input type="text" class="eqLogicAttr form-control" data-l1key="name" placeholder="{{Nom de la voiture}}"/>
 								</div>
 							</div>
 							<div class="form-group">
@@ -117,7 +117,29 @@ $eqLogics = eqLogic::byType($plugin->getId());
 									<label class="checkbox-inline"><input type="checkbox" class="eqLogicAttr" data-l1key="isVisible" checked/>{{Visible}}</label>
 								</div>
 							</div>
-							<br>
+							<legend><i class="fas fa-cogs"></i> {{Paramètres}}</legend>
+							<div class="form-group">
+								<label class="col-sm-3 control-label">{{Compte Volvo On Call}}</label>
+								<div class="col-lg-7">
+									<input class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="VocUsername"/>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label">{{Mot de passe Volvo On Call}}</label>
+								<div class="col-lg-7">
+									<input class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="VocPassword" type="password"/>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label">{{Région Volvo On Call}}</label>
+								<div class="col-lg-7">
+									<select class="eqLogicAttr form-control input-sm" data-l1key="configuration" data-l2key="VocRegion" name="VocRegion" id="VocRegion">
+										<option value="na">{{Amérique du nord}}</option>
+										<option value="cn">{{Chine}}</option>
+										<option value="eu">{{Europe}}</option>
+									</select>
+								</div>
+							</div>
 							<!--
 							<legend><i class="fas fa-cogs"></i> {{Paramètres}}</legend>
 							<div class="form-group">

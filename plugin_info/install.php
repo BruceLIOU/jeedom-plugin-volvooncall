@@ -18,19 +18,40 @@
 
 require_once dirname(__FILE__) . '/../../../core/php/core.inc.php';
 
-// Fonction exécutée automatiquement après l'installation du plugin
-  function template_install() {
+function volvooncall_install() {
+  $cron = cron::byClassAndFunction('volvooncall', 'pull');
+	if ( ! is_object($cron)) {
+    $cron = new cron();
+    $cron->setClass('volvooncall');
+    $cron->setFunction('pull');
+    $cron->setEnable(1);
+    $cron->setDeamon(0);
+    $cron->setSchedule('* * * * *');
+    $cron->save();
+	}
+}
 
+function volvooncall_update() {
+	foreach (eqLogic::byType('volvooncall') as $eqLogic) {
+		$eqLogic->save();
+	}
+  $cron = cron::byClassAndFunction('volvooncall', 'pull');
+	if ( ! is_object($cron)) {
+    $cron = new cron();
+    $cron->setClass('volvooncall');
+    $cron->setFunction('pull');
+    $cron->setEnable(1);
+    $cron->setDeamon(0);
+    $cron->setSchedule('* * * * *');
+    $cron->save();
+	}
+}
+
+function volvooncall_remove() {
+  $cron = cron::byClassAndFunction('volvooncall', 'pull');
+  if (is_object($cron)) {
+  $cron->stop();
+    $cron->remove();
   }
-
-// Fonction exécutée automatiquement après la mise à jour du plugin
-  function template_update() {
-
-  }
-
-// Fonction exécutée automatiquement après la suppression du plugin
-  function template_remove() {
-
-  }
-
+}
 ?>

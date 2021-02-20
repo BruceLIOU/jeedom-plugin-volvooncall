@@ -137,18 +137,17 @@ class volvooncall extends eqLogic
 
     $session_volvooncall = new volvooncall_api();
 
-    $account = $session_volvooncall->getAccount();   // Authentification
+    log::add('volvooncall', 'debug', 'VocUsername : '.$this->getConfiguration('VocUsername'));
 
-    if (!$account) {
+    $login = $session_volvooncall->login($this->getConfiguration('VocUsername'), $this->getConfiguration('VocPassword'));
+    log::add('volvooncall', 'debug', $login);
+
+    if ($login != true) {
       log::add('volvooncall', 'error', "Erreur Login");
       return;  // Erreur de login API VOLVO
     }
 
     $vin = $session_volvooncall->getVin();
-    if (!$vin) {
-      log::add('volvooncall', 'error', "Erreur VIN");
-      return;  // Erreur de VIN API VOLVO
-    }
 
     // creation de la liste des commandes / infos
     foreach ($this->getListeDefaultCommandes() as $id => $data) {
@@ -217,6 +216,8 @@ class volvooncall extends eqLogic
     $refresh->setSubType('other');
     $refresh->save();
     log::add('volvooncall', 'debug', 'postSave:Ajout ou Mise à jour véhicule:' . $vin);
+    $test_odometer = $session_volvooncall->getStatus($vin);
+    log::add('volvooncall', 'debug', 'test de retour API:' . $test_odometer["odometer"]);
 
     $vin_dir = dirname(__FILE__) . CARS_FILES_DIR . $vin;
     if (!file_exists($vin_dir)) {
@@ -234,12 +235,12 @@ class volvooncall extends eqLogic
   public static function pull()
   {
     log::add('volvooncall', 'debug', 'Funcion pull');
-    if ($this->getConfiguration('VocUsername') != "" || $this->getConfiguration('VocPassword') != "") {
-      log::add('volvooncall', 'debug', 'Mise à jour périodique');
-      foreach (self::byType('volvooncall') as $eqLogic) {
+
+    log::add('volvooncall', 'debug', 'Mise à jour périodique');
+    foreach (self::byType('volvooncall') as $eqLogic) {
         $eqLogic->periodic_state(0);
-      }
     }
+
   }
 
   // Fonction exécutée automatiquement après la suppression de l'équipement 
@@ -274,13 +275,18 @@ class volvooncall extends eqLogic
     $minute = intval(date("i"));
     $heure  = intval(date("G"));
     // Appel API pour le statut courant du vehicule
+
     $session_volvooncall = new volvooncall_api();
+
     $vin = $session_volvooncall->getVin();
+    log::add('volvooncall', 'debug', 'VocUsername : '.$this->getConfiguration('VocUsername'));
+
+    $session_volvooncall->login($this->getConfiguration('VocUsername'), $this->getConfiguration('VocPassword'));
 
     $fn_car_gps   = dirname(__FILE__) . CARS_FILES_DIR . $vin . '/gps.log';
     $fn_car_trips = dirname(__FILE__) . CARS_FILES_DIR . $vin . '/trips.log';
 
-    if ($this->getIsEnable()) {
+    if ( $this->getIsEnable() && $this->getConfiguration('volvooncall') != "" ) {
       $cmd_record_period = $this->getCmd(null, "record_period");
       $record_period = $cmd_record_period->execCmd();
       if ($record_period == NULL)
@@ -459,10 +465,8 @@ class volvooncallCmd extends cmd
   {
     if ($this->getLogicalId() == 'refresh') {
         log::add('volvooncall','info',"Refresh data");
-        if ($this->getConfiguration('VocUsername') != "" || $this->getConfiguration('VocPassword') != "") {
-          foreach (eqLogic::byType('volvooncall') as $eqLogic) {
+        foreach (eqLogic::byType('volvooncall') as $eqLogic) {
             $eqLogic->periodic_state(1);
-          }
         }
       }
   }

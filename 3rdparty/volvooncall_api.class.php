@@ -2,9 +2,9 @@
 // Function VOC
 class volvooncall_api
 {
-    private $VocUsername;
-    private $VocPassword;
-    private $VocRegion;
+    private $VocUsername = '';
+    private $VocPassword = '';
+    private $VocRegion = '';
 
 
     private $api_url = 'https://vocapi.wirelesscar.net/customerapi/rest/v3.0';
@@ -13,6 +13,14 @@ class volvooncall_api
     private $ACCOUNT_RELATION = '/vehicle-account-relations/';
     private $VEHICLE = '/vehicles/';
 
+    function login($VocUsername, $VocPassword)
+    {
+      $this->VocUsername = $VocUsername;
+      $this->VocPassword = $VocPassword;
+
+      if (isset($this->VocUsername) && isset($this->VocPassword))
+      return true;
+    }
 
     private function _request($url) {
         $ch = curl_init();

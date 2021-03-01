@@ -602,12 +602,71 @@ class volvooncall extends eqLogic
     foreach (self::byType('volvooncall') as $eqLogic) {
         $eqLogic->updateData();
     }
+    $eqLogic->trips();
 
   }
 
   // Fonction exécutée automatiquement après la suppression de l'équipement 
   public function postRemove()
   {
+  }
+
+  public function trips()
+  {
+    $session_volvooncall = new volvooncall_api();
+
+    $login = $session_volvooncall->login($this->getConfiguration('VocUsername'), $this->getConfiguration('VocPassword'));
+      
+    //Vérification des identifiants
+    if ($login != true) {
+       log::add('volvooncall', 'error', "Erreur Login");
+       return;  // Erreur de login API VOLVO
+    }
+    
+    $vin = $session_volvooncall->getVin();
+    log::add('volvooncall', 'debug', 'VIN : '.$vin);
+
+    // Appel de l'API
+    $retT = [];
+    $retT = $session_volvooncall->getTrips($vin);
+
+
+    $vin_dir = dirname(__FILE__).CARS_FILES_DIR.$vin;
+    if (!file_exists($vin_dir)) {
+      mkdir($vin_dir, 0777);
+      log::add('volvooncall', 'debug', 'folder : '.$vin_dir);
+    }
+
+    file_put_contents($vin_dir.'/trips.json', $retT['trips']);
+    $fn_car = file_get_contents('./trips.json');
+
+    $jsonTrips = json_decode($fn_car, TRUE);
+    foreach($jsonTrips['trips'] as $trip)
+    {
+        $id = $trip['id'];
+
+        $startTime = $trip['tripDetails'][0]['startTime'];
+        $startTimeF = date_create($startTime);
+        $endTime = $trip['tripDetails'][0]['endTime'];
+        $endTimeF = date_create($endTime);
+        //$duree = dateDiff(strtotime($startTime),strtotime($endTime));
+        $duree = date_diff($startTimeF, $endTimeF);
+        $dureeF = $duree->format('%H:%I');
+
+        $villes = $trip['tripDetails'][0]['startPosition']['city'].'/'.$trip['tripDetails'][0]['endPosition']['city'];
+
+        $distance = $trip['tripDetails'][0]['distance']/1000;
+        $electricalConsumption = $trip['tripDetails'][0]['electricalConsumption']/1000;
+        $fuelConsumtion = $trip['tripDetails'][0]['fuelConsumption']/1000;
+
+        $startpositionLat = $trip['tripDetails'][0]['startPosition']['latitude'];
+        $startpositionLon = $trip['tripDetails'][0]['startPosition']['longitude'];
+
+        $endPositionLat = $trip['tripDetails'][0]['endPosition']['latitude'];
+        $endPositionLon = $trip['tripDetails'][0]['endPosition']['longitude'];
+    }
+
+    print $villes;
   }
 
   public function updateData()
@@ -796,6 +855,7 @@ class volvooncallCmd extends cmd
         foreach (eqLogic::byType('volvooncall') as $eqLogic) {
             $eqLogic->updateData();
         }
+        $eqLogic->trips();
       }
   }
 

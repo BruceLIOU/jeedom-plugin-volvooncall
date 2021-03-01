@@ -6,7 +6,6 @@ class volvooncall_api
     private $VocPassword;
     private $VocRegion;
 
-
     private $api_url = 'https://vocapi.wirelesscar.net/customerapi/rest/v3.0';
 
     private $ACCOUNT = '/customeraccounts';
@@ -155,12 +154,8 @@ class volvooncall_api
         //print_r($result["result"]);
     
         return $result["result"];
-        //return json_decode($result->body);
+        //return json_decode($result["result"]);
     }
     
 }
-//$call = new vocapi();
-//$test = $call->getAttributes("YV1XZBBVFM2418828");
-//print_r($test);
-//echo $test['numberOfDoors'];
 ?>

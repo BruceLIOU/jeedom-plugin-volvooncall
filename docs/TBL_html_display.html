@@ -1,0 +1,390 @@
+<div id="exTab3" class="container container_volvooncall">
+    <ul class="nav nav-pills">
+        <li class="active">
+            <a href="#car_trips_tab" data-toggle="tab">Trajets</a>
+        </li>
+        <li>
+            <a href="#car_stat_tab" data-toggle="tab">Caractéristiques</a>
+        </li>
+        <li>
+            <a href="#car_cmd_tab" data-toggle="tab">Commandes</a>
+        </li>
+        <li>
+            <a href="#car_maint_tab" data-toggle="tab">Entretien</a>
+        </li>
+    </ul>
+
+    <div class="tab-content clearfix content_volcooncall">
+        <div class="tab-pane active" id="car_trips_tab">
+            <form class="form-horizontal">
+                <fieldset style="border: 1px solid #e5e5e5; border-radius: 5px 5px 5px 5px;">
+                    <div style="min-height: 10px;">
+                    </div>
+                    <div style="min-height:40px;font-size: 1.5em;">
+                        <i style="font-size: initial;"></i> {{Période analysée}}
+                    </div>
+                    <div style="min-height:30px;">
+                        <div class="pull-left" style="font-size: 1.3em;"> Début:
+                            <input id="gps_startDate" class="pull-right form-control input-sm in_datepicker"
+                                style="display : inline-block; width: 87px;" value="" />
+                        </div>
+                        <div class="pull-left" style="font-size: 1.3em;">Fin:
+                            <input id="gps_endDate" class="pull-right form-control input-sm in_datepicker"
+                                style="display : inline-block; width: 87px;" value="" />
+                        </div>
+                        <a style="margin-left:5px" class="pull-left btn btn-primary btn-sm tooltips"
+                            id='btgps_validChangeDate' title="{{Mise à jour des données sur la période}}">{{Mise à jour
+                            période}}</a><br>
+                    </div>
+                    <div style="min-height:50px;">
+                        <div style="padding-top:10px;font-size: 1.5em;">
+                            <a style="margin-right:5px;" class="pull-left btn btn-success btn-sm tooltips"
+                                id='btgps_per_today'>{{Aujourd'hui}}</a>
+                            <a style="margin-right:5px;" class="pull-left btn btn-success btn-sm tooltips"
+                                id='btgps_per_yesterday'>{{Hier}}</a>
+                            <a style="margin-right:5px;" class="pull-left btn btn-success btn-sm tooltips"
+                                id='btgps_per_this_week'>{{Cette semaine}}</a>
+                            <a style="margin-right:5px;" class="pull-left btn btn-success btn-sm tooltips"
+                                id='btgps_per_last_week'>{{Les 7 derniers jours}}</a>
+                            <a style="margin-right:5px;" class="pull-left btn btn-success btn-sm tooltips"
+                                id='btgps_per_all'>{{Tout}}</a>
+                        </div>
+                    </div>
+                </fieldset>
+            </form>
+            <div style="min-height: 10px;"></div>
+            <div>
+                <form class="form-horizontal">
+                    <fieldset style="border: 1px solid #e5e5e5; border-radius: 5px 5px 5px 5px;">
+                        <div
+                            style="padding-top:10px;padding-left:24px;padding-bottom:10px;color: #333;font-size: 1.5em;">
+                            <i style="font-size: initial;"></i> {{Historique des trajets réalisés sur cette période}}
+                        </div>
+                        <div id='trips_info' style="font-size: 1.2em;"></div>
+                        <div style="v"></div>
+                        <br>
+                    </fieldset>
+
+                </form>
+            </div>
+            <div style="min-height: 10px;"></div>
+            <div>
+                <div id="trips_list" style="float:left;width:45%">
+                    <div id='div_hist_liste' style="font-size: 1.2em;"></div>
+                    <div id='div_hist_liste2' style="font-size: 1.2em;">
+                        <table id="trip_liste" class="display compact" width="100%"></table>
+                    </div>
+                    <div id="trips_separ" style="margin-left:45%;width:1%">
+                    </div>
+                    <div id="trips_map" style="margin-left:46%;width:54%">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane" id="car_stat_tab">
+            <h3>Caractéristiques du véhicule</h3>
+          	<h4><a href="https://s.volvocars.com/AqgdNKlUpeOEl742" target="_blank">Voir sur le site de Volvo</a></h4>
+          	<p id="model">Modèle : <span class="model"></span></p>
+          	<p id="model_annee">Année du modèle : <span class="model_annee"></span></p>
+          	<p id="capacite_reservoir">Capacité réservoir : <span class="capacite_reservoir"></span>L</p>
+            <p id="immatriculation">Immatriculation : <span class="immatriculation"></span></p>
+          	<hr>
+          	<p id="moyenneVitesse">Vitesse moyenne : <span class="stateMoyenneVitesse"></span> km/h</p>
+          	<p id="moyenneConso">Consommation moyenne : <span class="stateConsoMoyenne"></span> l/km</p>
+          	<p id="TM">TM : <span class="stateTM"></span> km</p>
+          	<p id="TA">TA : <span class="stateTA"></span> km</p>
+        </div>
+        <div class="tab-pane" id="car_cmd_tab">
+            <h3>Toutes les commandes</h3>
+            <p><a class="btn">Démarrer le moteur</a></p>
+            <p><a class="btn">Allumer la climatisation</a></p>
+            <p><a class="btn">Programmer la climatisation</a></p>
+            <p><a class="btn">Vérrouiller le véhicule</a></p>
+        </div>
+        <div class="tab-pane" id="car_maint_tab">
+            <h3>Maintenance du véhicule</h3>
+            <p id="kilometrage">Kilométrage : <span class="stateKilometrage"></span> km</p>
+            <p id="dateRevision">Date prochaine révision : <span class="stateDateRevision"></span><span class="stateJoursRevision"></span></p>
+            <p id="distanceRevision">Distance révision : <span class="stateDistanceRevision"></span> km</p>
+
+            <div classs="entretien">
+                <h1>Programme d'entretien</h1>
+                <ul class="nav nav-pills">
+                    <li id="16k">
+                        <a href="#div_16k" data-toggle="tab">16 K</a>
+                    </li>
+                    <li id="32k">
+                        <a href="#div_32k" data-toggle="tab">32 K</a>
+                    </li>
+                    <li id="48k">
+                        <a href="#div_48k" data-toggle="tab">48 K</a>
+                    </li>
+                    <li id="64k">
+                        <a href="#div_64k" data-toggle="tab">64 K</a>
+                    </li>
+                    <li id="80k">
+                        <a href="#div_80k" data-toggle="tab">80 K</a>
+                    </li>
+                    <li id="96k">
+                        <a href="#div_96k" data-toggle="tab">96 K</a>
+                    </li>
+                </ul>
+                <div class="tab-content clearfix content_volcooncall">
+                    <div class="tab-pane" id="div_16k">
+                        <ul>
+                            <li>Changement de l’huile et des filtres (appoint avec huile synthétique)</li>
+                            <li>Inspection du châssis</li>
+                            <li>Mise à jour du logiciel technique</li>
+                            <li>Nettoyage du pare-brise devant la caméra IntelliSafe</li>
+                        </ul>
+                    </div>
+                    <div class="tab-pane" id="div_32k">
+                        <ul>
+                            <li>Changement de l’huile et des filtres (appoint avec huile synthétique)</li>
+                            <li>Inspection du châssis et de l’usure</li>
+                            <li>Remplacement du filtre à air de l’habitacle</li>
+                            <li>Mise à jour du logiciel technique</li>
+                            <li>Nettoyage du pare-brise devant la caméra IntelliSafe</li>
+                        </ul>
+                    </div>
+                    <div class="tab-pane" id="div_48k">
+                        <ul>
+                            <li>Changement de l’huile et des filtres (appoint avec huile synthétique)</li>
+                            <li>Inspection du châssis</li>
+                            <li>Mise à jour du logiciel technique</li>
+                            <li>Nettoyage du pare-brise devant la caméra IntelliSafe</li>
+                        </ul>
+                    </div>
+                    <div class="tab-pane" id="div_64k">
+                        <ul>
+                            <li>Changement de l’huile et des filtres (appoint avec huile synthétique)</li>
+                            <li>Inspection du châssis</li>
+                            <li>Inspection du groupe motopropulseur et de l’usure</li>
+                            <li>Remplacement du filtre de l’habitacle, du filtre à air du moteur</li>
+                            <li>Remplacement du liquide de freins</li>
+                            <li>Mise à jour du logiciel technique</li>
+                            <li>Nettoyage du pare-brise devant la caméra IntelliSafe</li>
+                        </ul>
+                    </div>
+                    <div class="tab-pane" id="div_80k">
+                        <ul>
+                            <li>Changement de l’huile et des filtres (appoint avec huile synthétique)</li>
+                            <li>Inspection du châssis</li>
+                            <li>Mise à jour du logiciel technique</li>
+                            <li>Nettoyage du pare-brise devant la caméra IntelliSafe</li>
+                        </ul>
+                    </div>
+                    <div class="tab-pane" id="div_96k">
+                        <ul>
+                            <li>Changement de l’huile et des filtres (appoint avec huile synthétique, selon la
+                                disponibilité)</li>
+                            <li>Inspection du châssis et de l’usure</li>
+                            <li>Remplacement du filtre à air de l’habitacle et des bougies </li>
+                            <li>Mise à jour du logiciel technique</li>
+                            <li>Nettoyage du pare-brise devant la caméra IntelliSafe</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+      	$(".in_datepicker").datepicker();
+      	moment.locale('fr'); 
+     
+        /* Partie à adapter avec l'ID de vos commandes */
+      	var model = 4882;
+        var model_annee = 4883;
+        var capacite_reservoir = 4885;
+        var immatriculation = 4884;
+      	var stateKilometrage = 4895;
+      	var stateVitesseMoyenne = 4887;
+      	var stateConsoMoyenne = 4886;
+      	var stateTM = 4898;
+      	var stateTA = 4899;
+      	/* Saisir la date de 1ère mise en circulation */
+      	var dateCircul = '27/08/2020'; //au format jj/mm/aaaa
+      	
+      
+        var seizeMille = 16000;
+        var dateseizeMille = moment(dateCircul, 'DD/MM/YYYY').add(1, 'y');
+        var trenteDeuxMille = 32000;
+        var datetrenteDeuxMille = moment(dateseizeMille, 'DD/MM/YYYY');
+        var quaranteHuitMille = 48000;
+        var datequaranteHuitMille = moment(datetrenteDeuxMille, 'DD/MM/YYYY'); 
+        var soixanteQuatreMille = 64000;
+        var datesoixanteQuatreMille = moment(datequaranteHuitMille, 'DD/MM/YYYY');
+        var quatreVingtMille = 80000;
+        var datequatreVingtMille = moment(datesoixanteQuatreMille, 'DD/MM/YYYY');
+
+        var distanceRevisionKm = 0;
+      
+		var today = moment().format('L');
+      	var jourRevision = moment().endOf('day').fromNow();
+      
+        $('#model')[0].setAttribute('data-cmd_id', model);
+      	jeedom.cmd.update[model] = function (_options) {
+            jeedom.cmd.execute({ // Récupération de la valeur  
+                id: model,
+                success: function (valeur_courante) {
+                    //      alert(valeur_courante);
+                    $('.model').empty().append(valeur_courante);
+                }
+            })
+        };
+      	jeedom.cmd.update[model]();
+
+        $('#model_annee')[0].setAttribute('data-cmd_id', model_annee);
+      	jeedom.cmd.update[model_annee] = function (_options) {
+            jeedom.cmd.execute({ // Récupération de la valeur  
+                id: model_annee,
+                success: function (valeur_courante) {
+                    //      alert(valeur_courante);
+                    $('.model_annee').empty().append(valeur_courante);
+                }
+            })
+        };
+      	jeedom.cmd.update[model_annee]();
+
+        $('#capacite_reservoir')[0].setAttribute('data-cmd_id', capacite_reservoir);
+      	jeedom.cmd.update[capacite_reservoir] = function (_options) {
+            jeedom.cmd.execute({ // Récupération de la valeur  
+                id: capacite_reservoir,
+                success: function (valeur_courante) {
+                    //      alert(valeur_courante);
+                    $('.capacite_reservoir').empty().append(valeur_courante);
+                }
+            })
+        };
+      	jeedom.cmd.update[capacite_reservoir]();
+
+        $('#immatriculation')[0].setAttribute('data-cmd_id', immatriculation);
+      	jeedom.cmd.update[immatriculation] = function (_options) {
+            jeedom.cmd.execute({ // Récupération de la valeur  
+                id: immatriculation,
+                success: function (valeur_courante) {
+                    //      alert(valeur_courante);
+                    $('.immatriculation').empty().append(valeur_courante);
+                }
+            })
+        };
+      	jeedom.cmd.update[immatriculation]();
+      
+        $('#moyenneVitesse')[0].setAttribute('data-cmd_id', stateVitesseMoyenne);
+      	jeedom.cmd.update[stateVitesseMoyenne] = function (_options) {
+            jeedom.cmd.execute({ // Récupération de la valeur  
+                id: stateVitesseMoyenne,
+                success: function (valeur_courante) {
+                    //      alert(valeur_courante);
+                    $('.stateMoyenneVitesse').empty().append(valeur_courante);
+                }
+            })
+        };
+      	jeedom.cmd.update[stateVitesseMoyenne]();
+
+        $('#moyenneConso')[0].setAttribute('data-cmd_id', stateConsoMoyenne);
+      	jeedom.cmd.update[stateConsoMoyenne] = function (_options) {
+            jeedom.cmd.execute({ // Récupération de la valeur  
+                id: stateConsoMoyenne,
+                success: function (valeur_courante) {
+                    //      alert(valeur_courante);
+                    $('.stateConsoMoyenne').empty().append(valeur_courante);
+                }
+            })
+        };
+      	jeedom.cmd.update[stateConsoMoyenne]();
+
+        $('#TM')[0].setAttribute('data-cmd_id', stateTM);
+      	jeedom.cmd.update[stateTM] = function (_options) {
+            jeedom.cmd.execute({ // Récupération de la valeur  
+                id: stateTM,
+                success: function (valeur_courante) {
+                    //      alert(valeur_courante);
+                    $('.stateTM').empty().append(valeur_courante);
+                }
+            })
+        };
+      	jeedom.cmd.update[stateTM]();
+      
+        $('#TA')[0].setAttribute('data-cmd_id', stateTA);
+      	jeedom.cmd.update[stateTA] = function (_options) {
+            jeedom.cmd.execute({ // Récupération de la valeur  
+                id: stateTA,
+                success: function (valeur_courante) {
+                    //      alert(valeur_courante);
+                    $('.stateTA').empty().append(valeur_courante);
+                }
+            })
+        };
+      	jeedom.cmd.update[stateTA]();
+      
+        $('#kilometrage')[0].setAttribute('data-cmd_id', stateKilometrage);
+      	jeedom.cmd.update[stateKilometrage] = function (_options) {
+            jeedom.cmd.execute({ // Récupération de la valeur  
+                id: stateKilometrage,
+                success: function (valeur_courante) {
+                    //      alert(valeur_courante);
+                    $('.stateKilometrage').empty().append(Math.round(valeur_courante * 100) / 100);
+                    if (valeur_courante < seizeMille) {
+                        $('#16k').addClass('active');
+                        $('#div_16k').addClass('active');
+                        distanceRevisionKm = seizeMille - valeur_courante;
+                      	var dateRevision = moment(dateseizeMille).format('L'); 
+                      	var jourRevision = " (" + moment(dateseizeMille).endOf('day').fromNow() + ")";
+                        $('.stateDistanceRevision').empty().append(Math.round(distanceRevisionKm * 100) / 100);
+                        $('.stateDateRevision').empty().append(dateRevision);
+                      	$('.stateJoursRevision').empty().append(jourRevision);
+                    }
+                    else if (valeur_courante > seizeMille && valeur_courante < trenteDeuxMille) {
+                        $('#32k').addClass('active');
+                        $('#div_32k').addClass('active');
+                        distanceRevisionKm = trenteDeuxMille - valeur_courante;
+                        var dateRevision = moment(datetrenteDeuxMille).format('L'); 
+                      	var jourRevision = " (" + moment(datetrenteDeuxMille).endOf('day').fromNow() + ")";
+                        $('.stateDistanceRevision').empty().append(Math.round(distanceRevisionKm * 100) / 100);
+                        $('.stateDateRevision').empty().append(dateRevision);
+                      	$('.stateJoursRevision').empty().append(jourRevision);
+                    }
+                    else if (valeur_courante > trenteDeuxMille && valeur_courante < quaranteHuitMille) {
+                        $('#48k').addClass('active');
+                        $('#div_48k').addClass('active');
+                        distanceRevisionKm = quaranteHuitMille - valeur_courante;
+                        var dateRevision = moment(datequaranteHuitMille).format('L'); 
+                      	var jourRevision = " (" + moment(datequaranteHuitMille).endOf('day').fromNow() + ")";
+                        $('.stateDistanceRevision').empty().append(Math.round(distanceRevisionKm * 100) / 100);
+                        $('.stateDateRevision').empty().append(dateRevision);
+                      	$('.stateJoursRevision').empty().append(jourRevision);
+                    }
+                    else if (valeur_courante > quaranteHuitMille && valeur_courante < soixanteQuatreMille) {
+                        $('#64k').addClass('active');
+                        $('#div_64k').addClass('active');
+                        distanceRevisionKm = soixanteQuatreMille - valeur_courante;
+                        var dateRevision = moment(datesoixanteQuatreMille).format('L'); 
+                      	var jourRevision = " (" + moment(datesoixanteQuatreMille).endOf('day').fromNow() + ")";
+                        $('.stateDistanceRevision').empty().append(Math.round(distanceRevisionKm * 100) / 100);
+                        $('.stateDateRevision').empty().append(dateRevision);
+                      	$('.stateJoursRevision').empty().append(jourRevision);
+                    }
+                    else if (valeur_courante > soixanteQuatreMille && valeur_courante < quatreVingtMille) {
+                        $('#80k').addClass('active');
+                        $('#div_80k').addClass('active');
+                        distanceRevisionKm = quatreVingtMille - valeur_courante;
+                        var dateRevision = moment(datequatreVingtMille).format('L'); 
+                      	var jourRevision = " (" + moment(datequatreVingtMille).endOf('day').fromNow() + ")";
+                        $('.stateDistanceRevision').empty().append(Math.round(distanceRevisionKm * 100) / 100);
+                        $('.stateDateRevision').empty().append(dateRevision);
+                      	$('.stateJoursRevision').empty().append(jourRevision);
+                    }
+                    else if (valeur_courante > quatreVingtMille) {
+                        $('#96k').addClass('active');
+                        $('#div_96k').addClass('active');
+                    }
+                }
+            })
+        };
+
+        jeedom.cmd.update[stateKilometrage]();
+
+    </script>
+
+</div>

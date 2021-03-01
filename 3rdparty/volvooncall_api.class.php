@@ -2,9 +2,9 @@
 // Function VOC
 class volvooncall_api
 {
-    private $VocUsername = '';
-    private $VocPassword = '';
-    private $VocRegion = '';
+    private $VocUsername;
+    private $VocPassword;
+    private $VocRegion;
 
 
     private $api_url = 'https://vocapi.wirelesscar.net/customerapi/rest/v3.0';
@@ -132,7 +132,7 @@ class volvooncall_api
     
         $params = null; //?client_longitude=0.000000&client_precision=0.000000&client_latitude=0.000000
         $result = $this->_request($this->api_url . $this->VEHICLE . $vin . '/position'.$params);
-        print_r($result["result"]);
+        //print_r($result["result"]);
     
         return $result["result"];
     }
@@ -142,7 +142,7 @@ class volvooncall_api
     
         $params = null; //?status=Accepted
         $result = $this->_request($this->api_url . $this->VEHICLE . $vin . '/chargeLocations'.$params);
-        print_r($result["result"]);
+        //print_r($result["result"]);
     
         return $result["result"];
         //return json_decode($result->body);
@@ -152,7 +152,7 @@ class volvooncall_api
         $this->_checkAuth();
     
         $result = $this->_request($this->api_url . $this->VEHICLE . $vin . '/trips');
-        print_r($result["result"]);
+        //print_r($result["result"]);
     
         return $result["result"];
         //return json_decode($result->body);

@@ -24,6 +24,11 @@ $eqLogics = eqLogic::byType($plugin->getId());
 				<br>
 				<span>{{Configuration}}</span>
 			</div>
+			<div class="cursor eqLogicAction logoSecondary" onclick="window.open('https:\/\/github.com/BruceLIOU/jeedom-plugin-volvooncall/blob/master/docs/fr_FR/documentation.md', '_blank')">
+                <i class="fas fa-book"></i>
+                <br>
+                <span>{{Documentation}}</span>
+            </div>
 		</div>
 		<legend><i class="fas fa-table"></i> {{Mes voitures}}</legend>
 		<!-- Champ de recherche -->
@@ -136,7 +141,7 @@ $eqLogics = eqLogic::byType($plugin->getId());
 									<select class="eqLogicAttr form-control input-sm" data-l1key="configuration" data-l2key="VocRegion" name="VocRegion" id="VocRegion">
 										<option value="na">{{Amérique du nord}}</option>
 										<option value="cn">{{Chine}}</option>
-										<option value="eu">{{Europe}}</option>
+										<option selected="selected" value="eu">{{Europe}}</option>
 									</select>
 								</div>
 							</div>

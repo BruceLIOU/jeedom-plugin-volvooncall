@@ -7,7 +7,9 @@
 	"require" : "4.0",
 	"language": "fr_FR",
 	"category" : "devicecommunication",
-	"compatibility" : ["miniplus","smart","rpi","docker","diy","mobile","v4"],
-	"documentation" : "https://bruce-liou.github.io/Documentations/volvooncall/#language#/",
-	"changelog" : "https://bruce-liou.github.io/Documentations/volvooncall/#language#/changelog"
+	"hasDependency" : false,
+	"hasOwnDeamon" : false,
+	"compatibility" : ["v4"],
+	"documentation" : "https://github.com/BruceLIOU/jeedom-plugin-volvooncall/blob/master/docs/#language#/documentation.md",
+	"changelog" : "https://github.com/BruceLIOU/jeedom-plugin-volvooncall/blob/master/docs/#language#/changelog.md"
 }

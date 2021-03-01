@@ -8,4 +8,8 @@
 
 - Initialisation du projet
 - Ce plugin n'est pas fonctionnel pour le moment (erreur de LOGIN)
-
+ # 01/03/2021
+ - Plugin fonctionnel mais en cours de développement
+ - Création fichiers de documentation
+ - Création widget
+ - Ajout code HTML (plugin HTML display) pour affichage détaillé dans un desgin

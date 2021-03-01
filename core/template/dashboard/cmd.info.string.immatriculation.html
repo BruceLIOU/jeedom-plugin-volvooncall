@@ -1,0 +1,26 @@
+<style>
+    .immat {
+      background-color: white;
+      padding: 4px;
+      border-left: 12px solid blue;
+      border-right: 12px solid blue;
+      border-radius: 2px;
+      color: black !important;
+    }
+</style>
+<div class="cmd cmd-widget #history#" data-type="info" data-subtype="string" data-template="tile" data-cmd_id="#id#" data-cmd_uid="#uid#" data-version="#version#" data-eqLogic_id="#eqLogic_id#">
+	<div class="title #hide_name#">
+		<div class="cmdName">#name_display#</div>
+	</div>
+	<div class="content-sm ">
+		<span class="iconCmd"></span>
+	</div>
+	<script>
+		jeedom.cmd.update['#id#'] = function(_options){
+			$('.cmd[data-cmd_id=#id#]').attr('title','{{Date de valeur}} : '+_options.valueDate+'<br/>{{Date de collecte}} : '+_options.collectDate)
+			let immat = '<span class="immat">'+_options.display_value+'</span>';
+			$('.cmd[data-cmd_id=#id#] .iconCmd').empty().append(immat);
+		}
+		jeedom.cmd.update['#id#']({display_value:'#state#',valueDate:'#valueDate#',collectDate:'#collectDate#',alertLevel:'#alertLevel#'});
+	</script>
+</div>

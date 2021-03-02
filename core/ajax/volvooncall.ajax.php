@@ -16,9 +16,8 @@
  * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-require_once dirname(__FILE__) . '/../../3rdparty/vocapi.class.php';
+require_once dirname(__FILE__) . '/../../3rdparty/volvooncall_api.class.php';
 
-define("MYP_FILES_DIR",  "/../../data/MyVolvo/");
 define("CARS_FILES_DIR", "/../../data/");
 
 global $cars_dt;
@@ -36,7 +35,7 @@ function get_car_trips_gps($vin, $ts_start, $ts_end)
   // Lecture des trajets
   // -------------------
   // ouverture du fichier de log: trajets
-  $fn_car = dirname(__FILE__).CARS_FILES_DIR.$vin.'/trips.log';
+  $fn_car = dirname(__FILE__).CARS_FILES_DIR.$vin.'/trips.json';
   $fcar = fopen($fn_car, "r");
 
   // lecture des donnees

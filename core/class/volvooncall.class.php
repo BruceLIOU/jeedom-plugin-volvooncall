@@ -626,22 +626,30 @@ class volvooncall extends eqLogic
     $vin = $session_volvooncall->getVin();
     log::add('volvooncall', 'debug', 'VIN : '.$vin);
 
-    // Appel de l'API
-    $retT = [];
-    $retT = $session_volvooncall->getTrips($vin);
-
-
     $vin_dir = dirname(__FILE__).CARS_FILES_DIR.$vin;
     if (!file_exists($vin_dir)) {
       mkdir($vin_dir, 0777);
-      log::add('volvooncall', 'debug', 'folder : '.$vin_dir);
     }
 
-    file_put_contents($vin_dir.'/trips.json', $retT['trips']);
-    $fn_car = file_get_contents('./trips.json');
+    // Appel de l'API
+    $retT = $session_volvooncall->getTrips($vin);
+    
+    $jsonFile = json_encode($retT['trips']);
 
+    /*
+    echo '<pre>';
+    var_dump($retT['trips']);
+    echo '</pre>';
+    */
+
+    file_put_contents($vin_dir.'/trips.json', $jsonFile);
+
+    /*$fn_car = file_get_contents('./trips.json');
+    $jsonTrips= [];
     $jsonTrips = json_decode($fn_car, TRUE);
-    foreach($jsonTrips['trips'] as $trip)
+    
+
+    foreach($retT['trips'] as $trip)
     {
         $id = $trip['id'];
 
@@ -664,9 +672,9 @@ class volvooncall extends eqLogic
 
         $endPositionLat = $trip['tripDetails'][0]['endPosition']['latitude'];
         $endPositionLon = $trip['tripDetails'][0]['endPosition']['longitude'];
-    }
 
-    print $villes;
+        //log::add('volvooncall', 'debug', 'villes : '.$villes);
+    }*/
   }
 
   public function updateData()

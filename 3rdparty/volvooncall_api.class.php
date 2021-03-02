@@ -6,6 +6,25 @@ class volvooncall_api
     private $VocPassword;
     private $VocRegion;
 
+    public function switchRegion(){
+        switch ($this->VocRegion) {
+            case 'eu':
+                $domain = '';
+                break;
+            case 'na':
+                $domain = '-na';
+                break;
+            case 'ch':
+                $domain = '-ch';
+                break;
+            default:
+                $domain = '';
+        }
+        return $domain;
+    }
+
+
+
     private $api_url = 'https://vocapi.wirelesscar.net/customerapi/rest/v3.0';
 
     private $ACCOUNT = '/customeraccounts';
@@ -154,7 +173,7 @@ class volvooncall_api
         //print_r($result["result"]);
     
         return $result["result"];
-        //return json_decode($result["result"]);
+        //return json_decode($result->body, true);
     }
     
 }

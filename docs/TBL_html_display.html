@@ -18,36 +18,26 @@
         <div class="tab-pane active" id="car_trips_tab">
             <form class="form-horizontal">
                 <fieldset style="border: 1px solid #e5e5e5; border-radius: 5px 5px 5px 5px;">
-                    <div style="min-height: 10px;">
-                    </div>
+                    <div style="min-height: 10px;"></div>
                     <div style="min-height:40px;font-size: 1.5em;">
-                        <i style="font-size: initial;"></i> {{Période analysée}}
+                        <i style="font-size: initial;"></i> Période analysée
                     </div>
                     <div style="min-height:30px;">
                         <div class="pull-left" style="font-size: 1.3em;"> Début:
-                            <input id="gps_startDate" class="pull-right form-control input-sm in_datepicker"
-                                style="display : inline-block; width: 87px;" value="" />
+                            <input id="gps_startDate" class="pull-right form-control input-sm in_datepicker" style="display : inline-block; width: 87px;" value="" />
                         </div>
                         <div class="pull-left" style="font-size: 1.3em;">Fin:
-                            <input id="gps_endDate" class="pull-right form-control input-sm in_datepicker"
-                                style="display : inline-block; width: 87px;" value="" />
+                            <input id="gps_endDate" class="pull-right form-control input-sm in_datepicker" style="display : inline-block; width: 87px;" value="" />
                         </div>
-                        <a style="margin-left:5px" class="pull-left btn btn-primary btn-sm tooltips"
-                            id='btgps_validChangeDate' title="{{Mise à jour des données sur la période}}">{{Mise à jour
-                            période}}</a><br>
+                        <a style="margin-left:5px" class="pull-left btn btn-primary btn-sm tooltips" id='btgps_validChangeDate' title="Mise à jour des données sur la période">Mise à jour période</a><br>
                     </div>
                     <div style="min-height:50px;">
                         <div style="padding-top:10px;font-size: 1.5em;">
-                            <a style="margin-right:5px;" class="pull-left btn btn-success btn-sm tooltips"
-                                id='btgps_per_today'>{{Aujourd'hui}}</a>
-                            <a style="margin-right:5px;" class="pull-left btn btn-success btn-sm tooltips"
-                                id='btgps_per_yesterday'>{{Hier}}</a>
-                            <a style="margin-right:5px;" class="pull-left btn btn-success btn-sm tooltips"
-                                id='btgps_per_this_week'>{{Cette semaine}}</a>
-                            <a style="margin-right:5px;" class="pull-left btn btn-success btn-sm tooltips"
-                                id='btgps_per_last_week'>{{Les 7 derniers jours}}</a>
-                            <a style="margin-right:5px;" class="pull-left btn btn-success btn-sm tooltips"
-                                id='btgps_per_all'>{{Tout}}</a>
+                            <a style="margin-right:5px;" class="pull-left btn btn-success btn-sm tooltips" id='btgps_per_today'>Aujourd'hui</a>
+                            <a style="margin-right:5px;" class="pull-left btn btn-success btn-sm tooltips" id='btgps_per_yesterday'>Hier</a>
+                            <a style="margin-right:5px;" class="pull-left btn btn-success btn-sm tooltips" id='btgps_per_this_week'>Cette semaine</a>
+                            <a style="margin-right:5px;" class="pull-left btn btn-success btn-sm tooltips" id='btgps_per_last_week'>Les 7 derniers jours</a>
+                            <a style="margin-right:5px;" class="pull-left btn btn-success btn-sm tooltips" id='btgps_per_all'>Tout</a>
                         </div>
                     </div>
                 </fieldset>
@@ -56,15 +46,19 @@
             <div>
                 <form class="form-horizontal">
                     <fieldset style="border: 1px solid #e5e5e5; border-radius: 5px 5px 5px 5px;">
-                        <div
-                            style="padding-top:10px;padding-left:24px;padding-bottom:10px;color: #333;font-size: 1.5em;">
-                            <i style="font-size: initial;"></i> {{Historique des trajets réalisés sur cette période}}
+                        <div style="padding-top:10px;padding-left:24px;padding-bottom:10px;color: #333;font-size: 1.5em;">
+                            <i style="font-size: initial;"></i> Historique des trajets réalisés sur cette période
+                            <div style="padding-top:8px;color: #fff;font-size: 0.6em;">
+                                Nombre de trajet : <span id="nombre_trajets"></span><br>
+                                Distance totale : <span id="distance_totale"></span> km<br>
+                                Consommation carburant : <span id="conso_carburant_totale"></span> l<br>
+                                Consommation électrique : <span id="conso_batterie_totale"></span> kWh<br>
+                            </div>
                         </div>
                         <div id='trips_info' style="font-size: 1.2em;"></div>
-                        <div style="v"></div>
+                        <div></div>
                         <br>
                     </fieldset>
-
                 </form>
             </div>
             <div style="min-height: 10px;"></div>
@@ -74,10 +68,8 @@
                     <div id='div_hist_liste2' style="font-size: 1.2em;">
                         <table id="trip_liste" class="display compact" width="100%"></table>
                     </div>
-                    <div id="trips_separ" style="margin-left:45%;width:1%">
-                    </div>
-                    <div id="trips_map" style="margin-left:46%;width:54%">
-                    </div>
+                    <div id="trips_separ" style="margin-left:45%;width:1%"></div>
+                    <div id="trips_map" style="margin-left:46%;width:54%"></div>
                 </div>
             </div>
         </div>
@@ -189,7 +181,9 @@
         </div>
     </div>
     <script>
-      	$(".in_datepicker").datepicker();
+        $( ".in_datepicker" ).datepicker({
+            dateFormat: 'dd-mm-yy'
+         });
       	moment.locale('fr'); 
      
         /* Partie à adapter avec l'ID de vos commandes */
@@ -382,6 +376,19 @@
                 }
             })
         };
+
+        // Trips boucle
+        /*
+        var json = $.getJSON('/plugins/volvooncall/data/VIN/trips.json');
+        var data_length = json.length;
+        console.log(data_length);
+        for (var i = 0; i < data_length; i++) {
+          alert(data[i]["trips"]);
+        }
+        /*let trips = { name:"Bill", age: 25, degree: "Masters" };
+        for (var item in trips) {
+            alert(trips[item])
+         }*/
 
         jeedom.cmd.update[stateKilometrage]();
 

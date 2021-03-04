@@ -33,3 +33,6 @@
     font-size: 45px;
     cursor:pointer;
 }
+#car_cmd_tab .row i:hover{
+    color:dimgrey;
+}

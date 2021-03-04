@@ -12,6 +12,10 @@
 
               $('.cmd[data-cmd_id=#id#] .state').empty().append('<span style="color:green;">Véhicule chargé</span>');
           }
+          else if (_options.display_value == "PlugRemoved") {
+
+            $('.cmd[data-cmd_id=#id#] .state').empty().append('<span style="color:red;">Véhicule non branché</span>');
+          }
           else {
               $('.cmd[data-cmd_id=#id#] .state').empty().append('<span style="color:red;">Véhicule en charge</span>');
             (function blink() {

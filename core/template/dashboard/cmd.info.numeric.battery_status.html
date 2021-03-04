@@ -2,7 +2,7 @@
   <div class="title #hide_name#">
     <div class="cmdName">#name_display#</div>
   </div>
-  <div class="widget-container">
+  <div id="container_battery" class="widget-container">
     <div class="battery">
          <div class="juice"></div>
     </div>
@@ -27,9 +27,10 @@
     display:block;
     padding:0px;
     position:relative;
+  }
+  #container_battery {
     margin-top: 15px;
   }
-    
   .battery{
     width: var(--widget_width);
     height: var(--widget_height);

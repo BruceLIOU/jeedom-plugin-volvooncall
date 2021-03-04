@@ -28,70 +28,62 @@ global $car_infos;
 // =====================================================
 // Fonction de lecture de tous les trajets d'une voiture
 // =====================================================
-function get_car_trips_gps($vin, $ts_start, $ts_end)
+function get_car_trips($vin, $ts_start, $ts_end)
 {
-  global $cars_dt;
-  
-  // Lecture des trajets
-  // -------------------
-  // ouverture du fichier de log: trajets
-  $fn_car = dirname(__FILE__).CARS_FILES_DIR.$vin.'/trips.json';
-  $fcar = fopen($fn_car, "r");
+  $session_volvooncall = new volvooncall_api();
+  $login = $session_volvooncall->login($this->getConfiguration('VocUsername'), $this->getConfiguration('VocPassword'));
 
-  // lecture des donnees
-  $line = 0;
-  $cars_dt["trips"] = [];
-  $first_ts = time();
-  $last_ts  = 0;
-  if ($fcar) {
-    while (($buffer = fgets($fcar, 4096)) !== false) {
-      // extrait les timestamps debut et fin du trajet
-      list($tr_tss, $tr_tse, $tr_ds, $tr_batt) = explode(",", $buffer);
-      $tsi_s = intval($tr_tss);
-      $tsi_e = intval($tr_tse);
-      // selectionne les trajets selon leur date depart&arrive
-      if (($tsi_s>=$ts_start) && ($tsi_s<=$ts_end)) {
-        $cars_dt["trips"][$line] = $buffer;
-        $line = $line + 1;
-        // Recherche des ts mini et maxi pour les trajets retenus
-        if ($tsi_s<$first_ts)
-          $first_ts = $tsi_s;
-        if ($tsi_e>$last_ts)
-          $last_ts = $tsi_e;
+  $info_trip = [];
+  if ($login) {
+    // Section caractéristiques véhicule
+    $vin = $session_volvooncall->getVin();
+    $retT = $session_volvooncall->getTrips($vin);
+
+    if ($retT) {
+      log::add('volvooncall','debug','get_car_trips:success='.$retT);
+      $info_trip["dist"]                     = 0;
+      $info_trip["elec"]                     = 0;
+      $info_trip["fuel"]                     = 0;
+    
+      $info_trip["total"]                    = count($retT['trips']);
+
+      foreach ($retT['trips'] as $trips)
+      {
+        $info_trip["dist"]                   += $trips['tripDetails'][0]['distance']/1000;
+        $info_trip["elec"]                   += $trips['tripDetails'][0]['electricalConsumption']/1000;
+        $info_trip["fuel"]                   += $trips['tripDetails'][0]['fuelConsumption']/1000;
+
+        $info_trip["id"]                     = $trips['id'];
+        $info_trip["startTime"]              = $trips['tripDetails'][0]['startTime'];
+        $info_trip["startTimeF"]             = date_create($info_trip["startTime"]);
+        $info_trip["endTime"]                = $trips['tripDetails'][0]['endTime'];
+        $info_trip["endTimeF"]               = date_create($info_trip["endTime"] );
+        $info_trip["duree"]                  = date_diff($info_trip["startTimeF"], $info_trip["endTimeF"]);
+        $info_trip["dureeF"]                 = $info_trip["duree"]->format('%H:%I');
+
+        $info_trip["villes"]                 = $trips['tripDetails'][0]['startPosition']['city'].'/'.$trips['tripDetails'][0]['endPosition']['city'];
+        $info_trip["distance"]               = $trips['tripDetails'][0]['distance']/1000;
+        $info_trip["electricalConsumption"]  = $trips['tripDetails'][0]['electricalConsumption']/1000;
+        $info_trip["fuelConsumtion"]         = $trips['tripDetails'][0]['fuelConsumption']/1000;
+        $info_trip["startpositionLat"]       = $trips['tripDetails'][0]['startPosition']['latitude'];
+        $info_trip["startpositionLon"]       = $trips['tripDetails'][0]['startPosition']['longitude'];
+        $info_trip["endPositionLat"]         = $trips['tripDetails'][0]['endPosition']['latitude'];
+        $info_trip["endPositionLon"]         = $trips['tripDetails'][0]['endPosition']['longitude'];
       }
+
+    }
+    else {
+      log::add('volvooncall','error',"get_car_trips:Erreur d'accès à l'API pour informations sur le véhicule");
     }
   }
-  fclose($fcar);
-
-  // Lecture des points GPS pour ces trajets
-  // ---------------------------------------
-  // ouverture du fichier de log: points GPS
-  $fn_car = dirname(__FILE__).CARS_FILES_DIR.$vin.'/gps.log';
-  $fcar = fopen($fn_car, "r");
-
-  // lecture des donnees
-  $line = 0;
-  $cars_dt["gps"] = [];
-  if ($fcar) {
-    while (($buffer = fgets($fcar, 4096)) !== false) {
-      // extrait les timestamps debut et fin du trajet
-      list($pts_ts, $pts_lat, $pts_lon, $pts_alt, $pts_batt, $pts_mlg, $pts_moving) = explode(",", $buffer);
-      $pts_tsi = intval($pts_ts);
-      // selectionne les trajets selon leur date depart&arrive
-      if (($pts_tsi>=$first_ts) && ($pts_tsi<=$last_ts)) {
-        $cars_dt["gps"][$line] = $buffer;
-        $line = $line + 1;
-      }
-    }
+  else {
+    log::add('volvooncall','error',"get_car_trips:Erreur login API pour informations sur le véhicule");
   }
-  fclose($fcar);
-  // Ajoute les coordonnées du domicile pour utilisation par javascript
-  $latitute=config::byKey("info::latitude");
-  $longitude=config::byKey("info::longitude");
-  $cars_dt["home"] = $latitute.",".$longitude;
 
-  //log::add('peugeotcars', 'debug', 'Ajax:get_car_trips:nb_lines'.$line);
-  return;
+  return $info_trip;
+
+
+
 }
 
 // ===========================================================
@@ -99,28 +91,29 @@ function get_car_trips_gps($vin, $ts_start, $ts_end)
 // ===========================================================
 function get_car_infos($vin)
 {
-  $session_volvooncall = new vocapi();
-  $session_volvooncall->login(config::byKey('VocUsername', 'volvooncall'), config::byKey('VocPassword', 'volvooncall'));
-  $login_ctr = $session_volvooncall->getAccount();   // Authentification
-  $info = [];
-  if ($login_ctr) {
-    // Recuperation de l'info type du vehicule
-    // $eqLogic = eqLogic::byLogicalId($vin,'peugeotcars');
-    // if (is_object($eqLogic)) {
-      // $cmd = $eqLogic->getCmd(null, "veh_type");
-      // if (is_object($cmd)) {
-        // $veh_type = $cmd->execCmd();
-      // }
-    // }
+  $session_volvooncall = new volvooncall_api();
+  $login = $session_volvooncall->login($this->getConfiguration('VocUsername'), $this->getConfiguration('VocPassword'));
 
+  $info = [];
+  if ($login) {
     // Section caractéristiques véhicule
     $vin = $session_volvooncall->getVin();
-    $ret = $session_volvooncall->getAttributes($vin);
-    if ($ret) {
-      log::add('volvooncall','debug','get_car_infos:success='.$ret);
-      $info["vin"] = $vin;
-      $info["short_label"] = $ret["vehicleType"];
-      $info["veh_type"] = $ret['fuelType'];
+    $retA = $session_volvooncall->getAttributes($vin);
+    $retS = $session_volvooncall->getStatus($vin);
+
+    if ($retA && $retS) {
+      log::add('volvooncall','debug','get_car_infos:success='.$retA);
+      $info["vin"]                    = $vin;
+      $info["vehicleType"]            = $retA["vehicleType"];
+      $info["fuelType"]               = $retA['fuelType'];
+      $info["modelYear"]              = $retA['modelYear'];
+      $info["fuelTankVolume"]         = $retA['fuelTankVolume'];
+      $info["registrationNumber"]     = $retA['registrationNumber'];
+
+      $info["averageSpeed"]           = $retS['averageSpeed'];
+      $info["averageFuelConsumption"] = $retS['averageFuelConsumption']/10;
+      $info["tripMeter1"]             = $retS['tripMeter1']/1000;
+      $info["tripMeter2"]             = $retS['tripMeter2']/1000;
     }
     else {
       log::add('volvooncall','error',"get_car_infos:Erreur d'accès à l'API pour informations sur le véhicule");
@@ -129,9 +122,6 @@ function get_car_infos($vin)
   else {
     log::add('volvooncall','error',"get_car_infos:Erreur login API pour informations sur le véhicule");
   }
-  
-  // Section version logiciels
-  //log::add('volvooncall','debug','get_car_infos:liste_logiciel='.$liste_logiciel);
 
   return $info;
 }
@@ -158,7 +148,7 @@ try {
     log::add('volvooncall', 'debug', 'param0:'.$ts_start);
     log::add('volvooncall', 'debug', 'param1:'.$ts_end);
     // Param 0 et 1 sont les timestamp de debut et fin de la periode de log demandée
-    get_car_trips_gps($vin, intval ($ts_start), intval ($ts_end));
+    get_car_trips($vin, intval ($ts_start), intval ($ts_end));
     $ret_json = json_encode ($cars_dt);
     ajax::success($ret_json);
     }

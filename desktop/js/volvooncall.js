@@ -22,6 +22,11 @@
 $("#table_cmd").sortable({axis: "y", cursor: "move", items: ".cmd", placeholder: "ui-state-highlight", tolerance: "intersect", forcePlaceholderSize: true});
 
 /*
+* Modale avec les fonctionalités supplémenataires
+*/
+//$('#md_modal').dialog({title: "Test de modale"}).load('index.php?v=d&plugin=volvooncall&modal=modal.volvooncall').dialog('open');
+
+/*
 * Fonction permettant l'affichage des commandes dans l'équipement
 */
 function addCmdToTable(_cmd) {

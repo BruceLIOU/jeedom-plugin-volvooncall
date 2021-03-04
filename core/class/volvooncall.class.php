@@ -68,6 +68,7 @@ class volvooncall extends eqLogic
   {       
       /* Informations générales sur le véhicule */
       /******************************************/
+      $vin2 = $this->getlogicalId();
       $refresh = $this->getCmd(null, 'refresh');
       if (!is_object($refresh)) {
         $refresh = new volvooncallCmd();
@@ -80,6 +81,20 @@ class volvooncall extends eqLogic
       $refresh->save();
 
       /************** Attributes ****************/
+      // Creation info VIN de véhicule
+      $info = $this->getCmd(null, 'vin');
+      if (!is_object($info)) {
+          $info = new volvooncallCmd();
+          $info->setName(__('VIN', __FILE__));
+      }
+      $info->setLogicalId('vin');
+      $info->setEqLogic_id($this->getId());
+      $info->setIsVisible(0);
+      $info->setIsHistorized(0);
+      $info->setType('info');
+      $info->setSubType('string');
+      $info->save();
+
       // Creation info Type de véhicule
       $info = $this->getCmd(null, 'fuelType');
       if (!is_object($info)) {
@@ -406,6 +421,98 @@ class volvooncall extends eqLogic
       $info->setEqLogic_id($this->getId());
       $info->setIsVisible(0);
       $info->setIsHistorized(0);
+      $info->setTemplate('dashboard', 'volvooncall::etat');
+      $info->setTemplate('mobile', 'volvooncall::etat');
+      $info->setType('info');
+      $info->setSubType('string');
+      $info->save();
+
+      $info = $this->getCmd(null, 'frontRightDoorOpen');
+      if (!is_object($info)) {
+          $info = new volvooncallCmd();
+          $info->setName(__('Porte avant droite', __FILE__));
+      }
+      $info->setLogicalId('frontRightDoorOpen');
+      $info->setEqLogic_id($this->getId());
+      $info->setIsVisible(0);
+      $info->setIsHistorized(0);
+      $info->setTemplate('dashboard', 'volvooncall::ouvertes_fermees');
+      $info->setTemplate('mobile', 'volvooncall::ouvertes_fermees');
+      $info->setType('info');
+      $info->setSubType('string');
+      $info->save();
+
+      $info = $this->getCmd(null, 'frontLeftDoorOpen');
+      if (!is_object($info)) {
+          $info = new volvooncallCmd();
+          $info->setName(__('Porte avant gauche', __FILE__));
+      }
+      $info->setLogicalId('frontLeftDoorOpen');
+      $info->setEqLogic_id($this->getId());
+      $info->setIsVisible(0);
+      $info->setIsHistorized(0);
+      $info->setTemplate('dashboard', 'volvooncall::ouvertes_fermees');
+      $info->setTemplate('mobile', 'volvooncall::ouvertes_fermees');
+      $info->setType('info');
+      $info->setSubType('string');
+      $info->save();
+
+      $info = $this->getCmd(null, 'rearRightDoorOpen');
+      if (!is_object($info)) {
+          $info = new volvooncallCmd();
+          $info->setName(__('Porte arrière droite', __FILE__));
+      }
+      $info->setLogicalId('rearRightDoorOpen');
+      $info->setEqLogic_id($this->getId());
+      $info->setIsVisible(0);
+      $info->setIsHistorized(0);
+      $info->setTemplate('dashboard', 'volvooncall::ouvertes_fermees');
+      $info->setTemplate('mobile', 'volvooncall::ouvertes_fermees');
+      $info->setType('info');
+      $info->setSubType('string');
+      $info->save();
+
+      $info = $this->getCmd(null, 'rearLeftDoorOpen');
+      if (!is_object($info)) {
+          $info = new volvooncallCmd();
+          $info->setName(__('Porte arrière gauche', __FILE__));
+      }
+      $info->setLogicalId('rearLeftDoorOpen');
+      $info->setEqLogic_id($this->getId());
+      $info->setIsVisible(0);
+      $info->setIsHistorized(0);
+      $info->setTemplate('dashboard', 'volvooncall::ouvertes_fermees');
+      $info->setTemplate('mobile', 'volvooncall::ouvertes_fermees');
+      $info->setType('info');
+      $info->setSubType('string');
+      $info->save();
+
+      $info = $this->getCmd(null, 'tailgateOpen');
+      if (!is_object($info)) {
+          $info = new volvooncallCmd();
+          $info->setName(__('Coffre', __FILE__));
+      }
+      $info->setLogicalId('tailgateOpen');
+      $info->setEqLogic_id($this->getId());
+      $info->setIsVisible(0);
+      $info->setIsHistorized(0);
+      $info->setTemplate('dashboard', 'volvooncall::ouvertes_fermees');
+      $info->setTemplate('mobile', 'volvooncall::ouvertes_fermees');
+      $info->setType('info');
+      $info->setSubType('string');
+      $info->save();
+
+      $info = $this->getCmd(null, 'hoodOpen');
+      if (!is_object($info)) {
+          $info = new volvooncallCmd();
+          $info->setName(__('Capot', __FILE__));
+      }
+      $info->setLogicalId('hoodOpen');
+      $info->setEqLogic_id($this->getId());
+      $info->setIsVisible(0);
+      $info->setIsHistorized(0);
+      $info->setTemplate('dashboard', 'volvooncall::ouvertes_fermees');
+      $info->setTemplate('mobile', 'volvooncall::ouvertes_fermees');
       $info->setType('info');
       $info->setSubType('string');
       $info->save();
@@ -470,8 +577,8 @@ class volvooncall extends eqLogic
       $info->setEqLogic_id($this->getId());
       $info->setIsHistorized(0);
       $info->setIsVisible(1);
-      $info->setTemplate('dashboard', 'volvooncall::battery_status_mmi');
-      $info->setTemplate('mobile', 'volvooncall::battery_status_mmi');
+      $info->setTemplate('dashboard', 'volvooncall::battery_status');
+      $info->setTemplate('mobile', 'volvooncall::battery_status');
       $info->setType('info');
       $info->setSubType('numeric');
       $info->setUnite('%');
@@ -523,6 +630,66 @@ class volvooncall extends eqLogic
       $info->setSubType('string');
       $info->save();
 
+      $info = $this->getCmd(null, 'frontLeftTyrePressure');
+      if (!is_object($info)) {
+          $info = new volvooncallCmd();
+          $info->setName(__('Pression pneu avant gauche', __FILE__));
+      }
+      $info->setLogicalId('frontLeftTyrePressure');
+      $info->setEqLogic_id($this->getId());
+      $info->setIsVisible(0);
+      $info->setIsHistorized(0);
+      $info->setTemplate('dashboard', 'volvooncall::ouvertes_fermees');
+      $info->setTemplate('mobile', 'volvooncall::ouvertes_fermees');
+      $info->setType('info');
+      $info->setSubType('string');
+      $info->save();
+
+      $info = $this->getCmd(null, 'frontRightTyrePressure');
+      if (!is_object($info)) {
+          $info = new volvooncallCmd();
+          $info->setName(__('Pression pneu avant droit', __FILE__));
+      }
+      $info->setLogicalId('frontRightTyrePressure');
+      $info->setEqLogic_id($this->getId());
+      $info->setIsVisible(0);
+      $info->setIsHistorized(0);
+      $info->setTemplate('dashboard', 'volvooncall::ouvertes_fermees');
+      $info->setTemplate('mobile', 'volvooncall::ouvertes_fermees');
+      $info->setType('info');
+      $info->setSubType('string');
+      $info->save();
+
+      $info = $this->getCmd(null, 'rearLeftTyrePressure');
+      if (!is_object($info)) {
+          $info = new volvooncallCmd();
+          $info->setName(__('Pression pneu arrière gauche', __FILE__));
+      }
+      $info->setLogicalId('rearLeftTyrePressure');
+      $info->setEqLogic_id($this->getId());
+      $info->setIsVisible(0);
+      $info->setIsHistorized(0);
+      $info->setTemplate('dashboard', 'volvooncall::ouvertes_fermees');
+      $info->setTemplate('mobile', 'volvooncall::ouvertes_fermees');
+      $info->setType('info');
+      $info->setSubType('string');
+      $info->save();
+
+      $info = $this->getCmd(null, 'rearRightTyrePressure');
+      if (!is_object($info)) {
+          $info = new volvooncallCmd();
+          $info->setName(__('Pression pneu arrière droit', __FILE__));
+      }
+      $info->setLogicalId('rearRightTyrePressure');
+      $info->setEqLogic_id($this->getId());
+      $info->setIsVisible(0);
+      $info->setIsHistorized(0);
+      $info->setTemplate('dashboard', 'volvooncall::ouvertes_fermees');
+      $info->setTemplate('mobile', 'volvooncall::ouvertes_fermees');
+      $info->setType('info');
+      $info->setSubType('string');
+      $info->save();
+
       // Creation info Fenêtres ouvertes
       /* @return Bool */
       $info = $this->getCmd(null, 'windowsAll');
@@ -534,6 +701,68 @@ class volvooncall extends eqLogic
       $info->setEqLogic_id($this->getId());
       $info->setIsVisible(0);
       $info->setIsHistorized(0);
+      $info->setTemplate('dashboard', 'volvooncall::etat');
+      $info->setTemplate('mobile', 'volvooncall::etat');
+      $info->setType('info');
+      $info->setSubType('string');
+      $info->save();
+
+      $info = $this->getCmd(null, 'frontLeftWindowOpen');
+      if (!is_object($info)) {
+          $info = new volvooncallCmd();
+          $info->setName(__('Fenêtre avant gauche', __FILE__));
+      }
+      $info->setLogicalId('frontLeftWindowOpen');
+      $info->setEqLogic_id($this->getId());
+      $info->setIsVisible(0);
+      $info->setIsHistorized(0);
+      $info->setTemplate('dashboard', 'volvooncall::ouvertes_fermees');
+      $info->setTemplate('mobile', 'volvooncall::ouvertes_fermees');
+      $info->setType('info');
+      $info->setSubType('string');
+      $info->save();
+
+      $info = $this->getCmd(null, 'frontRightWindowOpen');
+      if (!is_object($info)) {
+          $info = new volvooncallCmd();
+          $info->setName(__('Fenêtre avant droite', __FILE__));
+      }
+      $info->setLogicalId('frontRightWindowOpen');
+      $info->setEqLogic_id($this->getId());
+      $info->setIsVisible(0);
+      $info->setIsHistorized(0);
+      $info->setTemplate('dashboard', 'volvooncall::ouvertes_fermees');
+      $info->setTemplate('mobile', 'volvooncall::ouvertes_fermees');
+      $info->setType('info');
+      $info->setSubType('string');
+      $info->save();
+
+      $info = $this->getCmd(null, 'rearLeftWindowOpen');
+      if (!is_object($info)) {
+          $info = new volvooncallCmd();
+          $info->setName(__('Fenêtre arrière gauche', __FILE__));
+      }
+      $info->setLogicalId('rearLeftWindowOpen');
+      $info->setEqLogic_id($this->getId());
+      $info->setIsVisible(0);
+      $info->setIsHistorized(0);
+      $info->setTemplate('dashboard', 'volvooncall::ouvertes_fermees');
+      $info->setTemplate('mobile', 'volvooncall::ouvertes_fermees');
+      $info->setType('info');
+      $info->setSubType('string');
+      $info->save();
+
+      $info = $this->getCmd(null, 'rearRightWindowOpen');
+      if (!is_object($info)) {
+          $info = new volvooncallCmd();
+          $info->setName(__('Fenêtre arrière droite', __FILE__));
+      }
+      $info->setLogicalId('rearRightWindowOpen');
+      $info->setEqLogic_id($this->getId());
+      $info->setIsVisible(0);
+      $info->setIsHistorized(0);
+      $info->setTemplate('dashboard', 'volvooncall::ouvertes_fermees');
+      $info->setTemplate('mobile', 'volvooncall::ouvertes_fermees');
       $info->setType('info');
       $info->setSubType('string');
       $info->save();
@@ -684,7 +913,7 @@ class volvooncall extends eqLogic
       $session_volvooncall = new volvooncall_api();
 
       $login = $session_volvooncall->login($this->getConfiguration('VocUsername'), $this->getConfiguration('VocPassword'));
-      
+
       //Vérification des identifiants
       if ($login != true) {
          log::add('volvooncall', 'error', "Erreur Login");
@@ -692,6 +921,7 @@ class volvooncall extends eqLogic
       }
       
       $vin = $session_volvooncall->getVin();
+
       log::add('volvooncall', 'debug', 'VIN : '.$vin);
 
       // Appel de l'API
@@ -699,29 +929,49 @@ class volvooncall extends eqLogic
       $retS = $session_volvooncall->getStatus($vin);
       $retP = $session_volvooncall->getPosition($vin, null);
 
+      log::add('volvooncall', 'debug', 'URL : '.$session_volvooncall->getTestUrl());
+
       $doorsFR    = $retS["doors"]["frontRightDoorOpen"];
       if ($doorsFR != true) {
-          $doorsFRO = 1;
+        $doorsFRO = 1;
+      }
+      else {
+        $doorsFRO = 0;
       }
       $doorsFL    = $retS["doors"]["frontLeftDoorOpen"];
       if ($doorsFL != true) {
-          $doorsFLO = 1;
+        $doorsFLO = 1;
+      }
+      else {
+        $doorsFLO = 0;
       }
       $doorsRR    = $retS["doors"]["rearRightDoorOpen"];
       if ($doorsRR != true) {
-          $doorsRRO = 1;
+        $doorsRRO = 1;
+      }
+      else {
+        $doorsRRO = 0;
       }
       $doorsRL    = $retS["doors"]["rearLeftDoorOpen"];
       if ($doorsRL != true) {
-          $doorsRLO = 1;
+        $doorsRLO = 1;
+      }
+      else {
+        $doorsRLO = 0;
       }
       $doorsTG    = $retS["doors"]["tailgateOpen"];
       if ($doorsTG != true) {
-          $doorsTGO = 1;
+        $doorsTGO = 1;
+      }
+      else {
+        $doorsTGO = 0;
       }
       $doorsH     = $retS["doors"]["hoodOpen"];
       if ($doorsH != true) {
-          $doorsHO = 1;
+        $doorsHO = 1;
+      }
+      else {
+        $doorsHO = 0;
       }
 
       if (($doorsFRO+$doorsFLO+$doorsRRO+$doorsRLO+$doorsTGO+$doorsHO) == 6){
@@ -733,19 +983,31 @@ class volvooncall extends eqLogic
 
       $windowsFR    = $retS["windows"]["frontRightWindowOpen"];
       if ($windowsFR != true) {
-          $windowsFRO = 1;
+        $windowsFRO = 1;
+      }
+      else {
+        $windowsFRO = 0;
       }
       $windowsFL    = $retS["windows"]["frontLeftWindowOpen"];
       if ($windowsFL != true) {
-          $windowsFLO = 1;
+        $windowsFLO = 1;
+      }
+      else {
+        $windowsFLO = 0;
       }
       $windowsRR    = $retS["windows"]["rearRightWindowOpen"];
       if ($windowsRR != true) {
-          $windowsRRO = 1;
+        $windowsRRO = 1;
+      }
+      else {
+        $windowsRRO = 0;
       }
       $windowsRL    = $retS["windows"]["rearLeftWindowOpen"];
       if ($windowsRL != true) {
-          $windowsRLO = 1;
+        $windowsRLO = 1;
+      }
+      else {
+        $windowsRLO = 0;
       }
 
       if (($windowsFRO+$windowsFLO+$windowsRRO+$windowsRLO) == 4){
@@ -757,19 +1019,31 @@ class volvooncall extends eqLogic
 
       $tyrePressureFR    = $retS["tyrePressure"]["frontRightTyrePressure"];
       if ($tyrePressureFR == "Normal") {
-          $tyrePressureFRO = 1;
+        $tyrePressureFRO = 1;
+      }
+      else {
+        $tyrePressureFRO = 0;
       }
       $tyrePressureFL    = $retS["tyrePressure"]["frontLeftTyrePressure"];
       if ($tyrePressureFL == "Normal") {
-          $tyrePressureFLO = 1;
+        $tyrePressureFLO = 1;
+      }
+      else {
+        $tyrePressureFLO = 0;
       }
       $tyrePressureRR    = $retS["tyrePressure"]["rearRightTyrePressure"];
       if ($tyrePressureRR == "Normal") {
-          $tyrePressureRRO = 1;
+        $tyrePressureRRO = 1;
+      }
+      else {
+        $tyrePressureRRO = 0;
       }
       $tyrePressureRL    = $retS["tyrePressure"]["rearLeftTyrePressure"];
       if ($tyrePressureRL == "Normal") {
-          $tyrePressureRLO = 1;
+        $tyrePressureRLO = 1;
+      }
+      else {
+        $tyrePressureRLO = 0;
       }
 
       if (($tyrePressureFRO+$tyrePressureFLO+$tyrePressureRRO+$tyrePressureRLO) == 4){
@@ -780,6 +1054,8 @@ class volvooncall extends eqLogic
       }
       $positionGPS = $retP["position"]["latitude"].",".$retP["position"]["longitude"];
       try {
+         $this->checkAndUpdateCmd('VIN', $vin);
+         log::add('volvooncall', 'debug', 'key : VIN valeur : '.$vin);
          $this->checkAndUpdateCmd('fuelType', $retA["fuelType"]);
          log::add('volvooncall', 'debug', 'key : fuelType valeur : '.$retA["fuelType"]);
          $this->checkAndUpdateCmd('vehicleType', $retA["vehicleType"]);
@@ -834,10 +1110,38 @@ class volvooncall extends eqLogic
          log::add('volvooncall', 'debug', 'key : timeToHVBatteryFullyCharged valeur : '.$retS["hvBattery"]["timeToHVBatteryFullyCharged"]);
          $this->checkAndUpdateCmd('doorsAll', $doorsAllState);
          log::add('volvooncall', 'debug', 'key : doorsAll valeur : '.$doorsAllState);
+         $this->checkAndUpdateCmd('frontRightDoorOpen', $doorsFRO);
+         log::add('volvooncall', 'debug', 'key : frontRightDoorOpen valeur : '.$doorsFRO);
+         $this->checkAndUpdateCmd('frontLeftDoorOpen', $doorsFLO);
+         log::add('volvooncall', 'debug', 'key : frontLeftDoorOpen valeur : '.$doorsFLO);
+         $this->checkAndUpdateCmd('rearRightDoorOpen', $doorsRRO);
+         log::add('volvooncall', 'debug', 'key : rearRightDoorOpen valeur : '.$doorsRRO);
+         $this->checkAndUpdateCmd('rearLeftDoorOpen', $doorsRLO);
+         log::add('volvooncall', 'debug', 'key : rearLeftDoorOpen valeur : '.$doorsRLO);
+         $this->checkAndUpdateCmd('tailgateOpen', $doorsTGO);
+         log::add('volvooncall', 'debug', 'key : tailgateOpen valeur : '.$doorsTGO);
+         $this->checkAndUpdateCmd('hoodOpen', $doorsHO);
+         log::add('volvooncall', 'debug', 'key : hoodOpen valeur : '.$doorsHO);
          $this->checkAndUpdateCmd('windowsAll', $windowsAllState);
          log::add('volvooncall', 'debug', 'key : windowsAll valeur : '.$windowsAllState);
+         $this->checkAndUpdateCmd('frontLeftWindowOpen', $windowsFLO);
+         log::add('volvooncall', 'debug', 'key : frontLeftWindowOpen valeur : '.$windowsFLO);
+         $this->checkAndUpdateCmd('frontRightWindowOpen', $windowsFRO);
+         log::add('volvooncall', 'debug', 'key : frontRightWindowOpen valeur : '.$windowsFRO);
+         $this->checkAndUpdateCmd('rearLeftWindowOpen', $windowsRLO);
+         log::add('volvooncall', 'debug', 'key : rearLeftWindowOpen valeur : '.$windowsRLO);
+         $this->checkAndUpdateCmd('rearRightWindowOpen', $windowsRRO);
+         log::add('volvooncall', 'debug', 'key : rearRightWindowOpen valeur : '.$windowsRRO);
          $this->checkAndUpdateCmd('tyrePressureAll', $tyrePressureAllState);
          log::add('volvooncall', 'debug', 'key : tyrePressureAll valeur : '.$tyrePressureAllState);
+         $this->checkAndUpdateCmd('frontLeftTyrePressure', $tyrePressureFLO);
+         log::add('volvooncall', 'debug', 'key : frontLeftTyrePressure valeur : '.$tyrePressureFLO);
+         $this->checkAndUpdateCmd('frontRightTyrePressure', $tyrePressureFRO);
+         log::add('volvooncall', 'debug', 'key : frontRightTyrePressure valeur : '.$tyrePressureFRO);
+         $this->checkAndUpdateCmd('rearLeftTyrePressure', $tyrePressureRLO);
+         log::add('volvooncall', 'debug', 'key : rearLeftTyrePressure valeur : '.$tyrePressureRLO);
+         $this->checkAndUpdateCmd('rearRightTyrePressure', $tyrePressureRRO);
+         log::add('volvooncall', 'debug', 'key : rearRightTyrePressure valeur : '.$tyrePressureRRO);
          $this->checkAndUpdateCmd('position_gps', $positionGPS);
          log::add('volvooncall', 'debug', 'key : position_gps valeur : '.$positionGPS);
          $this->checkAndUpdateCmd('latitude', $retP["position"]["latitude"]);

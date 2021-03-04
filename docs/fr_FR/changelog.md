@@ -13,3 +13,9 @@
  - Création fichiers de documentation
  - Création widget
  - Ajout code HTML (plugin HTML display) pour affichage détaillé dans un desgin
+
+ # 04/03/2021 - Branche dev
+ - Création des commandes Sensors (pneus, portes, fenêtres) et de ses templates
+ - Création du panel (en cours de développement)
+ - Fix template widget
+ - Fix HTML display

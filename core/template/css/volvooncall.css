@@ -1,0 +1,8 @@
+
+#car_cmd_tab .row {
+    text-align: center;
+}
+#car_cmd_tab .row i{
+    font-size: 45px;
+    cursor:pointer;
+}

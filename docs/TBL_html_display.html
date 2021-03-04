@@ -1,3 +1,4 @@
+<link rel="stylesheet" href="/plugins/volvooncall/core/template/css/volvooncall.css" />
 <div id="exTab3" class="container container_volvooncall">
     <ul class="nav nav-pills">
         <li class="active">
@@ -88,10 +89,28 @@
         </div>
         <div class="tab-pane" id="car_cmd_tab">
             <h3>Toutes les commandes</h3>
+            <!--
             <p><a class="btn">Démarrer le moteur</a></p>
             <p><a class="btn">Allumer la climatisation</a></p>
             <p><a class="btn">Programmer la climatisation</a></p>
             <p><a class="btn">Vérrouiller le véhicule</a></p>
+            -->
+            <div class="row">
+                <div class="col-md-6" id="engine">
+                  <span class="iconSel"><i class="icon mdi-engine"></i><br>Moteur</span>
+                </div>
+                <div class="col-md-6 col-xl-3" id="heater">
+                    <span class="iconSel"><i class="icon mdi-car-seat-heater"></i><br>Chauffage</span>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-xs-12 col-md-6" id="lock">
+                    <span class="iconSel"><i class="icon mdi-cloud-lock-outline"></i><br>Verrouillage</span>
+                </div>
+                <div class="col-md-6" id="timers">
+                    <span class="iconSel"><i class="icon mdi-account-clock"></i><br>Timers</span>
+                </div>
+              </div>
         </div>
         <div class="tab-pane" id="car_maint_tab">
             <h3>Maintenance du véhicule</h3>
@@ -378,8 +397,7 @@
         };
 
         // Trips boucle
-        /*
-        var json = $.getJSON('/plugins/volvooncall/data/VIN/trips.json');
+        var json = $.getJSON('/plugins/volvooncall/data/YV1XZBBVFM2418828/trips.json');
         var data_length = json.length;
         console.log(data_length);
         for (var i = 0; i < data_length; i++) {
@@ -389,12 +407,6 @@
         for (var item in trips) {
             alert(trips[item])
          }*/
-         $.ajax({
-            url: "http://rest-service.guides.spring.io/greeting"
-        }).then(function(data) {
-           $('#nombre_trajets').append(data.id);
-           $('.greeting-content').append(data.content);
-        });
 
         jeedom.cmd.update[stateKilometrage]();
 

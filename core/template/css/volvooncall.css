@@ -1,3 +1,30 @@
+.container_volvooncall{
+    position:relative;
+    width:auto;
+}
+.container_volvooncall a{
+    color: white !important;
+}
+.content_volcooncall {
+    background-color: #337ab7 !important;
+    padding: 8px;
+    color:#fff;
+}
+.content_volcooncall, h1, h2, h3, h4{
+    color:#fff;
+}
+.content_volcooncall .nav > li > a {
+    color: white !important;
+    background-color: cadetblue;
+}
+.content_volcooncall .nav-pills > li.active > a, .content_volcooncall .nav-pills > li.active > a:focus, .content_volcooncall .nav-pills > li.active > a:hover {
+    color: #fff;
+    background-color: #337ab7;
+    border-bottom: 1px solid white;
+}
+.content_volcooncall hr {
+    border: 1px solid white;
+}
 
 #car_cmd_tab .row {
     text-align: center;

@@ -16,6 +16,10 @@
 
             $('.cmd[data-cmd_id=#id#] .state').empty().append('<span id="unPlugged" style="color:red;">Véhicule non branché</span>');
           }
+          else if (_options.display_value == "Interrupted") {
+
+            $('.cmd[data-cmd_id=#id#] .state').empty().append('<span id="interrupted" style="color:red;">Charge interrompue</span>');
+          }
           else {
               $('.cmd[data-cmd_id=#id#] .state').empty().append('<span id="chargeInProgress" style="color:red;">Véhicule en charge</span>');
             (function blink() {

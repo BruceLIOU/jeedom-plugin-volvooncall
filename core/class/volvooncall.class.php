@@ -863,7 +863,7 @@ class volvooncall extends eqLogic
     // Appel de l'API
     $retT = $session_volvooncall->getTrips($vin);
     
-    $jsonFile = json_encode($retT['trips']);
+    $jsonFile = json_encode($retT['trips'], JSON_PRETTY_PRINT);
 
     /*
     echo '<pre>';

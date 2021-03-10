@@ -82,6 +82,19 @@ Créer un template HTML (plugin HTML display) avec le code fournit (docs/TBL_htm
 </p>
 
 ## Bonus (code HTML avec le widget HTML display)
+# Pré-requis
+* Vous devez modifier certaines partie du code pour l'adapter à votre usage
+- lignes de 203 à 211 avec les Id de vos commandes
+- ligne 395 avec l'ID de votre commande vin
+- lignes 526 et 527 avec les coordonnées GPS de votre domicile
+* Installation du plugin icon
+* Installation du pack mdi
+<p align="left">
+  <img src="../images/config_plugin_icon-mdi.png" width="600" title="Plugin icon - pack mdi">
+</p>
+* Veuillez modifier
+
+
 Cette page permet de consulter les informations suivantes sur 4 onglets différents:
 * Liste des trajets effectués par le véhicule -> en cours de développement
 * Caractéristiques du véhicule et statistiques sur l'utilisation et la consommation du véhicule. 
@@ -95,14 +108,14 @@ On peut sélectionner un trajet dans le tableau pour l'afficher sur la carte. <b
 <i>En préparation : ajout de point GPS intermédiaires pour afficher le trajet complet</i><br>
 Un résumé sur l'ensemble des trajets sélectionnés et donné également sur cette page.
 <p align="left">
-  <img src="../images/panel1.png" width="600" title="Panel3">
+  <img src="../images/panel1.png" width="600" title="HTML display - trajets">
 </p>
 
 **Caractéristiques & Statistiques:** -> en cours de développement
 Présentations sous forme de graphe de quelques statistiques d'utilisation du véhicule.
 Adaptez le code en modifiant les ID de vos commandes (commentaire dans le code)
 <p align="left">
-  <img src="../images/panel2.png" width="600" title="Panel3">
+  <img src="../images/panel2.png" width="600" title="Commandes">
 </p>
 
 * Distances parcourues 
@@ -118,7 +131,7 @@ L'onglet affiché est celui en rapport à votre kilométrage.
 Ces informations sont estimatives et approximatives.
 Adaptez le code en modifiant la date de 1ère mise en circulation (commentaire dans le code)
 <p align="left">
-  <img src="../images/panel3.png" width="600" title="Panel3">
+  <img src="../images/panel3.png" width="600" title="Entretien">
 </p>
 
 **Bugs connus:**

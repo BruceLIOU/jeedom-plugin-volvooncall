@@ -89,10 +89,14 @@ Cette page permet de consulter les informations suivantes sur 4 onglets différe
 * Informations sur les visites d'entretien du véhicule recommandées par Volvo (commentaire dans le code)
 
 **Affichage des trajets:** -> en cours de développement
-Il est possible de définir une période soit par 2 dates, soit par des racourcis ('Aujourd'hui', 'hier', 'les 7 derniers jours' ou 'tout'), puis d'afficher l'ensemble des trajets sur cette période.<br>
-La suite de la page est mise à jour avec l'affichage des trajets sélectionnés, en tableau et en affichage sur une carte. (Openstreet map) <br>
-On peut sélectionner les trajets 1 par 1 dans le tableau pour afficher un seul trajet dans la liste. <br>
+<strike>Il est possible de définir une période soit par 2 dates, soit par des racourcis ('Aujourd'hui', 'hier', 'les 7 derniers jours' ou 'tout'), puis d'afficher l'ensemble des trajets sur cette période.</strike><br>
+La suite de la page est mise à jour avec l'affichage des trajets <strike>sélectionnés</strike>, en tableau et en affichage sur une carte. (Openstreet map) <br>
+On peut sélectionner un trajet dans le tableau pour l'afficher sur la carte. <br>
+<i>En préparation : ajout de point GPS intermédiaires pour afficher le trajet complet</i><br>
 Un résumé sur l'ensemble des trajets sélectionnés et donné également sur cette page.
+<p align="left">
+  <img src="../images/panel1.png" width="600" title="Panel3">
+</p>
 
 **Caractéristiques & Statistiques:** -> en cours de développement
 Présentations sous forme de graphe de quelques statistiques d'utilisation du véhicule.
@@ -119,10 +123,12 @@ Adaptez le code en modifiant la date de 1ère mise en circulation (commentaire d
 
 **Bugs connus:**
 Cette version 1.0 est encore en développement. Il y a quelques bugs connus mais non pénalisants
-* Javascript erreur : "ReferenceError: L is not defined" (affichée dans la barre de titre de jeedom) <br>
+* <strike> Javascript erreur : "ReferenceError: L is not defined" (affichée dans la barre de titre de jeedom) <br></strike>
+* Les markers ne s'affichent pas correctement sur la carte (HTML display)
 
 **Suite prévue pour ce plugin:**
 * Implémentation API Volvo (quand elle sera plus complète)
 * Ajouter le pilotage du préconditionnement du véhicule par Timers
 * Envoyer des trajets au véhicule
 * Exporter les trajets (pdf ou xls) pour des notes de frais par exemple
+* Ajouter des points GPS intermédiaires pour afficher les trajets complets (interval de 5 minutes)

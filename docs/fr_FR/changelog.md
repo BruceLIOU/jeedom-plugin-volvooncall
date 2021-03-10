@@ -20,3 +20,9 @@
  - Création du panel (en cours de développement)
  - Fix template widget
  - Fix HTML display
+
+ # 10/03/2021 - Branche dev
+ - Intégration des trajets (HTML display)
+ - Fix panel
+ - CSS
+

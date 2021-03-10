@@ -58,3 +58,9 @@
 #car_stat_tab th, #car_stat_tab tr{
     text-align: center;
 }
+.content_volcooncall table#trip_liste tr.odd > .sorting_1{
+    background-color: #232324;
+}
+.content_volcooncall table#trip_liste tr.even > .sorting_1{
+    background-color: #191919;
+}

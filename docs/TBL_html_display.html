@@ -1,5 +1,11 @@
 <link rel="stylesheet" href="/plugins/volvooncall/core/template/css/volvooncall.css" />
+<link rel="stylesheet" href="/plugins/volvooncall/3rdparty/leaflet_v1.7.1/leaflet.css" />
+<link rel="stylesheet" href="/plugins/volvooncall/3rdparty/DataTables/DataTables-1.10.22/css/jquery.dataTables.min.css" />
 <div id="exTab3" class="container container_volvooncall">
+    <script src="/plugins/volvooncall/3rdparty/leaflet_v1.7.1/leaflet.js"></script>
+    <script src="/plugins/volvooncall/3rdparty/DataTables/DataTables-1.10.22/js/jquery.dataTables.min.js"></script>
+    <script src="/plugins/volvooncall/3rdparty/js/moment.js"></script>
+    <script src="/plugins/volvooncall/3rdparty/js/moment-with-locales.js"></script>
     <ul class="nav nav-pills">
         <li class="active">
             <a href="#car_trips_tab" data-toggle="tab">Trajets</a>
@@ -17,43 +23,30 @@
 
     <div class="tab-content clearfix content_volcooncall">
         <div class="tab-pane active" id="car_trips_tab">
-            <form class="form-horizontal">
-                <fieldset style="border: 1px solid #e5e5e5; border-radius: 5px 5px 5px 5px;">
-                    <div style="min-height: 10px;"></div>
-                    <div style="min-height:40px;font-size: 1.5em;">
-                        <i style="font-size: initial;"></i> Période analysée
-                    </div>
-                    <div style="min-height:30px;">
-                        <div class="pull-left" style="font-size: 1.3em;"> Début:
-                            <input id="gps_startDate" class="pull-right form-control input-sm in_datepicker" style="display : inline-block; width: 87px;" value="" />
-                        </div>
-                        <div class="pull-left" style="font-size: 1.3em;">Fin:
-                            <input id="gps_endDate" class="pull-right form-control input-sm in_datepicker" style="display : inline-block; width: 87px;" value="" />
-                        </div>
-                        <a style="margin-left:5px" class="pull-left btn btn-primary btn-sm tooltips" id='btgps_validChangeDate' title="Mise à jour des données sur la période">Mise à jour période</a><br>
-                    </div>
-                    <div style="min-height:50px;">
-                        <div style="padding-top:10px;font-size: 1.5em;">
-                            <a style="margin-right:5px;" class="pull-left btn btn-success btn-sm tooltips" id='btgps_per_today'>Aujourd'hui</a>
-                            <a style="margin-right:5px;" class="pull-left btn btn-success btn-sm tooltips" id='btgps_per_yesterday'>Hier</a>
-                            <a style="margin-right:5px;" class="pull-left btn btn-success btn-sm tooltips" id='btgps_per_this_week'>Cette semaine</a>
-                            <a style="margin-right:5px;" class="pull-left btn btn-success btn-sm tooltips" id='btgps_per_last_week'>Les 7 derniers jours</a>
-                            <a style="margin-right:5px;" class="pull-left btn btn-success btn-sm tooltips" id='btgps_per_all'>Tout</a>
-                        </div>
-                    </div>
-                </fieldset>
-            </form>
-            <div style="min-height: 10px;"></div>
             <div>
                 <form class="form-horizontal">
                     <fieldset style="border: 1px solid #e5e5e5; border-radius: 5px 5px 5px 5px;">
-                        <div style="padding-top:10px;padding-left:24px;padding-bottom:10px;color: #333;font-size: 1.5em;">
-                            <i style="font-size: initial;"></i> Historique des trajets réalisés sur cette période
-                            <div style="padding-top:8px;color: #fff;font-size: 0.6em;">
-                                Nombre de trajet : <span id="nombre_trajets"></span><br>
-                                Distance totale : <span id="distance_totale"></span> km<br>
-                                Consommation carburant : <span id="conso_carburant_totale"></span> l<br>
-                                Consommation électrique : <span id="conso_batterie_totale"></span> kWh<br>
+                        <div style="padding:10px 24px 0 24px;font-size: 1.5em;">
+                            <i style="font-size: initial;"></i> Historique des trajets réalisés
+                            <div style="padding-top:8px;color: #fff;font-size: 0.6em; text-align: center;">
+                                <table id="table_resum" width="100%" cellspacing="5" align="center">
+                                    <thead>
+                                        <th>Nombre de trajet</th>
+                                        <th>Distance totale</th>
+                                        <th>Consommation totale carburant</th>
+                                        <th>Consommation totale électrique</th>
+                                        <th>Régénération totale électrique</th>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td id="nombre_trajets"></td>
+                                            <td id="distance_totale"></td>
+                                            <td id="conso_carburant_totale"></td>
+                                            <td id="conso_batterie_totale"></td>
+                                            <td id="regen_batterie_totale"></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                         <div id='trips_info' style="font-size: 1.2em;"></div>
@@ -62,21 +55,22 @@
                     </fieldset>
                 </form>
             </div>
-            <div style="min-height: 10px;"></div>
-            <div>
-                <div id="trips_list" style="float:left;width:45%">
+
+            <div style="width:100%">
+                <div id="trips_list" style="float:left;width:60%">
                     <div id='div_hist_liste' style="font-size: 1.2em;"></div>
                     <div id='div_hist_liste2' style="font-size: 1.2em;">
                         <table id="trip_liste" class="display compact" width="100%"></table>
                     </div>
-                    <div id="trips_separ" style="margin-left:45%;width:1%"></div>
-                    <div id="trips_map" style="margin-left:46%;width:54%"></div>
+                    <div id="trips_separ" style="width:100%"></div>                    
                 </div>
+                <div id="trips_map" style="width:40%; top:58px"></div>
             </div>
         </div>
         <div class="tab-pane" id="car_stat_tab">
             <h3>Caractéristiques du véhicule</h3>
           	<h4><a href="https://s.volvocars.com/AqgdNKlUpeOEl742" target="_blank">Voir sur le site de Volvo</a></h4>
+            <p id="vin">VIN : <span class="vin"></span></p>
           	<p id="model">Modèle : <span class="model"></span></p>
           	<p id="model_annee">Année du modèle : <span class="model_annee"></span></p>
           	<p id="capacite_reservoir">Capacité réservoir : <span class="capacite_reservoir"></span>L</p>
@@ -395,20 +389,267 @@
                 }
             })
         };
+        jeedom.cmd.update[stateKilometrage]();
 
         // Trips boucle
-        var json = $.getJSON('/plugins/volvooncall/data/YV1XZBBVFM2418828/trips.json');
-        var data_length = json.length;
-        console.log(data_length);
-        for (var i = 0; i < data_length; i++) {
-          alert(data[i]["trips"]);
-        }
-        /*let trips = { name:"Bill", age: 25, degree: "Masters" };
-        for (var item in trips) {
-            alert(trips[item])
-         }*/
+        var vin = 5046;
+        $('#vin')[0].setAttribute('data-cmd_id', vin);
+      	jeedom.cmd.update[vin] = function (_options) {
+            jeedom.cmd.execute({ // Récupération de la valeur  
+                id: vin,
+                success: function (valeur_courante) {
+                    //alert(valeur_courante);
+                    $('.vin').empty().append(valeur_courante);
 
-        jeedom.cmd.update[stateKilometrage]();
+                    var data = [];
+                    var tripId;
+                    var tripCategory;
+                    var tripFuelConsumption;
+                    var tripElectricalConsumption;
+                    var tripElectricalRegeneration;
+                    var tripDistance;
+                    var tripStartOdometer;
+                    var tripStartTime;
+                    var tripEndOdometer;
+                    var tripEndTime;
+                    var tripStartLatitude;
+                    var tripStartLongitude;
+                    var tripEndLatitude;
+                    var tripEndLongitude;
+
+                    var totalDistance = 0;
+                    var totalFuelConsumption = 0;
+                    var totalElectricalConsumption = 0;
+                    var totalElectricalRegeneration = 0;
+
+
+                    var table_trips = [];
+
+                    var dataSet = [];
+
+                    var planes = [];
+
+                    var startGps = [];
+                    var endGps = [];
+                    
+
+                    moment.locale('fr'); 
+                    moment.defaultFormat = "DD/MM/YYYY HH:mm";
+                        
+                    $.getJSON('https://casba-istres.freeboxos.fr/plugins/volvooncall/data/'+ valeur_courante +'/trips.json', function (data) {
+                        console.log(data);
+
+                        $.each(data.trips, function(i, item) {
+                            tripId = item.id;
+                            tripCategory = item.category;
+                            tripFuelConsumption = item.tripDetails[0].fuelConsumption;
+                            tripElectricalConsumption = item.tripDetails[0].electricalConsumption;
+                            tripElectricalRegeneration = item.tripDetails[0].electricalRegeneration;
+                            tripDistance = item.tripDetails[0].distance;
+                            tripStartOdometer = item.tripDetails[0].startOdometer;
+                            tripStartTime = item.tripDetails[0].startTime;
+                            tripEndOdometer = item.tripDetails[0].endOdometer;
+                            tripEndTime = item.tripDetails[0].endTime;
+                            tripStartLatitude = item.tripDetails[0].startPosition.latitude;
+                            tripStartLongitude = item.tripDetails[0].startPosition.longitude;
+                            tripEndLatitude = item.tripDetails[0].endPosition.latitude;
+                            tripEndLongitude = item.tripDetails[0].endPosition.longitude;
+                            //alert(tripStartLatitude);
+                            var date_ob_start = new Date(tripStartTime);                 // initialize new Date object
+                            var year_start = date_ob_start.getFullYear();                         // year as 4 digits (YYYY)
+                            var month_start = ("0" + (date_ob_start.getMonth() + 1)).slice(-2);   // month as 2 digits (MM)
+                            var day_start   = ("0" + date_ob_start.getDate()).slice(-2);          // daye as 2 digits (DD)
+                            var hours_start = ("0" + date_ob_start.getHours()).slice(-2);         // hours as 2 digits (hh)
+                            var minutes_start = ("0" + date_ob_start.getMinutes()).slice(-2);     // minutes as 2 digits (mm)
+                            var seconds_start = ("0" + date_ob_start.getSeconds()).slice(-2);     // seconds as 2 digits (mm)
+
+                            var date_ob_end = new Date(tripEndTime);
+                            var year_end = date_ob_end.getFullYear();                         // year as 4 digits (YYYY)
+                            var month_end = ("0" + (date_ob_start.getMonth() + 1)).slice(-2);   // month as 2 digits (MM)
+                            var day_end   = ("0" + date_ob_end.getDate()).slice(-2);          // daye as 2 digits (DD)
+                            var hours_end = ("0" + date_ob_end.getHours()).slice(-2);         // hours as 2 digits (hh)
+                            var minutes_end = ("0" + date_ob_end.getMinutes()).slice(-2);     // minutes as 2 digits (mm)
+                            var seconds_end = ("0" + date_ob_end.getSeconds()).slice(-2);     // seconds as 2 digits (mm)
+
+                            var date_heure_str_start = day_start + "/" + month_start + "/" + year_start + " <br> " + hours_start + ":" + minutes_start;
+                            var date_heure_str_end = day_end  + "/" + month_end  + "/" + year_end  + " <br> " + hours_end  + ":" + minutes_end;
+
+                            var date_heure_str_start2 = day_start + "/" + month_start + "/" + year_start + " " + hours_start + ":" + minutes_start + ":" + seconds_start;
+                            var date_heure_str_end2 = day_end  + "/" + month_end  + "/" + year_end  + " " + hours_end  + ":" + minutes_end + ":" + seconds_end;
+
+                            var duree = date_ob_end - date_ob_start;
+                            var duree_str = moment.utc(moment(date_heure_str_end2,"DD/MM/YYYY HH:mm").diff(moment(date_heure_str_start2,"DD/MM/YYYY HH:mm"))).format("HH:mm");
+
+                            var distance = Math.round(tripDistance*100)/100;
+
+
+                            var tripVitesse = 3600.0 * distance / duree;
+                            tripVitesse = Math.round(tripVitesse*10.0)/10.0;
+                        
+                            totalDistance += Math.round(tripDistance*100)/100;
+                            totalFuelConsumption += Math.round(tripFuelConsumption*100)/100;
+                            totalElectricalConsumption += Math.round(tripElectricalConsumption*100)/100;
+                            totalElectricalRegeneration += Math.round(tripElectricalRegeneration*100)/100;
+
+                            
+                            startGpsLat = tripStartLatitude;
+                            startGpsLon = tripStartLongitude;
+                            endGpsLat = tripEndLatitude;
+                            endGpsLon = tripEndLongitude;
+                            
+
+                            planes = [
+                            ["Départ", tripStartLatitude, tripStartLongitude],
+                            ["Arrivée", tripEndLatitude, tripEndLongitude]
+                            ];
+
+
+                            //alert(planesGPS);
+
+                            var line = [tripId, date_heure_str_start, duree_str, (distance/1000).toFixed(1)+" km", tripVitesse+" km/h", (tripFuelConsumption/1000).toFixed(2)+" l", (tripElectricalConsumption/1000).toFixed(2)+" kWh", (tripElectricalRegeneration/1000).toFixed(2)+" kWh", startGpsLat, startGpsLon, endGpsLat, endGpsLon];
+                                dataSet.push(line);
+
+                            //console.log(line);
+
+                            
+
+                        });
+                            //alert(tripStartLatitude); 
+                            //recap
+                            var trips_number = Object.keys(data.trips).length;
+                            $('#nombre_trajets').empty().append(trips_number);
+                            $('#distance_totale').empty().append((totalDistance/1000).toFixed(1) + " km");
+                            $('#conso_carburant_totale').empty().append((totalFuelConsumption/100).toFixed(2) + " l");
+                            $('#conso_batterie_totale').empty().append((totalElectricalConsumption/1000).toFixed(2) + " kWh");
+                            $('#regen_batterie_totale').empty().append((totalElectricalRegeneration/1000).toFixed(2) + " kWh");
+
+                            var home_lat = "43.50674868528217"; // Valeur à adapter
+                            var home_lon = "4.993125339272483"; // Valeur à adapter
+
+                            $('#trips_map').css({height:'490px'});
+                            var map = L.map('trips_map').setView([home_lat, home_lon], 11);
+                            mapLink = 
+                                '<a href="http://openstreetmap.org">OpenStreetMap</a>';
+                            L.tileLayer(
+                                'https://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png', {
+                                attribution: '&copy; ' + mapLink + ' Contributors',
+                                minZomm:1,
+                                maxZoom: 20
+                                }).addTo(map);
+
+                                var markerHome = L.marker([home_lat, home_lon]).addTo(map);
+                    
+
+
+                            if (trips_number <1) {
+                                if ( $.fn.DataTable.isDataTable( '#trip_liste' ) ) {
+                                  $('#trip_liste').DataTable().destroy();
+                                }
+                                var x = document.getElementById("div_hist_liste2");
+                                x.style.display = "none";
+                                $("#div_hist_liste").empty();
+                                $("#div_hist_liste").append("Pas de données");
+                                return;
+                            }
+
+                            $("#div_hist_liste").empty();
+
+                            if ($.fn.DataTable.isDataTable('#trip_liste')) {
+                                $('#trip_liste').DataTable().destroy();
+                            }
+
+                            var x = document.getElementById("div_hist_liste2");
+                            x.style.display = "block";
+                            table_trips = $('#trip_liste').DataTable( {
+                                "language": {
+                                    "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/French.json"
+                                },
+                                "searching": false,
+                                "scrollY": "50%",
+                                "scrollCollapse": true,
+                                "paging": true,
+                                "bLengthChange": false,
+                                "order": [[ 0, "desc" ]],
+                                "columnDefs": [
+                                    {
+                                        "targets": [ 0 ],
+                                        "visible": false
+                                    },
+                                    {
+                                        "targets": [ 8 ],
+                                        "visible": false
+                                    },
+                                    {
+                                        "targets": [ 9 ],
+                                        "visible": false
+                                    },
+                                    {
+                                        "targets": [ 10 ],
+                                        "visible": false
+                                    },
+                                    {
+                                        "targets": [ 11 ],
+                                        "visible": false
+                                    }
+                                ],
+                                data: dataSet,
+                                select: {
+                                  style: 'single'
+                                },
+                                columns: [
+                                    { title: "ID" },
+                                    { title: "<span class='iconSel'><i title='Date/Heure' class='icon mdi-clock-time-eight-outline'></i></span>" },
+                                    { title: "<span class='iconSel'><i title='Durée' class='icon mdi-timer-outline'></i></span>" },
+                                    { title: "<span class='iconSel'><i title='Distance' class='icon mdi-map-marker-distance'></i></span>" },
+                                    { title: "<span class='iconSel'><i title='Vitesse moyenne' class='icon mdi-speedometer'></i></span>" },
+                                    { title: "<span class='iconSel'><i title='Consommation carburant' class='icon mdi-fuel'></i></span>" },
+                                    { title: "<span class='iconSel'><i title='Consommation électrique' class='icon mdi-battery-negative'></i></span>" },
+                                    { title: "<span class='iconSel'><i title='Régénération électrique' class='icon mdi-battery-positive'></i></span>" },
+                                    { title: "Start Lat GPS" },
+                                    { title: "Start Lon GPS" },
+                                    { title: "End Lat GPS" },
+                                    { title: "End Lon GPS" }
+                                ]
+                            } );
+
+                            $('#trip_liste tbody').on('click', 'tr', function () {
+                                var line = table_trips.row(this).index();
+                                //alert( 'You clicked on line:'+line);
+                                var data = table_trips.row( this ).data();
+                                //alert( 'You clicked on '+data[0]+'\'s row' );
+                                
+                                if ( $(this).hasClass('selected') ) {
+                                  $(this).removeClass('selected');
+                                  //display_trips(-1);
+                                  map.removeLayer(markerStart);
+                                  map.removeLayer(markerEnd);
+                                  }
+                                  else {
+                                    table_trips.$('tr.selected').removeClass('selected');
+                                    $(this).addClass('selected');
+                                    //alert( 'You clicked on '+data[6]+'\'s row' );
+                                    //display_trips(line);
+                                    map.removeLayer(markerHome);
+                                    markerStart = new L.marker([data[8],data[9]])
+                                            .bindPopup("Départ")
+                                            .addTo(map);
+                                    markerEnd = new L.marker([data[10],data[11]])
+                                            .bindPopup("Arrivée")
+                                            .addTo(map);
+                                    
+                                    /*for (var i = 0; i < planes.length; i++) {
+                                        marker = new L.marker([planes[i][1],planes[i][2]])
+                                            .bindPopup(planes[i][0])
+                                            .addTo(map);
+                                    }*/
+                                  }
+                              } );
+
+                    });
+                }
+            })
+        };
+        jeedom.cmd.update[vin]();    
 
     </script>
 

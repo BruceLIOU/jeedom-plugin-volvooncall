@@ -36,3 +36,22 @@
 #car_cmd_tab .row i:hover{
     color:dimgrey;
 }
+.content_volcooncall select, .content_volcooncall label, .content_volcooncall #trip_liste_info, .content_volcooncall #trip_liste_previous, .content_volcooncall #trip_liste_next{
+  color: white!important;
+}
+.content_volcooncall #trip_liste_paginate{
+    font-size:14px;
+    float: left;
+}
+.content_volcooncall .leaflet-control > a{
+    color: grey!important;
+}
+.content_volcooncall .iconSel i{
+    font-size:34px;
+}
+.content_volcooncall #table_resum th{
+    text-align: center;
+}
+.content_volcooncall th{
+    padding-left: 4px!important;
+}

@@ -9,7 +9,10 @@ include_file('3rdparty', 'leaflet_v1.7.1/leaflet', 'js', 'volvooncall');
 include_file('3rdparty', 'leaflet_v1.7.1/leaflet', 'css', 'volvooncall');
 include_file('3rdparty', 'js/moment', 'js', 'volvooncall');
 include_file('3rdparty', 'js/moment-with-locales', 'js', 'volvooncall');
-include_file('3rdparty', 'volvooncall_api.class', 'php', 'volvooncall');
+include_file('core', 'template/css/volvooncall.css', 'template', 'volvooncall');
+
+include '/plugins/volvooncall/core/class/volvooncall.class.php';
+
 
 $date = array(
     'start' => date('d-m-Y', strtotime(config::byKey('history::defautShowPeriod') . ' ' . date('d-m-Y'))),
@@ -17,62 +20,46 @@ $date = array(
 );
 sendVarToJS('eqType', 'volvooncall');
 sendVarToJs('object_id', init('object_id'));
-$eqLogics = eqLogic::byType('volvooncall');
-$eqLogic = $eqLogics[0];
+$eqLogics = volvooncall::byType('volvooncall');
 
-//log::add('volvooncall', 'debug', 'eqLogic:'.$eqLogic);
-
-$vin = $eqLogic->getlogicalId();
-
+foreach ($eqLogics as $eqLogic) {
+    $VocUsername = $eqLogic->getConfiguration('VocUsername');
+    $VocPassword = $eqLogic->getConfiguration('VocPassword');
+}
 
 $session_volvooncall = new volvooncall_api();
 
-    // Section caractéristiques véhicule
-    //$vin = $session_volvooncall->getVin();
-    $retT = $session_volvooncall->getTrips($vin);
+$login = $session_volvooncall->login($VocUsername, $VocPassword);
 
-    if ($retT) {
-      log::add('volvooncall', 'debug', 'Pannel: VIN:'.$vin);
-      log::add('volvooncall','debug','get_trips_infos:success='.serialize($retT));
+//Vérification des identifiants
+if ($login != true) {
+  log::add('volvooncall', 'error', "Erreur Login");
+  return;  // Erreur de login API VOLVO
+}
 
-      $dist = 0;
-      $elec = 0;
-      $fuel = 0;
-      
-      $total = count($retT['trips']);
+$vin = $session_volvooncall->getVin();
 
-      foreach ($retT['trips'] as $trips)
-      {
-          $dist+= $trips['tripDetails'][0]['distance']/1000;
-          $elec+= $trips['tripDetails'][0]['electricalConsumption']/1000;
-          $fuel+= $trips['tripDetails'][0]['fuelConsumption']/1000;
+log::add('volvooncall', 'debug', 'Pannel: VIN:'.$vin);
 
-          log::add('volvooncall','debug','Total trajets='.$total);
+$retT = $session_volvooncall->getTrips($vin);
 
-          $startTime = $trips['tripDetails'][0]['startTime'];
-          $startTimeF = date_create($startTime);
-          $endTime = $trips['tripDetails'][0]['endTime'];
-          $endTimeF = date_create($endTime);
-          //$duree = dateDiff(strtotime($startTime),strtotime($endTime));
-          $duree = date_diff($startTimeF, $endTimeF);
-          $dureeF = $duree->format('%H:%I');
+$jsonFile = __DIR__ . '/../../data/'.$vin.'trips.json';
 
-          $villes = $trips['tripDetails'][0]['startPosition']['city'].'/'.$trips['tripDetails'][0]['endPosition']['city'];
+$fn_car = file_get_contents($jsonFile);
+$jsonTrips = json_decode($fn_car, TRUE);
 
-          $distance = $trips['tripDetails'][0]['distance']/1000;
-          $electricalConsumption = $trips['tripDetails'][0]['electricalConsumption']/1000;
-          $fuelConsumtion = $trips['tripDetails'][0]['fuelConsumption']/1000;
+$dist = 0;
+$elec = 0;
+$fuel = 0;
 
-          $startpositionLat = $trips['tripDetails'][0]['startPosition']['latitude'];
-          $startpositionLon = $trips['tripDetails'][0]['startPosition']['longitude'];
+$total = count($retT["trips"]);
+foreach ( $retT["trips"] as $trips )
+{
+    $dist += $trips['tripDetails'][0]['distance']/1000;
+    $elec += $trips['tripDetails'][0]['electricalConsumption']/1000;
+    $fuel += $trips['tripDetails'][0]['fuelConsumption']/1000;
+}
 
-          $endPositionLat = $trips['tripDetails'][0]['endPosition']['latitude'];
-          $endPositionLon = $trips['tripDetails'][0]['endPosition']['longitude'];
-      }
-    }
-    else {
-      log::add('volvooncall','error',"get_trips_infos:Erreur d'accès à l'API pour informations sur le véhicule");
-    }
 ?>
 
 <div id="exTab3" class="container container_volvooncall">
@@ -99,6 +86,9 @@ $session_volvooncall = new volvooncall_api();
                     <div style="min-height:40px;font-size: 1.5em;">
                         <i style="font-size: initial;"></i> Période analysée
                     </div>
+                    <?php
+                        echo '<input type="hidden" value="' . $vin . '">';
+                    ?>
                     <div style="min-height:30px;">
                         <div class="pull-left" style="font-size: 1.3em;"> Début:
                             <input id="gps_startDate" class="pull-right form-control input-sm in_datepicker" style="display : inline-block; width: 87px;" value="<?php echo $date['start']?>" />

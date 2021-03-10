@@ -55,3 +55,6 @@
 .content_volcooncall th{
     padding-left: 4px!important;
 }
+#car_stat_tab th, #car_stat_tab tr{
+    text-align: center;
+}

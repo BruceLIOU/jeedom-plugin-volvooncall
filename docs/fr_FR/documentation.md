@@ -92,8 +92,6 @@ Créer un template HTML (plugin HTML display) avec le code fournit (docs/TBL_htm
 <p align="left">
   <img src="../images/config_plugin_icon-mdi.png" width="200" title="Plugin icon - pack mdi">
 </p>
-* Veuillez modifier
-
 
 Cette page permet de consulter les informations suivantes sur 4 onglets différents:
 * Liste des trajets effectués par le véhicule -> en cours de développement

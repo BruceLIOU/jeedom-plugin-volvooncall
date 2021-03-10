@@ -88,7 +88,7 @@ Cette page permet de consulter les informations suivantes sur 4 onglets différe
 * Commandes (démarrage/véreouillage/climatisation/...) -> en cours de développement
 * Informations sur les visites d'entretien du véhicule recommandées par Volvo (commentaire dans le code)
 
-**Affichage des trajets:** -> en cours de développement
+**Affichage des trajets:** -> en cours de développement<br>
 <strike>Il est possible de définir une période soit par 2 dates, soit par des racourcis ('Aujourd'hui', 'hier', 'les 7 derniers jours' ou 'tout'), puis d'afficher l'ensemble des trajets sur cette période.</strike><br>
 La suite de la page est mise à jour avec l'affichage des trajets <strike>sélectionnés</strike>, en tableau et en affichage sur une carte. (Openstreet map) <br>
 On peut sélectionner un trajet dans le tableau pour l'afficher sur la carte. <br>

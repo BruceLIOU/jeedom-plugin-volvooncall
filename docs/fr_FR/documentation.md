@@ -90,7 +90,7 @@ Créer un template HTML (plugin HTML display) avec le code fournit (docs/TBL_htm
 * Installation du plugin icon
 * Installation du pack mdi
 <p align="left">
-  <img src="../images/config_plugin_icon-mdi.png" width="600" title="Plugin icon - pack mdi">
+  <img src="../images/config_plugin_icon-mdi.png" width="200" title="Plugin icon - pack mdi">
 </p>
 * Veuillez modifier
 

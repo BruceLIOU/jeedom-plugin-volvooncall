@@ -57,7 +57,7 @@ foreach ( $retT["trips"] as $trips )
 {
     $dist += $trips['tripDetails'][0]['distance']/1000;
     $elec += $trips['tripDetails'][0]['electricalConsumption']/1000;
-    $fuel += $trips['tripDetails'][0]['fuelConsumption']/1000;
+    $fuel += $trips['tripDetails'][0]['fuelConsumption']/100;
 }
 
 ?>
@@ -118,8 +118,8 @@ foreach ( $retT["trips"] as $trips )
                             <div style="padding-top:8px;color: #fff;font-size: 0.6em;">
                                 Nombre de trajet : <span id="nombre_trajets"><?php echo $total?></span><br>
                                 Distance totale : <span id="distance_totale"></span><?php echo round($dist, 2);?> km<br>
-                                Consommation carburant : <span id="conso_carburant_totale"><?php echo round($elec, 2);?></span> l<br>
-                                Consommation électrique : <span id="conso_batterie_totale"><?php echo round($fuel, 2);?></span> kWh<br>
+                                Consommation carburant : <span id="conso_carburant_totale"><?php echo round($fuel, 2);?></span> l<br>
+                                Consommation électrique : <span id="conso_batterie_totale"><?php echo round($elec, 2);?></span> kWh<br>
                             </div>
                         </div>
                         <div id='trips_info' style="font-size: 1.2em;"></div>

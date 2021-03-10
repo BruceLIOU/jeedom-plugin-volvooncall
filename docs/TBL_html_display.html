@@ -70,16 +70,41 @@
         <div class="tab-pane" id="car_stat_tab">
             <h3>Caractéristiques du véhicule</h3>
           	<h4><a href="https://s.volvocars.com/AqgdNKlUpeOEl742" target="_blank">Voir sur le site de Volvo</a></h4>
-            <p id="vin">VIN : <span class="vin"></span></p>
-          	<p id="model">Modèle : <span class="model"></span></p>
-          	<p id="model_annee">Année du modèle : <span class="model_annee"></span></p>
-          	<p id="capacite_reservoir">Capacité réservoir : <span class="capacite_reservoir"></span>L</p>
-            <p id="immatriculation">Immatriculation : <span class="immatriculation"></span></p>
+              <table id="table_carac" width="100%" cellspacing="5" align="center">
+                <thead>
+                    <th>VIN</th>
+                    <th>Modèle</th>
+                    <th>Année du modèle</th>
+                    <th>Capacité réservoir</th>
+                    <th>Immatriculation</th>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td id="vin"><span class="vin"></span></td>
+                        <td id="model"><span class="model"></span></td>
+                        <td id="model_annee"><span class="model_annee"></span></td>
+                        <td id="capacite_reservoir"><span class="capacite_reservoir"></span></td>
+                        <td id="immatriculation"><span class="immatriculation"></span></td>
+                    </tr>
+                </tbody>
+            </table>
           	<hr>
-          	<p id="moyenneVitesse">Vitesse moyenne : <span class="stateMoyenneVitesse"></span> km/h</p>
-          	<p id="moyenneConso">Consommation moyenne : <span class="stateConsoMoyenne"></span> l/km</p>
-          	<p id="TM">TM : <span class="stateTM"></span> km</p>
-          	<p id="TA">TA : <span class="stateTA"></span> km</p>
+              <table id="table_stats" width="100%" cellspacing="5" align="center">
+                <thead>
+                    <th>Vitesse moyenne</th>
+                    <th>Consommation moyenne</th>
+                    <th>TM</th>
+                    <th>TA</th>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td id="moyenneVitesse"><span class="stateMoyenneVitesse"></span></td>
+                        <td id="moyenneConso"><span class="stateConsoMoyenne"></span></td>
+                        <td id="TM"><span class="stateTM"></span></td>
+                        <td id="TA"><span class="stateTA"></span></td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
         <div class="tab-pane" id="car_cmd_tab">
             <h3>Toutes les commandes</h3>
@@ -259,7 +284,7 @@
                 id: capacite_reservoir,
                 success: function (valeur_courante) {
                     //      alert(valeur_courante);
-                    $('.capacite_reservoir').empty().append(valeur_courante);
+                    $('.capacite_reservoir').empty().append(valeur_courante + " l");
                 }
             })
         };
@@ -283,7 +308,7 @@
                 id: stateVitesseMoyenne,
                 success: function (valeur_courante) {
                     //      alert(valeur_courante);
-                    $('.stateMoyenneVitesse').empty().append(valeur_courante);
+                    $('.stateMoyenneVitesse').empty().append(valeur_courante + " km/h");
                 }
             })
         };
@@ -295,7 +320,7 @@
                 id: stateConsoMoyenne,
                 success: function (valeur_courante) {
                     //      alert(valeur_courante);
-                    $('.stateConsoMoyenne').empty().append(valeur_courante);
+                    $('.stateConsoMoyenne').empty().append(valeur_courante + " l/100km");
                 }
             })
         };
@@ -307,7 +332,7 @@
                 id: stateTM,
                 success: function (valeur_courante) {
                     //      alert(valeur_courante);
-                    $('.stateTM').empty().append(valeur_courante);
+                    $('.stateTM').empty().append(valeur_courante + " km");
                 }
             })
         };
@@ -319,7 +344,7 @@
                 id: stateTA,
                 success: function (valeur_courante) {
                     //      alert(valeur_courante);
-                    $('.stateTA').empty().append(valeur_courante);
+                    $('.stateTA').empty().append(valeur_courante + " km");
                 }
             })
         };

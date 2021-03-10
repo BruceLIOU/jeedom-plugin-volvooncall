@@ -422,9 +422,9 @@
       	jeedom.cmd.update[vin] = function (_options) {
             jeedom.cmd.execute({ // Récupération de la valeur  
                 id: vin,
-                success: function (valeur_courante) {
+                success: function (vin) {
                     //alert(valeur_courante);
-                    $('.vin').empty().append(valeur_courante);
+                    $('.vin').empty().append(vin);
 
                     var data = [];
                     var tripId;
@@ -461,7 +461,7 @@
                     moment.locale('fr'); 
                     moment.defaultFormat = "DD/MM/YYYY HH:mm";
                         
-                    $.getJSON('https://casba-istres.freeboxos.fr/plugins/volvooncall/data/'+ valeur_courante +'/trips.json', function (data) {
+                    $.getJSON('https://casba-istres.freeboxos.fr/plugins/volvooncall/data/'+ vin +'/trips.json', function (data) {
                         console.log(data);
 
                         $.each(data.trips, function(i, item) {

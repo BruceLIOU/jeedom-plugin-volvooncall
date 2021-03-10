@@ -68,8 +68,7 @@ class volvooncall extends eqLogic
   {
     /* Informations générales sur le véhicule */
     /******************************************/
-    $vin2 = $this->getlogicalId();
-    $refresh = $this->getCmd(null, 'refresh');
+     $refresh = $this->getCmd(null, 'refresh');
     if (!is_object($refresh)) {
       $refresh = new volvooncallCmd();
       $refresh->setName(__('Rafraichir', __FILE__));
@@ -914,38 +913,6 @@ class volvooncall extends eqLogic
     */
 
     file_put_contents($vin_dir . '/trips.json', $jsonFile);
-
-    /*$fn_car = file_get_contents('./trips.json');
-    $jsonTrips= [];
-    $jsonTrips = json_decode($fn_car, TRUE);
-    
-
-    foreach($retT['trips'] as $trip)
-    {
-        $id = $trip['id'];
-
-        $startTime = $trip['tripDetails'][0]['startTime'];
-        $startTimeF = date_create($startTime);
-        $endTime = $trip['tripDetails'][0]['endTime'];
-        $endTimeF = date_create($endTime);
-        //$duree = dateDiff(strtotime($startTime),strtotime($endTime));
-        $duree = date_diff($startTimeF, $endTimeF);
-        $dureeF = $duree->format('%H:%I');
-
-        $villes = $trip['tripDetails'][0]['startPosition']['city'].'/'.$trip['tripDetails'][0]['endPosition']['city'];
-
-        $distance = $trip['tripDetails'][0]['distance']/1000;
-        $electricalConsumption = $trip['tripDetails'][0]['electricalConsumption']/1000;
-        $fuelConsumtion = $trip['tripDetails'][0]['fuelConsumption']/1000;
-
-        $startpositionLat = $trip['tripDetails'][0]['startPosition']['latitude'];
-        $startpositionLon = $trip['tripDetails'][0]['startPosition']['longitude'];
-
-        $endPositionLat = $trip['tripDetails'][0]['endPosition']['latitude'];
-        $endPositionLon = $trip['tripDetails'][0]['endPosition']['longitude'];
-
-        //log::add('volvooncall', 'debug', 'villes : '.$villes);
-    }*/
   }
 
   public function updateData()
@@ -1205,7 +1172,7 @@ class volvooncall extends eqLogic
     $tripPoints = $retT["trips"];
     $tripPosition = $retP["position"];
 
-    $fn_car_gps   = dirname(__FILE__).CARS_FILES_DIR.$vin.'/gps.log';
+    $fn_car_gps   = dirname(__FILE__).CARS_FILES_DIR.$vin.'/gps.json';
 
     $engineRunning = $retS["engineRunning"];
 
@@ -1216,88 +1183,25 @@ class volvooncall extends eqLogic
       $is_running = 0;
     }
 
-    $arrayTrips = array( 'pts_gps' => array() );
-
-    $startPositionGps = null;//lat,lon
-    $startPositionDateTime = null;//jj/mm/aaaa HH:mm
-    $startPositionOdometer = null;//km
-    $startPositionFuelAmount = null;// value/10 l
-    $startPositionElectricalLevel = null;// value/1000 KmH
-
-    $endPositionGps = null;//lat,lon
-    $endPositionDateTime = null;//jj/mm/aaaa HH:mm
-    $endPositionOdometer = null;//km
-    $endPositionFuelAmount = null;// value/10 l
-    $endPositionElectricalLevel = null;// value/1000 KmH
-
-    $distance = null;//km
+    //$arrayTrips = array( 'pts_gps' => array() );
+    $arrayTrips = array( 'pts_gps' => array('idTrip' => array()) );
 
     if ($this->getIsEnable()) {
       if ($is_running == 1) {
-        $n = 0;
-
-        foreach ($tripPoints as $trip) {
-            $idTrip = $trip["id"]; // id Trip
-            $arrayTrips['pts_gps'][$n]['idTrip'] = $idTrip;
-        
-            $coordId = 0;
-            $i = 0;
-            foreach ($tripPosition as $position) {
-                $countIdGps = $coordId++;
-                $latitude = $retP["position"]["latitude"];
-                $longitude = $retP["position"]["longitude"];
-                $arrayTrips['pts_gps'][$n]['idGps'][$i]['coords']['id'] = $countIdGps;
-                $arrayTrips['pts_gps'][$n]['idGps'][$i]['coords']['latitude'] = $latitude;
-                $arrayTrips['pts_gps'][$n]['idGps'][$i]['coords']['longitude'] = $longitude;
-                $i++;
-            }
-            $n++;
+        for ($i = 1; $i < 21; $i++) {
+          sleep(300); //en secondes => 5 minutes : 60*5 = 300
+          $arrayTrips['pts_gps']['idTrip'] = $tripPoints[0]["id"];
+          //$arrayTrips['pts_gps']['id'] = $i;
+          $arrayTrips['pts_gps']['coords'][$i]['idGps'] = $i;
+          $arrayTrips['pts_gps']['coords'][$i]['latitude'] = $tripPosition["latitude"];
+          $arrayTrips['pts_gps']['coords'][$i]['longitude'] = $tripPosition["longitude"];
         }
-        sleep(300); //en secondes => 5 minutes : 60*5 = 300
 
-        array_push( $tripPoints[0]["tripDetails"], $arrayTrips);
-        
-        $res = array_slice($tripPoints, 0, 1, true) +
-            $arrayTrips +
-            array_slice($tripPoints, 0, -1, true) ;
-        
-            //echo count($tripPoints[0]) - 1;
-        
-        $json = json_encode( $res, JSON_PRETTY_PRINT );
-        file_put_contents($fn_car_gps, $json, FILE_APPEND | LOCK_EX);
 
-        /*$startPositionGps = $retP["position"]["latitude"].','.$retP["position"]["longitude"];
-        $startPositionDateTime = date_format(date_create($retP["position"]["timestamp"]), 'd/m/Y H:i:s');
-        $startPositionOdometer = $retS["odometer"];
-        $startPositionFuelAmount = $retS["fuelAmount"]/10;
-        $startPositionElectricalLevel = $retS["hvBattery"]["hvBatteryLevel"]/1000;
-
-        sleep(300); //en secondes => 5 minutes : 60*5 = 300
-  
-        $endPositionGps = $retP["position"]["latitude"].','.$retP["position"]["longitude"];
-        $endPositionDateTime = date_format(date_create($retP["position"]["timestamp"]), 'd/m/Y H:i:s');
-        $endPositionOdometer = $retS["odometer"];
-        $endPositionFuelAmount = $retS["fuelAmount"]/10;
-        $endPositionElectricalLevel = $retS["hvBattery"]["hvBatteryLevel"]/1000;*/
-
-        log::add('volvooncall','debug',"Record GPS : Engine Running =".$is_running);
+        $jsonGPS = json_encode($arrayTrips, JSON_PRETTY_PRINT);
+        file_put_contents($fn_car_gps, $jsonGPS, FILE_APPEND | LOCK_EX);
       }
-
-      /*$id = $retT["id"];
-      $fuelConsumption = $startPositionFuelAmount - $endPositionFuelAmount;
-      $electricalConsumption = $startPositionElectricalLevel - $endPositionElectricalLevel;
-      $distance = $endPositionOdometer - $startPositionOdometer;
-
-      if (($distance > 0) && ($distance != $endPositionOdometer)) {
-        $gps_log_dt = $id.",".$startPositionDateTime.",".$endPositionDateTime.",".$startPositionGps.",".$endPositionGps.",".$fuelConsumption.",".$electricalConsumption.",".$distance.",".$is_running."\n";
-        log::add('volvooncall','debug',"Record GPS : Gps_dt=".$gps_log_dt);
-        file_put_contents($fn_car_gps, $gps_log_dt, FILE_APPEND | LOCK_EX);
-      }
-      else {
-        log::add('volvooncall','debug',"Record GPS = Pas de trajets enregistrés");
-      }*/
     }
-
   }
 
 }

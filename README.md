@@ -1,5 +1,5 @@
 # Plugin Jeedom pour Volvo On Call
-## PHP / API REST / JSON
+## PHP / JAVASCRIPT / API REST / JSON
 
 Ce plugin utilise une API sans documentation.
 

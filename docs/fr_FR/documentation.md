@@ -5,22 +5,24 @@
 --
 L'API utilisée est celle de Wirelesscar et n'a pas de documentation !
 --
-VOLVO a tout d'abord opté pour ce choix pour un "clé en main" mais sont en train de développer leur propre API.
-Vous pouvez la retrouver [ici](https://developer.volvocars.com/volvo-api).
-Elle est assez prometteuse mais ne permet pas, pour le moment, de faire autant de chose que sa concurrente.
+VOLVO a tout d'abord opté pour ce choix pour un "clé en main" mais sont en train de développer leur propre API.<br>
+Vous pouvez la retrouver [ici](https://developer.volvocars.com/volvo-api).<br>
+Elle est assez prometteuse mais ne permet pas, pour le moment, de faire autant de chose que sa concurrente.<br>
 
-Un script python existe [ici](https://github.com/molobrakos/volvooncall) et je m'en suis largement inspiré ainsi que celui développé par Lelas pour les voitures Peugeot.
+Un script python existe [ici](https://github.com/molobrakos/volvooncall) et je m'en suis largement inspiré ainsi que celui développé par Lelas pour les voitures Peugeot.<br>
 Merci à eux !
 <hr>
 
 ## Fonctions
 
 Ce plugin permet d'accèder aux informations de votre voiture connectée Volvo :
-- Quasiment tous les capteurs (ampoules, lave-glace, liquide de freins, statistiques, pression des penus, etc...)
+- Quasiment tous les capteurs (ampoules, lave-glace, liquide de freins, statistiques, pression des pneus, etc...)
+
 Il permet également d'accéder au trajets des 100 derniers jours avec les détails :
 - départ/arrivée
 - consommation
 - moyenne de vitesse
+
 Il permet aussi, si votre voiture le supporte, quelques actions distantes : -> en développement
 - Moteur : couper et mettre en route
 - Climatisation : préconditionnement du véhicule avec gestion de Timers
@@ -48,13 +50,13 @@ Par source Github:
   * Branche : master ou dev
 * Aller dans le menu "plugins/objets connectés/Volvo On Call" de jeedom pour installer le nouveau plugin.
 
-Sur la page configuration du plugin, saisir vos identifiants de compte Volvo On Call et votre région*.
+Sur la page configuration du plugin, saisir vos identifiants de compte Volvo On Call et votre région*.<br>
 *Fonction en cours de développement
 
 ## Configuration
-Une fois l'installation effectuée:
-Sur l'onglet "**Equipement**", choisissez l'objet parent et rendez le actif et visible.
-Renseigner vos identifiants Volvo On Call ainsi que votre région (Europe par défaut)*.
+Une fois l'installation effectuée:<br>
+Sur l'onglet "**Equipement**", choisissez l'objet parent et rendez le actif et visible.<br>
+Renseigner vos identifiants Volvo On Call ainsi que votre région (Europe par défaut)*.<br>
 *Fonction en cours de développement
 <p align="left">
   <img src="../images/config_equipement.png" width="700" title="Configuration équipement">
@@ -62,19 +64,19 @@ Renseigner vos identifiants Volvo On Call ainsi que votre région (Europe par d�
 
 La plugin à besoin de connaitre les coordonnées GPS de stationnement habituel de la voiture. <br>
 Pour cela, il faut renseigner ces coordonnées GPS dans la page de configuration de jeedom. <br>
-Règlages => Système => Configuration => Informations <br>
+Règlages => Système => Configuration => Informations
 <p align="left">
   <img src="../images/config_informations.png" width="500" title="Configuration informations">
 </p>
 
 ## Widget
-Les widgets sont configurés automatiquement par le plugin lors de la création de l'équipement.
+Les widgets sont configurés automatiquement par le plugin lors de la création de l'équipement.<br>
 Il est possible d'agencer les éléments dans les widgets par la fonction d'édition du dashboard.<br>
 Je propose l'agencement suivant comme exemple, en utilisant la présentation en tableau dans Configuration Avancée=>Disposition (voir ci dessous) <br>
-Une image d'un Volvo XC40 est proposé en background.
-** Bonus avec le plugin HTML display pour un affichage dans un design**
-Créer un design 
-Ajouter un lien (avec l'id de votre design) en bas de tableau pour accéder au détail du véhicule.
+Une image d'un Volvo XC40 est proposé en background.<br>
+** Bonus avec le plugin HTML display pour un affichage dans un design**<br>
+Créer un design <br>
+Ajouter un lien (avec l'id de votre design) en bas de tableau pour accéder au détail du véhicule.<br>
 <code><a href="/index.php?v=d&p=plan&plan_id=60" class="btn btn-primary btn-volvooncall">Accéder à plus d'informations</a></code>
 Créer un template HTML (plugin HTML display) avec le code fournit (docs/TBL_html_display.html) en adaptant le code selon vos commandes (commentaires dans le code)
 <p align="left">
@@ -110,7 +112,7 @@ Un résumé sur l'ensemble des trajets sélectionnés et donné également sur c
 </p>
 
 **Caractéristiques & Statistiques:** -> en cours de développement<br>
-Présentations sous forme de graphe de quelques statistiques d'utilisation du véhicule.
+Présentations sous forme de graphe de quelques statistiques d'utilisation du véhicule.<br>
 Adaptez le code en modifiant les ID de vos commandes (commentaire dans le code)
 <p align="left">
   <img src="../images/panel2.png" width="600" title="Commandes">
@@ -121,12 +123,12 @@ Adaptez le code en modifiant les ID de vos commandes (commentaire dans le code)
 * Energie consommée et coût estimé
 
 
-**commandes du  véhicule:** -> en cours de développement<br>
+**Commandes du  véhicule:** -> en cours de développement<br>
 Vous retrouverez les mêmes commandes que l'application Volvo On Call
 
 **Visites d'entretien:**<br>
-L'onglet affiché est celui en rapport à votre kilométrage.
-Ces informations sont estimatives et approximatives.
+L'onglet affiché est celui en rapport à votre kilométrage.<br>
+Ces informations sont estimatives et approximatives.<br>
 Adaptez le code en modifiant la date de 1ère mise en circulation (commentaire dans le code)
 <p align="left">
   <img src="../images/panel3.png" width="600" title="Entretien">

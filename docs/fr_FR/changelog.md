@@ -26,3 +26,9 @@
  - Fix panel
  - CSS
 
+  # 13/03/2021 - Branche dev
+ - Commandes selon le type de véhicule et les attributs supportés
+ - Ajout widget pour la "distance de la maison"
+ - CSS
+ - Html display => déplacement de la carte selon la ligne choisie
+

@@ -1,0 +1,21 @@
+<div class="cmd cmd-widget #history#" data-type="info" data-subtype="numeric" data-template="line" data-cmd_id="#id#" data-cmd_uid="#uid#" data-version="#version#" data-eqLogic_id="#eqLogic_id#">
+	<div class="content-xs">
+		<span class="cmdName #hide_name#">#name_display# </span> <strong class="state"></strong><span class="unite"> #unite#</span>
+	</div>
+	<script>
+		jeedom.cmd.update['#id#'] = function(_options) {
+			var cmd = $('.cmd[data-cmd_id=#id#]')
+			if (_options.display_value > 0.05){
+				cmd.attr('title','{{Date de valeur}} : '+_options.valueDate+'<br/>{{Date de collecte}} : '+_options.collectDate)
+				cmd.find('.state').empty().append(_options.display_value);
+			}
+			else {
+				cmd.attr('title','{{Date de valeur}} : '+_options.valueDate+'<br/>{{Date de collecte}} : '+_options.collectDate)
+				cmd.find('.state').empty().append("La voiture est à la maison");
+                cmd.find('.cmdName').empty().hide();
+                cmd.find('.unite').empty().hide();
+			}
+		}
+		jeedom.cmd.update['#id#']({display_value:'#state#',valueDate:'#valueDate#',collectDate:'#collectDate#',alertLevel:'#alertLevel#'})
+	</script>
+</div>

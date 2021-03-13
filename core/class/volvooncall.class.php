@@ -66,9 +66,57 @@ class volvooncall extends eqLogic
   // Fonction exécutée automatiquement après la sauvegarde (création ou mise à jour) de l'équipement 
   public function postSave()
   {
+    $this->listCommand();
+  }
+
+  // Fonction exécutée automatiquement avant la suppression de l'équipement 
+  public function preRemove()
+  {
+  }
+
+  // Fonction appelée au rythme de 1 mn (recupeartion des informations courantes de la voiture)
+  // ==========================================================================================
+  public static function pull()
+  {
+    log::add('volvooncall', 'debug', 'Funcion pull');
+
+    log::add('volvooncall', 'debug', 'Mise à jour périodique');
+    foreach (self::byType('volvooncall') as $eqLogic) {
+      $eqLogic->updateData();
+      $eqLogic->record_pts_gps();
+    }
+    $eqLogic->trips();
+  }
+
+  // Fonction exécutée automatiquement après la suppression de l'équipement 
+  public function postRemove()
+  {
+  }
+
+  public function listCommand()
+  {
+
+    $session_volvooncall = new volvooncall_api();
+
+    $login = $session_volvooncall->login($this->getConfiguration('VocUsername'), $this->getConfiguration('VocPassword'));
+
+    //Vérification des identifiants
+    if ($login != true) {
+      log::add('volvooncall', 'error', "Erreur Login");
+      return;  // Erreur de login API VOLVO
+    }
+
+    $vin = $session_volvooncall->getVin();
+    log::add('volvooncall', 'debug', 'List Cmd VIN : ' . $vin);
+
+    $retA = $session_volvooncall->getAttributes($vin);
+
+    $fuel_Type = $retA["fuelType"];
+    $preclimatizationSupported = $retA["preclimatizationSupported"];
+
     /* Informations générales sur le véhicule */
     /******************************************/
-     $refresh = $this->getCmd(null, 'refresh');
+    $refresh = $this->getCmd(null, 'refresh');
     if (!is_object($refresh)) {
       $refresh = new volvooncallCmd();
       $refresh->setName(__('Rafraichir', __FILE__));
@@ -153,39 +201,42 @@ class volvooncall extends eqLogic
     $info->save();
 
     // Creation info Volume du réservoir
-    $info = $this->getCmd(null, 'fuelTankVolume');
-    if (!is_object($info)) {
-      $info = new volvooncallCmd();
-      $info->setName(__('Volume du réservoir', __FILE__));
-    }
-    $info->setLogicalId('fuelTankVolume');
-    $info->setEqLogic_id($this->getId());
-    $info->setIsVisible(0);
-    $info->setIsHistorized(0);
-    $info->setType('info');
-    $info->setSubType('numeric');
-    $info->setUnite('l');
-    $info->save();
+    if ($fuel_Type != "Electric") {
+        $info = $this->getCmd(null, 'fuelTankVolume');
+        if (!is_object($info)) {
+        $info = new volvooncallCmd();
+        $info->setName(__('Volume du réservoir', __FILE__));
+        }
+        $info->setLogicalId('fuelTankVolume');
+        $info->setEqLogic_id($this->getId());
+        $info->setIsVisible(0);
+        $info->setIsHistorized(0);
+        $info->setType('info');
+        $info->setSubType('numeric');
+        $info->setUnite('l');
+        $info->save();
 
-    /* Informations sur le véhicule */
-    /********************************/
-    /************ Status ************/
-    // Creation info Consommation moyenne de carburant
-    $info = $this->getCmd(null, 'averageFuelConsumption');
-    if (!is_object($info)) {
-      $info = new volvooncallCmd();
-      $info->setName(__('Consommation moyenne de carburant', __FILE__));
+
+        /* Informations sur le véhicule */
+        /********************************/
+        /************ Status ************/
+        // Creation info Consommation moyenne de carburant
+        $info = $this->getCmd(null, 'averageFuelConsumption');
+        if (!is_object($info)) {
+        $info = new volvooncallCmd();
+        $info->setName(__('Consommation moyenne de carburant', __FILE__));
+        }
+        $info->setLogicalId('averageFuelConsumption');
+        $info->setEqLogic_id($this->getId());
+        $info->setIsVisible(1);
+        $info->setIsHistorized(0);
+        $info->setTemplate('dashboard', 'volvooncall::number');
+        $info->setTemplate('mobile', 'volvooncall::number');
+        $info->setType('info');
+        $info->setSubType('numeric');
+        $info->setUnite('l/100km');
+        $info->save();
     }
-    $info->setLogicalId('averageFuelConsumption');
-    $info->setEqLogic_id($this->getId());
-    $info->setIsVisible(1);
-    $info->setIsHistorized(0);
-    $info->setTemplate('dashboard', 'volvooncall::number');
-    $info->setTemplate('mobile', 'volvooncall::number');
-    $info->setType('info');
-    $info->setSubType('numeric');
-    $info->setUnite('l/100km');
-    $info->save();
 
     // Creation info Vitesse moyenne
     $info = $this->getCmd(null, 'averageSpeed');
@@ -244,29 +295,31 @@ class volvooncall extends eqLogic
       $info->setName(__('Status de connection', __FILE__));
     }
     $info->setLogicalId('connectionStatus');
-    $info->setIsVisible(0);
     $info->setEqLogic_id($this->getId());
+    $info->setIsVisible(0);
     $info->setIsHistorized(0);
     $info->setType('info');
     $info->setSubType('string');
     $info->save();
 
-    // Creation info Autonomie carburant
-    $info = $this->getCmd(null, 'distanceToEmpty');
-    if (!is_object($info)) {
-      $info = new volvooncallCmd();
-      $info->setName(__('Autonomie carburant', __FILE__));
+    if ($fuel_Type != "Electric") {
+        // Creation info Autonomie carburant
+        $info = $this->getCmd(null, 'distanceToEmpty');
+        if (!is_object($info)) {
+        $info = new volvooncallCmd();
+        $info->setName(__('Autonomie carburant', __FILE__));
+        }
+        $info->setLogicalId('distanceToEmpty');
+        $info->setEqLogic_id($this->getId());
+        $info->setIsVisible(1);
+        $info->setIsHistorized(0);
+        $info->setTemplate('dashboard', 'volvooncall::number');
+        $info->setTemplate('mobile', 'volvooncall::number');
+        $info->setType('info');
+        $info->setSubType('numeric');
+        $info->setUnite('km');
+        $info->save();
     }
-    $info->setLogicalId('distanceToEmpty');
-    $info->setEqLogic_id($this->getId());
-    $info->setIsVisible(1);
-    $info->setIsHistorized(0);
-    $info->setTemplate('dashboard', 'volvooncall::number');
-    $info->setTemplate('mobile', 'volvooncall::number');
-    $info->setType('info');
-    $info->setSubType('numeric');
-    $info->setUnite('km');
-    $info->save();
 
     // Creation info Moteur en marche
     /* @return bool */
@@ -283,48 +336,39 @@ class volvooncall extends eqLogic
     $info->setSubType('binary');
     $info->save();
 
-    $info = $this->getCmd(null, 'record_period');
-    if (!is_object($info)) {
-      $info = new volvooncallCmd();
-      $info->setName(__('Période enregistrement', __FILE__));
-    }
-    $info->setLogicalId('record_period');
-    $info->setEqLogic_id($this->getId());
-    $info->setIsVisible(1);
-    $info->setIsHistorized(0);
-    $info->setType('info');
-    $info->setSubType('numeric');
-    $info->save();
+    if ($fuel_Type != "Electric") {
+        // Creation info Carburant restant
+        $info = $this->getCmd(null, 'fuelAmount');
+        if (!is_object($info)) {
+        $info = new volvooncallCmd();
+        $info->setName(__('Carburant restant', __FILE__));
+        }
+        $info->setLogicalId('fuelAmount');
+        $info->setEqLogic_id($this->getId());
+        $info->setIsVisible(0);
+        $info->setIsHistorized(0);
+        $info->setType('info');
+        $info->setSubType('numeric');
+        $info->setUnite('l');
+        $info->save();
 
-    // Creation info Carburant restant
-    $info = $this->getCmd(null, 'fuelAmount');
-    if (!is_object($info)) {
-      $info = new volvooncallCmd();
-      $info->setName(__('Carburant restant', __FILE__));
+        // Creation info Carburant restant
+        $info = $this->getCmd(null, 'fuelAmountLevel');
+        if (!is_object($info)) {
+        $info = new volvooncallCmd();
+        $info->setName(__('Niveau carburant restant', __FILE__));
+        }
+        $info->setLogicalId('fuelAmountLevel');
+        $info->setEqLogic_id($this->getId());
+        $info->setIsVisible(1);
+        $info->setIsHistorized(0);
+        $info->setTemplate('dashboard', 'volvooncall::gauge_fuel');
+        $info->setTemplate('mobile', 'volvooncall::gauge_fuel');
+        $info->setType('info');
+        $info->setSubType('numeric');
+        $info->setUnite('%');
+        $info->save();
     }
-    $info->setLogicalId('fuelAmount');
-    $info->setEqLogic_id($this->getId());
-    $info->setIsVisible(0);
-    $info->setIsHistorized(0);
-    $info->setType('info');
-    $info->setSubType('numeric');
-    $info->setUnite('l');
-    $info->save();
-
-    // Creation info Carburant restant
-    $info = $this->getCmd(null, 'fuelAmountLevel');
-    if (!is_object($info)) {
-      $info = new volvooncallCmd();
-      $info->setName(__('Niveau carburant restant', __FILE__));
-    }
-    $info->setLogicalId('fuelAmountLevel');
-    $info->setEqLogic_id($this->getId());
-    $info->setIsVisible(1);
-    $info->setIsHistorized(0);
-    $info->setType('info');
-    $info->setSubType('numeric');
-    $info->setUnite('%');
-    $info->save();
 
     // Creation info Kilométrage
     $info = $this->getCmd(null, 'odometer');
@@ -343,20 +387,22 @@ class volvooncall extends eqLogic
     $info->setUnite('km');
     $info->save();
 
-    // Creation info Status de la climatisation à distance
-    /* @return Charging */
-    $info = $this->getCmd(null, 'remoteClimatizationStatus');
-    if (!is_object($info)) {
-      $info = new volvooncallCmd();
-      $info->setName(__('Status de la climatisation à distance', __FILE__));
+    if ($preclimatizationSupported) {
+        // Creation info Status de la climatisation à distance
+        /* @return Charging */
+        $info = $this->getCmd(null, 'remoteClimatizationStatus');
+        if (!is_object($info)) {
+        $info = new volvooncallCmd();
+        $info->setName(__('Status de la climatisation à distance', __FILE__));
+        }
+        $info->setLogicalId('remoteClimatizationStatus');
+        $info->setEqLogic_id($this->getId());
+        $info->setIsVisible(0);
+        $info->setIsHistorized(0);
+        $info->setType('info');
+        $info->setSubType('string');
+        $info->save();
     }
-    $info->setLogicalId('remoteClimatizationStatus');
-    $info->setEqLogic_id($this->getId());
-    $info->setIsVisible(0);
-    $info->setIsHistorized(0);
-    $info->setType('info');
-    $info->setSubType('string');
-    $info->save();
 
     // Creation info Status d'entretien
     /* @return Normal */
@@ -545,87 +591,89 @@ class volvooncall extends eqLogic
     $info->setSubType('string');
     $info->save();
 
-    // Creation info Status du cable de chargement
-    /* @return CablePluggedInCar_FullyCharged */
-    $info = $this->getCmd(null, 'hvBatteryChargeStatusDerived');
-    if (!is_object($info)) {
-      $info = new volvooncallCmd();
-      $info->setName(__('Status du cable de chargement', __FILE__));
-    }
-    $info->setLogicalId('hvBatteryChargeStatusDerived');
-    $info->setEqLogic_id($this->getId());
-    $info->setIsVisible(1);
-    $info->setIsHistorized(0);
-    $info->setTemplate('dashboard', 'volvooncall::plugged');
-    $info->setTemplate('mobile', 'volvooncall::plugged');
-    $info->setType('info');
-    $info->setSubType('string');
-    $info->save();
+    if ($fuel_Type == "Electric" || $fuel_Type == 'HEV') {
+        // Creation info Status du cable de chargement
+        /* @return CablePluggedInCar_FullyCharged */
+        $info = $this->getCmd(null, 'hvBatteryChargeStatusDerived');
+        if (!is_object($info)) {
+        $info = new volvooncallCmd();
+        $info->setName(__('Status du cable de chargement', __FILE__));
+        }
+        $info->setLogicalId('hvBatteryChargeStatusDerived');
+        $info->setEqLogic_id($this->getId());
+        $info->setIsVisible(1);
+        $info->setIsHistorized(0);
+        $info->setTemplate('dashboard', 'volvooncall::plugged');
+        $info->setTemplate('mobile', 'volvooncall::plugged');
+        $info->setType('info');
+        $info->setSubType('string');
+        $info->save();
 
-    // Creation info Status de la charge
-    /* @return ChargeEnd */
-    $info = $this->getCmd(null, 'hvBatteryChargeStatus');
-    if (!is_object($info)) {
-      $info = new volvooncallCmd();
-      $info->setName(__('Status de la charge', __FILE__));
-    }
-    $info->setLogicalId('hvBatteryChargeStatus');
-    $info->setEqLogic_id($this->getId());
-    $info->setIsVisible(1);
-    $info->setIsHistorized(0);
-    $info->setTemplate('dashboard', 'volvooncall::chargement');
-    $info->setTemplate('mobile', 'volvooncall::chargement');
-    $info->setType('info');
-    $info->setSubType('string');
-    $info->save();
+        // Creation info Status de la charge
+        /* @return ChargeEnd */
+        $info = $this->getCmd(null, 'hvBatteryChargeStatus');
+        if (!is_object($info)) {
+        $info = new volvooncallCmd();
+        $info->setName(__('Status de la charge', __FILE__));
+        }
+        $info->setLogicalId('hvBatteryChargeStatus');
+        $info->setEqLogic_id($this->getId());
+        $info->setIsVisible(1);
+        $info->setIsHistorized(0);
+        $info->setTemplate('dashboard', 'volvooncall::chargement');
+        $info->setTemplate('mobile', 'volvooncall::chargement');
+        $info->setType('info');
+        $info->setSubType('string');
+        $info->save();
 
-    // Creation info Niveau de la batterie
-    $info = $this->getCmd(null, 'hvBatteryLevel');
-    if (!is_object($info)) {
-      $info = new volvooncallCmd();
-      $info->setName(__('Niveau de la batterie', __FILE__));
-    }
-    $info->setLogicalId('hvBatteryLevel');
-    $info->setEqLogic_id($this->getId());
-    $info->setIsHistorized(0);
-    $info->setIsVisible(1);
-    $info->setTemplate('dashboard', 'volvooncall::battery_status');
-    $info->setTemplate('mobile', 'volvooncall::battery_status');
-    $info->setType('info');
-    $info->setSubType('numeric');
-    $info->setUnite('%');
-    $info->save();
+        // Creation info Niveau de la batterie
+        $info = $this->getCmd(null, 'hvBatteryLevel');
+        if (!is_object($info)) {
+        $info = new volvooncallCmd();
+        $info->setName(__('Niveau de la batterie', __FILE__));
+        }
+        $info->setLogicalId('hvBatteryLevel');
+        $info->setEqLogic_id($this->getId());
+        $info->setIsHistorized(0);
+        $info->setIsVisible(1);
+        $info->setTemplate('dashboard', 'volvooncall::battery_status');
+        $info->setTemplate('mobile', 'volvooncall::battery_status');
+        $info->setType('info');
+        $info->setSubType('numeric');
+        $info->setUnite('%');
+        $info->save();
 
-    // Creation info Autonomie de la batterie
-    $info = $this->getCmd(null, 'distanceToHVBatteryEmpty');
-    if (!is_object($info)) {
-      $info = new volvooncallCmd();
-      $info->setName(__('Autonomie de la batterie', __FILE__));
-    }
-    $info->setLogicalId('distanceToHVBatteryEmpty');
-    $info->setEqLogic_id($this->getId());
-    $info->setIsVisible(0);
-    $info->setIsHistorized(0);
-    $info->setType('info');
-    $info->setSubType('numeric');
-    $info->setUnite('km');
-    $info->save();
+        // Creation info Autonomie de la batterie
+        $info = $this->getCmd(null, 'distanceToHVBatteryEmpty');
+        if (!is_object($info)) {
+        $info = new volvooncallCmd();
+        $info->setName(__('Autonomie de la batterie', __FILE__));
+        }
+        $info->setLogicalId('distanceToHVBatteryEmpty');
+        $info->setEqLogic_id($this->getId());
+        $info->setIsVisible(0);
+        $info->setIsHistorized(0);
+        $info->setType('info');
+        $info->setSubType('numeric');
+        $info->setUnite('km');
+        $info->save();
 
-    // Creation info Heure de fin de chargement
-    $info = $this->getCmd(null, 'timeToHVBatteryFullyCharged');
-    if (!is_object($info)) {
-      $info = new volvooncallCmd();
-      $info->setName(__('Heure de fin de chargement', __FILE__));
+        // Creation info Heure de fin de chargement
+        $info = $this->getCmd(null, 'timeToHVBatteryFullyCharged');
+        if (!is_object($info)) {
+        $info = new volvooncallCmd();
+        $info->setName(__('Heure de fin de chargement', __FILE__));
+        }
+        $info->setLogicalId('timeToHVBatteryFullyCharged');
+        $info->setEqLogic_id($this->getId());
+        $info->setIsVisible(1);
+        $info->setIsHistorized(0);
+        $info->setTemplate('dashboard', 'volvooncall::heure-chargement');
+        $info->setTemplate('mobile', 'volvooncall::heure-chargement');
+        $info->setType('info');
+        $info->setSubType('string');
+        $info->save();
     }
-    $info->setLogicalId('timeToHVBatteryFullyCharged');
-    $info->setEqLogic_id($this->getId());
-    $info->setIsVisible(1);
-    $info->setIsHistorized(0);
-    $info->setTemplate('dashboard', 'volvooncall::heure-chargement');
-    $info->setTemplate('mobile', 'volvooncall::heure-chargement');
-    $info->setType('info');
-    $info->setSubType('string');
-    $info->save();
 
     // Creation info Pression des pneus
     /* @return Normal */
@@ -792,36 +840,6 @@ class volvooncall extends eqLogic
     $info->setIsHistorized(0);
     $info->setTemplate('dashboard', 'volvooncall::opensmap');
     $info->setTemplate('mobile', 'volvooncall::opensmap');
-    $info->setConfiguration('trip_start_ts', 0);
-    $info->setConfiguration('trip_start_mileage',  0);
-    $info->setConfiguration('trip_start_battlevel', 0);
-    $info->setConfiguration('trip_in_progress', 0);
-    $info->setType('info');
-    $info->setSubType('string');
-    $info->save();
-
-    $info = $this->getCmd(null, 'position_gps_lat');
-    if (!is_object($info)) {
-      $info = new volvooncallCmd();
-      $info->setName(__('Position GPS LAT', __FILE__));
-    }
-    $info->setLogicalId('position_gps_lat');
-    $info->setEqLogic_id($this->getId());
-    $info->setIsVisible(0);
-    $info->setIsHistorized(0);
-    $info->setType('info');
-    $info->setSubType('string');
-    $info->save();
-
-    $info = $this->getCmd(null, 'position_gps_lon');
-    if (!is_object($info)) {
-      $info = new volvooncallCmd();
-      $info->setName(__('Position GPS LON', __FILE__));
-    }
-    $info->setLogicalId('position_gps_lon');
-    $info->setEqLogic_id($this->getId());
-    $info->setIsVisible(0);
-    $info->setIsHistorized(0);
     $info->setType('info');
     $info->setSubType('string');
     $info->save();
@@ -834,7 +852,6 @@ class volvooncall extends eqLogic
     }
     $info->setLogicalId('latitude');
     $info->setEqLogic_id($this->getId());
-    $info->setIsVisible(0);
     $info->setIsVisible(0);
     $info->setIsHistorized(0);
     $info->setType('info');
@@ -850,37 +867,29 @@ class volvooncall extends eqLogic
     $info->setLogicalId('longitude');
     $info->setEqLogic_id($this->getId());
     $info->setIsVisible(0);
-    $info->setIsVisible(0);
     $info->setIsHistorized(0);
     $info->setType('info');
     $info->setSubType('numeric');
     $info->save();
-  }
 
-  // Fonction exécutée automatiquement avant la suppression de l'équipement 
-  public function preRemove()
-  {
-  }
-
-  // Fonction appelée au rythme de 1 mn (recupeartion des informations courantes de la voiture)
-  // ==========================================================================================
-  public static function pull()
-  {
-    log::add('volvooncall', 'debug', 'Funcion pull');
-
-    log::add('volvooncall', 'debug', 'Mise à jour périodique');
-    foreach (self::byType('volvooncall') as $eqLogic) {
-      $eqLogic->updateData();
-      $eqLogic->record_pts_gps();
+    // Creation info distance
+    $info = $this->getCmd(null, 'distance');
+    if (!is_object($info)) {
+      $info = new volvooncallCmd();
+      $info->setName(__('Distance maison', __FILE__));
     }
-    $eqLogic->trips();
+    $info->setLogicalId('distance');
+    $info->setEqLogic_id($this->getId());
+    $info->setIsVisible(1);
+    $info->setIsHistorized(0);
+    $info->setTemplate('dashboard', 'volvooncall::distance_home');
+    $info->setTemplate('mobile', 'volvooncall::distance_home');
+    $info->setType('info');
+    $info->setSubType('numeric');
+    $info->setUnite('km');
+    $info->save();
   }
-
-  // Fonction exécutée automatiquement après la suppression de l'équipement 
-  public function postRemove()
-  {
-  }
-
+  
   public function trips()
   {
     $session_volvooncall = new volvooncall_api();
@@ -1045,6 +1054,15 @@ class volvooncall extends eqLogic
       $tyrePressureAllState = "La pression de l'un des pneus n'est pas bonne";
     }
     $positionGPS = $retP["position"]["latitude"] . "," . $retP["position"]["longitude"];
+    
+    // Calcul distance maison
+    $lat_home = deg2rad(floatval(config::byKey("info::latitude")));
+    $lon_home = deg2rad(floatval(config::byKey("info::longitude")));
+    $lat_veh = deg2rad(floatval($retP["position"]["latitude"]));
+    $lon_veh = deg2rad(floatval($retP["position"]["longitude"]));
+    $distance = 6371.01 * acos(sin($lat_home)*sin($lat_veh) + cos($lat_home)* cos($lat_veh)*cos($lon_home - $lon_veh)); // calcul de la distance
+    $distance = number_format($distance, 3, '.', '');//formatage 3 décimales
+
     try {
       $this->checkAndUpdateCmd('VIN', $vin);
       log::add('volvooncall', 'debug', 'key : VIN valeur : ' . $vin);
@@ -1072,8 +1090,6 @@ class volvooncall extends eqLogic
       log::add('volvooncall', 'debug', 'key : distanceToEmpty valeur : ' . $retS["distanceToEmpty"]);
       $this->checkAndUpdateCmd('engineRunning', $retS["engineRunning"]);
       log::add('volvooncall', 'debug', 'key : engineRunning valeur : ' . $retS["engineRunning"]);
-      //$this->checkAndUpdateCmd('record_period', $record_period);
-      //log::add('volvooncall', 'debug', 'key : record_period valeur : ' . $record_period);
       $this->checkAndUpdateCmd('fuelAmount', $retS["fuelAmount"]);
       log::add('volvooncall', 'debug', 'key : fuelAmount valeur : ' . $retS["fuelAmount"]);
       $this->checkAndUpdateCmd('fuelAmountLevel', $retS["fuelAmountLevel"]);
@@ -1142,6 +1158,8 @@ class volvooncall extends eqLogic
       log::add('volvooncall', 'debug', 'key : latitude valeur : ' . $retP["position"]["latitude"]);
       $this->checkAndUpdateCmd('longitude', $retP["position"]["longitude"]);
       log::add('volvooncall', 'debug', 'key : longitude valeur : ' . $retP["position"]["longitude"]);
+      $this->checkAndUpdateCmd('distance', $distance);
+      log::add('volvooncall', 'debug', 'key : distance valeur : ' . $distance);
     } catch (Exception $e) {
       $key = $cmd->getLogicalId();
       foreach ($this->getCmd('info') as $cmd) {
@@ -1182,6 +1200,7 @@ class volvooncall extends eqLogic
     else {
       $is_running = 0;
     }
+    
 
     //$arrayTrips = array( 'pts_gps' => array() );
     $arrayTrips = array( 'pts_gps' => array('idTrip' => array()) );

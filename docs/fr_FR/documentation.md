@@ -17,7 +17,7 @@ Merci à eux !
 
 Ce plugin permet d'accèder aux informations de votre voiture connectée Volvo :
 - Quasiment tous les capteurs (ampoules, lave-glace, liquide de freins, statistiques, pression des penus, etc...)
-Il permet également d'accéder au trajets des 100 derniers jours avec les détails : -> en développement
+Il permet également d'accéder au trajets des 100 derniers jours avec les détails :
 - départ/arrivée
 - consommation
 - moyenne de vitesse
@@ -68,14 +68,14 @@ Règlages => Système => Configuration => Informations <br>
 </p>
 
 ## Widget
-Le widget est configuré automatiquement par le plugin lors de la création de l'équipement.
-Il est possible d'agencer les éléments dans le widgets par la fonction d'édition du dashboard.<br>
+Les widgets sont configurés automatiquement par le plugin lors de la création de l'équipement.
+Il est possible d'agencer les éléments dans les widgets par la fonction d'édition du dashboard.<br>
 Je propose l'agencement suivant comme exemple, en utilisant la présentation en tableau dans Configuration Avancée=>Disposition (voir ci dessous) <br>
 Une image d'un Volvo XC40 est proposé en background.
 ** Bonus avec le plugin HTML display pour un affichage dans un design**
 Créer un design 
 Ajouter un lien (avec l'id de votre design) en bas de tableau pour accéder au détail du véhicule.
-<a href="/index.php?v=d&p=plan&plan_id=60" class="btn btn-primary btn-volvooncall">Accéder à plus d'informations</a>
+<code><a href="/index.php?v=d&p=plan&plan_id=60" class="btn btn-primary btn-volvooncall">Accéder à plus d'informations</a></code>
 Créer un template HTML (plugin HTML display) avec le code fournit (docs/TBL_html_display.html) en adaptant le code selon vos commandes (commentaires dans le code)
 <p align="left">
   <img src="../images/config_widget.png" width="700" title="Widget dashboard">
@@ -84,9 +84,9 @@ Créer un template HTML (plugin HTML display) avec le code fournit (docs/TBL_htm
 ## Bonus (code HTML avec le widget HTML display)
 # Pré-requis
 * Vous devez modifier certaines partie du code pour l'adapter à votre usage
-- lignes de 203 à 211 avec les Id de vos commandes
-- ligne 395 avec l'ID de votre commande vin
-- lignes 526 et 527 avec les coordonnées GPS de votre domicile
+- lignes de 228 à 236 avec les Id de vos commandes
+- ligne 420 avec l'ID de votre commande vin
+- lignes 556 et 557 avec les coordonnées GPS de votre domicile
 * Installation du plugin icon
 * Installation du pack mdi
 <p align="left">
@@ -94,12 +94,12 @@ Créer un template HTML (plugin HTML display) avec le code fournit (docs/TBL_htm
 </p>
 
 Cette page permet de consulter les informations suivantes sur 4 onglets différents:
-* Liste des trajets effectués par le véhicule -> en cours de développement
-* Caractéristiques du véhicule et statistiques sur l'utilisation et la consommation du véhicule. 
+* Historique des trajets & liste des trajets effectués par le véhicule
+* Caractéristiques du véhicule et statistiques sur l'utilisation et la consommation du véhicule -> en cours de développement
 * Commandes (démarrage/véreouillage/climatisation/...) -> en cours de développement
 * Informations sur les visites d'entretien du véhicule recommandées par Volvo (commentaire dans le code)
 
-**Affichage des trajets:** -> en cours de développement<br>
+**Affichage des trajets:**<br>
 <strike>Il est possible de définir une période soit par 2 dates, soit par des racourcis ('Aujourd'hui', 'hier', 'les 7 derniers jours' ou 'tout'), puis d'afficher l'ensemble des trajets sur cette période.</strike><br>
 La suite de la page est mise à jour avec l'affichage des trajets <strike>sélectionnés</strike>, en tableau et en affichage sur une carte. (Openstreet map) <br>
 On peut sélectionner un trajet dans le tableau pour l'afficher sur la carte. <br>
@@ -109,7 +109,7 @@ Un résumé sur l'ensemble des trajets sélectionnés et donné également sur c
   <img src="../images/panel1.png" width="600" title="HTML display - trajets">
 </p>
 
-**Caractéristiques & Statistiques:** -> en cours de développement
+**Caractéristiques & Statistiques:** -> en cours de développement<br>
 Présentations sous forme de graphe de quelques statistiques d'utilisation du véhicule.
 Adaptez le code en modifiant les ID de vos commandes (commentaire dans le code)
 <p align="left">
@@ -121,10 +121,10 @@ Adaptez le code en modifiant les ID de vos commandes (commentaire dans le code)
 * Energie consommée et coût estimé
 
 
-**commandes du  véhicule:** -> en cours de développement
+**commandes du  véhicule:** -> en cours de développement<br>
 Vous retrouverez les mêmes commandes que l'application Volvo On Call
 
-**Visites d'entretien:**
+**Visites d'entretien:**<br>
 L'onglet affiché est celui en rapport à votre kilométrage.
 Ces informations sont estimatives et approximatives.
 Adaptez le code en modifiant la date de 1ère mise en circulation (commentaire dans le code)
@@ -132,7 +132,7 @@ Adaptez le code en modifiant la date de 1ère mise en circulation (commentaire d
   <img src="../images/panel3.png" width="600" title="Entretien">
 </p>
 
-**Bugs connus:**
+**Bugs connus:**<br>
 Cette version 1.0 est encore en développement. Il y a quelques bugs connus mais non pénalisants
 * <strike> Javascript erreur : "ReferenceError: L is not defined" (affichée dans la barre de titre de jeedom) <br></strike>
 * Les markers ne s'affichent pas correctement sur la carte (HTML display)

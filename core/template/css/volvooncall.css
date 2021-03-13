@@ -64,3 +64,10 @@
 .content_volcooncall table#trip_liste tr.even > .sorting_1{
     background-color: #191919;
 }
+.content_volcooncall .dataTables_scrollBody .iconSel i{
+    font-size:14px;
+    margin-left:10px
+}
+.content_volcooncall tr.selected {
+    opacity: 0.7;
+}

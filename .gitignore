@@ -1,19 +1,2 @@
-<<<<<<< HEAD
 data/
 desktop/php/test.php
-=======
-nbproject/
-test.php
-core/config/common.config.php
-plugins
-sftp-config.json
-.project
-.DS_Store
-Thumbs.db
-*.php~
-docs/_site/
-docs/Gemfile.lock
-docs/.sass-cache/
-.remote-sync.json
-data/
->>>>>>> 16bdd36f1e67ad102676635b09524f921aa1557e

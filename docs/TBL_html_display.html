@@ -33,9 +33,9 @@
                                     <thead>
                                         <th>Nombre de trajet</th>
                                         <th>Distance totale</th>
-                                        <th>Consommation totale carburant</th>
-                                        <th>Consommation totale électrique</th>
-                                        <th>Régénération totale électrique</th>
+                                        <th id="th_conso_carburant_totale">Consommation totale carburant</th>
+                                        <th id="th_conso_batterie_totale">Consommation totale électrique</th>
+                                        <th id="th_regen_batterie_totale">Régénération totale électrique</th>
                                     </thead>
                                     <tbody>
                                         <tr>
@@ -73,14 +73,16 @@
               <table id="table_carac" width="100%" cellspacing="5" align="center">
                 <thead>
                     <th>VIN</th>
+                    <th>Type de véhicule</th>
                     <th>Modèle</th>
                     <th>Année du modèle</th>
-                    <th>Capacité réservoir</th>
+                    <th id="th_capacite_reservoir">Capacité réservoir</th>
                     <th>Immatriculation</th>
                 </thead>
                 <tbody>
                     <tr>
                         <td id="vin"><span class="vin"></span></td>
+                        <td id="type_fuel"><span class="type_fuel"></span></td>
                         <td id="model"><span class="model"></span></td>
                         <td id="model_annee"><span class="model_annee"></span></td>
                         <td id="capacite_reservoir"><span class="capacite_reservoir"></span></td>
@@ -92,7 +94,7 @@
               <table id="table_stats" width="100%" cellspacing="5" align="center">
                 <thead>
                     <th>Vitesse moyenne</th>
-                    <th>Consommation moyenne</th>
+                    <th id="th_moyenneConso">Consommation moyenne</th>
                     <th>TM</th>
                     <th>TA</th>
                 </thead>
@@ -224,7 +226,8 @@
          });
       	moment.locale('fr'); 
      
-        /* Partie à adapter avec l'ID de vos commandes */
+        /* Partie à adapter avec l\'ID de vos commandes */
+        var typeFuel = 4881;
       	var model = 4882;
         var model_annee = 4883;
         var capacite_reservoir = 4885;
@@ -253,7 +256,25 @@
       
 		var today = moment().format('L');
       	var jourRevision = moment().endOf('day').fromNow();
-      
+
+        
+
+
+        $('#type_fuel')[0].setAttribute('data-cmd_id', typeFuel);
+      	jeedom.cmd.update[typeFuel] = function (_options) {
+            jeedom.cmd.execute({ // Récupération de la valeur  
+                id: typeFuel,
+                success: function (valeur_courante) {
+                    //      alert(valeur_courante);
+                    //$('.type_fuel').empty().append('Diesel');
+                    $('.type_fuel').empty().append(valeur_courante);
+                    //var fuelType = valeur_courante;
+                }
+            })
+        };
+      	jeedom.cmd.update[typeFuel]();
+        var fuelType = $('.type_fuel').html();
+             
         $('#model')[0].setAttribute('data-cmd_id', model);
       	jeedom.cmd.update[model] = function (_options) {
             jeedom.cmd.execute({ // Récupération de la valeur  
@@ -278,17 +299,20 @@
         };
       	jeedom.cmd.update[model_annee]();
 
-        $('#capacite_reservoir')[0].setAttribute('data-cmd_id', capacite_reservoir);
-      	jeedom.cmd.update[capacite_reservoir] = function (_options) {
-            jeedom.cmd.execute({ // Récupération de la valeur  
-                id: capacite_reservoir,
-                success: function (valeur_courante) {
-                    //      alert(valeur_courante);
-                    $('.capacite_reservoir').empty().append(valeur_courante + " l");
-                }
-            })
-        };
-      	jeedom.cmd.update[capacite_reservoir]();
+          if (fuelType != "Electrique") {
+
+            $('#capacite_reservoir')[0].setAttribute('data-cmd_id', capacite_reservoir);
+            jeedom.cmd.update[capacite_reservoir] = function (_options) {
+                jeedom.cmd.execute({ // Récupération de la valeur  
+                    id: capacite_reservoir,
+                    success: function (valeur_courante) {
+                        //      alert(valeur_courante);
+                        $('.capacite_reservoir').empty().append(valeur_courante + " l");
+                    }
+                })
+            };
+            jeedom.cmd.update[capacite_reservoir]();
+        }
 
         $('#immatriculation')[0].setAttribute('data-cmd_id', immatriculation);
       	jeedom.cmd.update[immatriculation] = function (_options) {
@@ -314,17 +338,25 @@
         };
       	jeedom.cmd.update[stateVitesseMoyenne]();
 
-        $('#moyenneConso')[0].setAttribute('data-cmd_id', stateConsoMoyenne);
-      	jeedom.cmd.update[stateConsoMoyenne] = function (_options) {
-            jeedom.cmd.execute({ // Récupération de la valeur  
-                id: stateConsoMoyenne,
-                success: function (valeur_courante) {
-                    //      alert(valeur_courante);
-                    $('.stateConsoMoyenne').empty().append(valeur_courante + " l/100km");
-                }
-            })
-        };
-      	jeedom.cmd.update[stateConsoMoyenne]();
+        if (fuelType != "Electrique") {
+
+            $('#moyenneConso')[0].setAttribute('data-cmd_id', stateConsoMoyenne);
+            jeedom.cmd.update[stateConsoMoyenne] = function (_options) {
+                jeedom.cmd.execute({ // Récupération de la valeur  
+                    id: stateConsoMoyenne,
+                    success: function (valeur_courante) {
+                        //      alert(valeur_courante);
+                        $('.stateConsoMoyenne').empty().append(valeur_courante + " l/100km");
+                    }
+                })
+            };
+            jeedom.cmd.update[stateConsoMoyenne]();
+            
+        }
+        else {
+            $('#th_moyenneConso').hide();
+            $('.stateConsoMoyenne').hide();
+        }
 
         $('#TM')[0].setAttribute('data-cmd_id', stateTM);
       	jeedom.cmd.update[stateTM] = function (_options) {
@@ -418,6 +450,7 @@
 
         // Trips boucle
         var vin = 5046;
+        
         $('#vin')[0].setAttribute('data-cmd_id', vin);
       	jeedom.cmd.update[vin] = function (_options) {
             jeedom.cmd.execute({ // Récupération de la valeur  
@@ -426,12 +459,17 @@
                     //alert(valeur_courante);
                     $('.vin').empty().append(vin);
 
+                    var fuelType = $('.type_fuel').html();
                     var data = [];
                     var tripId;
                     var tripCategory;
-                    var tripFuelConsumption;
-                    var tripElectricalConsumption;
-                    var tripElectricalRegeneration;
+                    if (fuelType == "Diesel" || fuelType == "Essence" || fuelType == "HEV") {
+                        var tripFuelConsumption;
+                    }
+                    if (fuelType == "Electrique" || fuelType == "HEV") {
+                        var tripElectricalConsumption;
+                        var tripElectricalRegeneration;
+                    }
                     var tripDistance;
                     var tripStartOdometer;
                     var tripStartTime;
@@ -443,14 +481,22 @@
                     var tripEndLongitude;
 
                     var totalDistance = 0;
-                    var totalFuelConsumption = 0;
-                    var totalElectricalConsumption = 0;
-                    var totalElectricalRegeneration = 0;
-
+                    if (fuelType == "Diesel" || fuelType == "Essence" || fuelType == "HEV") {
+                        var totalFuelConsumption = 0;
+                    }
+                    if (fuelType == "Electrique" || fuelType == "HEV") {
+                        var totalElectricalConsumption = 0;
+                        var totalElectricalRegeneration = 0;
+                    }
+                    console.log(fuelType);
 
                     var table_trips = [];
 
                     var dataSet = [];
+
+                    var columnDefs = [];
+
+                    var columns = [];
 
                     var planes = [];
 
@@ -467,9 +513,13 @@
                         $.each(data.trips, function(i, item) {
                             tripId = item.id;
                             tripCategory = item.category;
-                            tripFuelConsumption = item.tripDetails[0].fuelConsumption;
-                            tripElectricalConsumption = item.tripDetails[0].electricalConsumption;
-                            tripElectricalRegeneration = item.tripDetails[0].electricalRegeneration;
+                            if (fuelType == "Diesel" || fuelType == "Essence" || fuelType == "HEV") {
+                                tripFuelConsumption = item.tripDetails[0].fuelConsumption;
+                            }
+                            if (fuelType == "Electrique" || fuelType == "HEV") {
+                                tripElectricalConsumption = item.tripDetails[0].electricalConsumption;
+                                tripElectricalRegeneration = item.tripDetails[0].electricalRegeneration;
+                            }
                             tripDistance = item.tripDetails[0].distance;
                             tripStartOdometer = item.tripDetails[0].startOdometer;
                             tripStartTime = item.tripDetails[0].startTime;
@@ -512,10 +562,25 @@
                             tripVitesse = Math.round(tripVitesse*10.0)/10.0;
                         
                             totalDistance += Math.round(tripDistance*100)/100;
-                            totalFuelConsumption += Math.round(tripFuelConsumption*100)/100;
-                            totalElectricalConsumption += Math.round(tripElectricalConsumption*100)/100;
-                            totalElectricalRegeneration += Math.round(tripElectricalRegeneration*100)/100;
-
+                            if (fuelType == "Diesel" || fuelType == "Essence" || fuelType == "HEV") {
+                                totalFuelConsumption += Math.round(tripFuelConsumption*100)/100;
+                                if (fuelType == "Diesel" || fuelType == "Essence") {
+                                    $('#th_conso_batterie_totale').hide();
+                                    $('#th_regen_batterie_totale').hide();
+                                }
+                            }
+                            if (fuelType == "Electrique" || fuelType == "HEV") {
+                                totalElectricalConsumption += Math.round(tripElectricalConsumption*100)/100;
+                                totalElectricalRegeneration += Math.round(tripElectricalRegeneration*100)/100;
+                                if (fuelType == "Electrique") {
+                                    $('#th_conso_carburant_totale').hide();
+                                    $('#conso_carburant_totale').hide();
+                                    $('#th_capacite_reservoir').hide();
+                                    $('#capacite_reservoir').hide();
+                                    $('#th_moyenneConso').hide();
+                                    $('#moyenneConso').hide();
+                                }
+                            }
                             
                             startGpsLat = tripStartLatitude;
                             startGpsLon = tripStartLongitude;
@@ -536,8 +601,18 @@
 
                             //alert(planesGPS);
 
-                            var line = [tripId, date_heure_str_start, duree_str, (distance/1000).toFixed(1)+" km", tripVitesse+" km/h", (tripFuelConsumption/1000).toFixed(2)+" l", (tripElectricalConsumption/1000).toFixed(2)+" kWh", (tripElectricalRegeneration/1000).toFixed(2)+" kWh", startGpsLat, startGpsLon, endGpsLat, endGpsLon, actions];
-                                dataSet.push(line);
+                            if (fuelType == "Electrique") { //-1 : tripFuelConsumption
+                                var line = [tripId, date_heure_str_start, duree_str, (distance/1000).toFixed(1)+" km", tripVitesse+" km/h", (tripElectricalConsumption/1000).toFixed(2)+" kWh", (tripElectricalRegeneration/1000).toFixed(2)+" kWh", startGpsLat, startGpsLon, endGpsLat, endGpsLon, actions];
+                            }
+                            else if (fuelType == "HEV") {
+                                var line = [tripId, date_heure_str_start, duree_str, (distance/1000).toFixed(1)+" km", tripVitesse+" km/h", (tripFuelConsumption/1000).toFixed(2)+" l", (tripElectricalConsumption/1000).toFixed(2)+" kWh", (tripElectricalRegeneration/1000).toFixed(2)+" kWh", startGpsLat, startGpsLon, endGpsLat, endGpsLon, actions];
+                            }
+                            else { // -2 : tripElectricalConsumption & tripElectricalRegeneration
+                                var line = [tripId, date_heure_str_start, duree_str, (distance/1000).toFixed(1)+" km", tripVitesse+" km/h", (tripFuelConsumption/1000).toFixed(2)+" l", startGpsLat, startGpsLon, endGpsLat, endGpsLon, actions];
+                            }
+                            dataSet.push(line);
+
+                            
 
                             //console.log(line);
 
@@ -549,9 +624,130 @@
                             var trips_number = Object.keys(data.trips).length;
                             $('#nombre_trajets').empty().append(trips_number);
                             $('#distance_totale').empty().append((totalDistance/1000).toFixed(1) + " km");
-                            $('#conso_carburant_totale').empty().append((totalFuelConsumption/100).toFixed(2) + " l");
-                            $('#conso_batterie_totale').empty().append((totalElectricalConsumption/1000).toFixed(2) + " kWh");
-                            $('#regen_batterie_totale').empty().append((totalElectricalRegeneration/1000).toFixed(2) + " kWh");
+                            if (fuelType == "Diesel" || fuelType == "Essence") {
+                                $('#conso_carburant_totale').empty().append((totalFuelConsumption/100).toFixed(2) + " l");
+                                columnDefId = 
+                                [
+                                    {
+                                        "targets": [ 0 ],
+                                        "visible": false
+                                    },
+                                    {
+                                        "targets": [ 6 ],
+                                        "visible": false
+                                    },
+                                    {
+                                        "targets": [ 7 ],
+                                        "visible": false
+                                    },
+                                    {
+                                        "targets": [ 8 ],
+                                        "visible": false
+                                    },
+                                    {
+                                        "targets": [ 9 ],
+                                        "visible": false
+                                    }
+                                ];
+                                columnsData = 
+                                [
+                                    { title: "ID" },//0
+                                    { title: "<span class='iconSel'><i title='Date/Heure' class='icon mdi-clock-time-eight-outline'></i></span>" },//1
+                                    { title: "<span class='iconSel'><i title='Durée' class='icon mdi-timer-outline'></i></span>" },//2
+                                    { title: "<span class='iconSel'><i title='Distance' class='icon mdi-map-marker-distance'></i></span>" },//3
+                                    { title: "<span class='iconSel'><i title='Vitesse moyenne' class='icon mdi-speedometer'></i></span>" },//4
+                                    { title: "<span class='iconSel'><i title='Consommation carburant' class='icon mdi-fuel'></i></span>" },//5
+                                    { title: "Start Lat GPS" },//6
+                                    { title: "Start Lon GPS" },//7
+                                    { title: "End Lat GPS" },//8
+                                    { title: "End Lon GPS" },//9
+                                    { title: "Actions" }//10
+                                ];
+                            }
+                            if (fuelType == "Electrique") {
+                                columnDefId = 
+                                [
+                                    {
+                                        "targets": [ 0 ],
+                                        "visible": false
+                                    },
+                                    {
+                                        "targets": [ 7 ],
+                                        "visible": false
+                                    },
+                                    {
+                                        "targets": [ 8 ],
+                                        "visible": false
+                                    },
+                                    {
+                                        "targets": [ 9 ],
+                                        "visible": false
+                                    },
+                                    {
+                                        "targets": [ 10 ],
+                                        "visible": false
+                                    }
+                                ];
+                                columnsData = 
+                                [
+                                    { title: "ID" },//0
+                                    { title: "<span class='iconSel'><i title='Date/Heure' class='icon mdi-clock-time-eight-outline'></i></span>" },//1
+                                    { title: "<span class='iconSel'><i title='Durée' class='icon mdi-timer-outline'></i></span>" },//2
+                                    { title: "<span class='iconSel'><i title='Distance' class='icon mdi-map-marker-distance'></i></span>" },//3
+                                    { title: "<span class='iconSel'><i title='Vitesse moyenne' class='icon mdi-speedometer'></i></span>" },//4
+                                    { title: "<span class='iconSel'><i title='Consommation électrique' class='icon mdi-battery-negative'></i></span>" },//5
+                                    { title: "<span class='iconSel'><i title='Régénération électrique' class='icon mdi-battery-positive'></i></span>" },//6
+                                    { title: "Start Lat GPS" },//7
+                                    { title: "Start Lon GPS" },//8
+                                    { title: "End Lat GPS" },//9
+                                    { title: "End Lon GPS" },//10
+                                    { title: "Actions" }//11
+                                ];
+                            }
+                            else if (fuelType == "HEV") {
+                                $('#conso_batterie_totale').empty().append((totalElectricalConsumption/1000).toFixed(2) + " kWh");
+                                $('#regen_batterie_totale').empty().append((totalElectricalRegeneration/1000).toFixed(2) + " kWh");
+                                $('#conso_carburant_totale').empty().append((totalFuelConsumption/100).toFixed(2) + " l");
+                                columnDefId = 
+                                [
+                                    {
+                                        "targets": [ 0 ],
+                                        "visible": false
+                                    },
+                                    {
+                                        "targets": [ 8 ],
+                                        "visible": false
+                                    },
+                                    {
+                                        "targets": [ 9 ],
+                                        "visible": false
+                                    },
+                                    {
+                                        "targets": [ 10 ],
+                                        "visible": false
+                                    },
+                                    {
+                                        "targets": [ 11 ],
+                                        "visible": false
+                                    }
+                                ];
+                                columnsData = 
+                                [
+                                    { title: "ID" },//0
+                                    { title: "<span class='iconSel'><i title='Date/Heure' class='icon mdi-clock-time-eight-outline'></i></span>" },//1
+                                    { title: "<span class='iconSel'><i title='Durée' class='icon mdi-timer-outline'></i></span>" },//2
+                                    { title: "<span class='iconSel'><i title='Distance' class='icon mdi-map-marker-distance'></i></span>" },//3
+                                    { title: "<span class='iconSel'><i title='Vitesse moyenne' class='icon mdi-speedometer'></i></span>" },//4
+                                    { title: "<span class='iconSel'><i title='Consommation carburant' class='icon mdi-fuel'></i></span>" },//5
+                                    { title: "<span class='iconSel'><i title='Consommation électrique' class='icon mdi-battery-negative'></i></span>" },//6
+                                    { title: "<span class='iconSel'><i title='Régénération électrique' class='icon mdi-battery-positive'></i></span>" },//7
+                                    { title: "Start Lat GPS" },//8
+                                    { title: "Start Lon GPS" },//9
+                                    { title: "End Lat GPS" },//10
+                                    { title: "End Lon GPS" },//11
+                                    { title: "Actions" }//12
+                                ];
+                            }
 
                             var home_lat = "43.50674868528217"; // Valeur à adapter
                             var home_lon = "4.993125339272483"; // Valeur à adapter
@@ -600,47 +796,12 @@
                                 "paging": true,
                                 "bLengthChange": false,
                                 "order": [[ 0, "desc" ]],
-                                "columnDefs": [
-                                    {
-                                        "targets": [ 0 ],
-                                        "visible": false
-                                    },
-                                    {
-                                        "targets": [ 8 ],
-                                        "visible": false
-                                    },
-                                    {
-                                        "targets": [ 9 ],
-                                        "visible": false
-                                    },
-                                    {
-                                        "targets": [ 10 ],
-                                        "visible": false
-                                    },
-                                    {
-                                        "targets": [ 11 ],
-                                        "visible": false
-                                    }
-                                ],
+                                "columnDefs": columnDefId,
                                 data: dataSet,
                                 select: {
                                   style: 'single'
                                 },
-                                columns: [
-                                    { title: "ID" },
-                                    { title: "<span class='iconSel'><i title='Date/Heure' class='icon mdi-clock-time-eight-outline'></i></span>" },
-                                    { title: "<span class='iconSel'><i title='Durée' class='icon mdi-timer-outline'></i></span>" },
-                                    { title: "<span class='iconSel'><i title='Distance' class='icon mdi-map-marker-distance'></i></span>" },
-                                    { title: "<span class='iconSel'><i title='Vitesse moyenne' class='icon mdi-speedometer'></i></span>" },
-                                    { title: "<span class='iconSel'><i title='Consommation carburant' class='icon mdi-fuel'></i></span>" },
-                                    { title: "<span class='iconSel'><i title='Consommation électrique' class='icon mdi-battery-negative'></i></span>" },
-                                    { title: "<span class='iconSel'><i title='Régénération électrique' class='icon mdi-battery-positive'></i></span>" },
-                                    { title: "Start Lat GPS" },
-                                    { title: "Start Lon GPS" },
-                                    { title: "End Lat GPS" },
-                                    { title: "End Lon GPS" },
-                                    { title: "Actions" }
-                                ]
+                                columns: columnsData
                             } );
 
                             function addMarker(code,lat,lng){
@@ -686,14 +847,32 @@
                                     map.removeLayer(markerHome);
 
                                     
+                                    if (fuelType == "Diesel" || fuelType == "Essence") {
+                                        markerStart = new L.marker([data[6],data[7]])
+                                        .bindPopup("Départ")
+                                        .addTo(map);
+                                        markerEnd = new L.marker([data[8],data[9]])
+                                        .bindPopup("Arrivée")
+                                        .addTo(map);
+                                    }
+                                    else if (fuelType == "Electrique") {
+                                        markerStart = new L.marker([data[7],data[8]])
+                                        .bindPopup("Départ")
+                                        .addTo(map);
+                                        markerEnd = new L.marker([data[9],data[10]])
+                                        .bindPopup("Arrivée")
+                                        .addTo(map);
+                                    }
+                                    else if (fuelType == "HEV") {
+                                        markerStart = new L.marker([data[8],data[9]])
+                                        .bindPopup("Départ")
+                                        .addTo(map);
+                                        markerEnd = new L.marker([data[10],data[11]])
+                                        .bindPopup("Arrivée")
+                                        .addTo(map);
+                                    }
 
 
-                                    markerStart = new L.marker([data[8],data[9]])
-                                            .bindPopup("Départ")
-                                            .addTo(map);
-                                    markerEnd = new L.marker([data[10],data[11]])
-                                            .bindPopup("Arrivée")
-                                            .addTo(map);
 
                                     map.panTo(markerStart.getLatLng());
                                     

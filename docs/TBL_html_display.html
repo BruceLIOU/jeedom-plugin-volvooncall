@@ -461,7 +461,7 @@
                     moment.locale('fr'); 
                     moment.defaultFormat = "DD/MM/YYYY HH:mm";
                         
-                    $.getJSON('https://casba-istres.freeboxos.fr/plugins/volvooncall/data/'+ vin +'/trips.json', function (data) {
+                    $.getJSON('./plugins/volvooncall/data/'+ vin +'/trips.json', function (data) {
                         console.log(data);
 
                         $.each(data.trips, function(i, item) {
@@ -528,10 +528,15 @@
                             ["Arrivée", tripEndLatitude, tripEndLongitude]
                             ];
 
+                            var actions = [];
+                            actions = [
+                            ["<a href='#' id='show_"+tripId+"'><span class='iconSel' ><i class='icon mdi-loupe'></i></span></a><a href='#' id='export_"+tripId+"'><span class='iconSel'><i class='icon mdi-file-export-outline'></i></span></a>"]
+                            ];
+
 
                             //alert(planesGPS);
 
-                            var line = [tripId, date_heure_str_start, duree_str, (distance/1000).toFixed(1)+" km", tripVitesse+" km/h", (tripFuelConsumption/1000).toFixed(2)+" l", (tripElectricalConsumption/1000).toFixed(2)+" kWh", (tripElectricalRegeneration/1000).toFixed(2)+" kWh", startGpsLat, startGpsLon, endGpsLat, endGpsLon];
+                            var line = [tripId, date_heure_str_start, duree_str, (distance/1000).toFixed(1)+" km", tripVitesse+" km/h", (tripFuelConsumption/1000).toFixed(2)+" l", (tripElectricalConsumption/1000).toFixed(2)+" kWh", (tripElectricalRegeneration/1000).toFixed(2)+" kWh", startGpsLat, startGpsLon, endGpsLat, endGpsLon, actions];
                                 dataSet.push(line);
 
                             //console.log(line);
@@ -633,42 +638,73 @@
                                     { title: "Start Lat GPS" },
                                     { title: "Start Lon GPS" },
                                     { title: "End Lat GPS" },
-                                    { title: "End Lon GPS" }
+                                    { title: "End Lon GPS" },
+                                    { title: "Actions" }
                                 ]
                             } );
+
+                            function addMarker(code,lat,lng){
+                                var p = L.marker([lat,lng]);
+                                p.bindPopup(code);
+                                p.addTo(map);
+                              }
+
+                              function removeLayer(marker){
+                                map.removeLayer(marker);
+                              }
 
                             $('#trip_liste tbody').on('click', 'tr', function () {
                                 var line = table_trips.row(this).index();
                                 //alert( 'You clicked on line:'+line);
                                 var data = table_trips.row( this ).data();
-                                //alert( 'You clicked on '+data[0]+'\'s row' );
-                                
+                                //alert( 'You clicked on '+data[8]+'\'s row' );
+
+
                                 if ( $(this).hasClass('selected') ) {
                                   $(this).removeClass('selected');
                                   //display_trips(-1);
+                                  
+
+                                  map.removeLayer(markerHome);
+
+
                                   map.removeLayer(markerStart);
                                   map.removeLayer(markerEnd);
+
+                                  /*for (i=0;i<markerStart.length;i++) {
+                                    map.removeLayer(markerStart[i]);
                                   }
-                                  else {
+                                  for (i=0;i<markerEnd.length;i++) {
+                                    map.removeLayer(markerEnd[i]);
+                                  }*/
+                                }
+                                else {
                                     table_trips.$('tr.selected').removeClass('selected');
                                     $(this).addClass('selected');
                                     //alert( 'You clicked on '+data[6]+'\'s row' );
                                     //display_trips(line);
                                     map.removeLayer(markerHome);
+
+                                    
+
+
                                     markerStart = new L.marker([data[8],data[9]])
                                             .bindPopup("Départ")
                                             .addTo(map);
                                     markerEnd = new L.marker([data[10],data[11]])
                                             .bindPopup("Arrivée")
                                             .addTo(map);
+
+                                    map.panTo(markerStart.getLatLng());
                                     
                                     /*for (var i = 0; i < planes.length; i++) {
                                         marker = new L.marker([planes[i][1],planes[i][2]])
                                             .bindPopup(planes[i][0])
                                             .addTo(map);
                                     }*/
-                                  }
+                                }
                               } );
+                              
 
                     });
                 }

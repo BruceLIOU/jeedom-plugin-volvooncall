@@ -8,7 +8,13 @@ Cette APi fonctionne avec une authentification basique.
 * Elle permet de récupérer les informations du compte/véhicule/position/trajets
 * Elle permet aussi de lancer des commandes de démarrage/chauffage/planification de pré-climatisation
 
-Ce plugin a testé avec un VOLVO XC40 Hybride
+## Prérequis
+* Abonnement Volvooncall actif
+
+Testé avec VOLVO :
+* XC40 Hybride
+* XC40 Essence
+* XC60 Diesel
 
 ## Documentation
 [Documentation](/docs/fr_FR/documentation.md)

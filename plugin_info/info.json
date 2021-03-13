@@ -11,6 +11,6 @@
 	"hasDependency" : false,
 	"hasOwnDeamon" : false,
 	"compatibility" : ["v4"],
-	"documentation" : "https://github.com/BruceLIOU/jeedom-plugin-volvooncall/blob/master/docs/#language#/documentation.md",
-	"changelog" : "https://github.com/BruceLIOU/jeedom-plugin-volvooncall/blob/master/docs/#language#/changelog.md"
+	"documentation" : "https://bruceliou.github.io/volvooncall/docs/#language#/documentation.md",
+	"changelog" : "https://bruceliou.github.io/volvooncall/docs/#language#/changelog.md"
 }

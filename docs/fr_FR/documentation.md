@@ -13,6 +13,9 @@ Un script python existe [ici](https://github.com/molobrakos/volvooncall) et je m
 Merci à eux !
 <hr>
 
+## Prérequis :
+- Abonnement Volvooncall actif
+
 ## Fonctions
 
 Ce plugin permet d'accèder aux informations de votre voiture connectée Volvo :
@@ -28,10 +31,10 @@ Il permet aussi, si votre voiture le supporte, quelques actions distantes : -> e
 - Climatisation : préconditionnement du véhicule avec gestion de Timers
 - Vérrouilage : portes et fenêtres
 
-Les informations disponibles dans le widgets sont:
-* Charge de la batterie, autonomie et kilométrage de la voiture
+Les informations disponibles dans les widgets sont:
+* Charge de la batterie, autonomie, kilométrage de la voiture, etc...
 * Information sur le chargement de la batterie (Prise connectée, fin de chargement, etc...)
-* Nombre de jours et kilomètres jusqu'au prochain entretien du véhicule -> dans un code HTML
+* Nombre de jours et kilomètres restant jusqu'au prochain entretien du véhicule -> dans un code HTML
 * Situation du véhicule sur une carte (Position GPS).
 
 <p align="left">
@@ -69,25 +72,25 @@ Règlages => Système => Configuration => Informations
   <img src="../images/config_informations.png" width="500" title="Configuration informations">
 </p>
 
-## Widget
+## Widgets
 Les widgets sont configurés automatiquement par le plugin lors de la création de l'équipement.<br>
 Il est possible d'agencer les éléments dans les widgets par la fonction d'édition du dashboard.<br>
 Je propose l'agencement suivant comme exemple, en utilisant la présentation en tableau dans Configuration Avancée=>Disposition (voir ci dessous) <br>
-Une image d'un Volvo XC40 est proposé en background.<br>
+Une image d'une Volvo XC40 est proposée en background.<br>
 ** Bonus avec le plugin HTML display pour un affichage dans un design**<br>
 Créer un design <br>
 Ajouter un lien (avec l'id de votre design) en bas de tableau pour accéder au détail du véhicule.<br>
 
     <a href="/index.php?v=d&p=plan&plan_id=60" class="btn btn-primary btn-volvooncall">Accéder à plus d'informations</a>
 
-Créer un template HTML (plugin HTML display) avec le code fournit (docs/TBL_html_display.html) en adaptant le code selon vos commandes (commentaires dans le code)
+Créer un template HTML (plugin HTML display) avec le code fournit [ici](docs/TBL_html_display.html) en adaptant le code selon vos commandes (commentaires dans le code)
 <p align="left">
   <img src="../images/config_widget.png" width="700" title="Widget dashboard">
 </p>
 
 ## Bonus (code HTML avec le widget HTML display)
-# Pré-requis
-* Vous devez modifier certaines partie du code pour l'adapter à votre usage
+# Pré-requis pour le bonus
+* Vous devez modifier certaines parties du code pour l'adapter à votre usage
 - lignes de 228 à 236 avec les Id de vos commandes
 - ligne 420 avec l'ID de votre commande vin
 - lignes 556 et 557 avec les coordonnées GPS de votre domicile
@@ -138,12 +141,13 @@ Adaptez le code en modifiant la date de 1ère mise en circulation (commentaire d
 
 **Bugs connus:**<br>
 Cette version 1.0 est encore en développement. Il y a quelques bugs connus mais non pénalisants
-* <strike> Javascript erreur : "ReferenceError: L is not defined" (affichée dans la barre de titre de jeedom) <br></strike>
-* Les markers ne s'affichent pas correctement sur la carte (HTML display)
+* <strike> Javascript erreur : "ReferenceError: L is not defined" (affichée dans la barre de titre de jeedom)</strike><br>
+* <strike>Les markers ne s'affichent pas correctement sur la carte (HTML display)</strike><br>
+* Sur 'click' d'une ligne du tableau, les markers précédents ne sont pas retirés de la carte. (Pour le moment, il faut sélectionner et déselectionner avant de cliquer sur un autre trajet).
 
 **Suite prévue pour ce plugin:**
 * Implémentation API Volvo (quand elle sera plus complète)
 * Ajouter le pilotage du préconditionnement du véhicule par Timers
 * Envoyer des trajets au véhicule
-* Exporter les trajets (pdf ou xls) pour des notes de frais par exemple
+* Exporter les trajets (pdf ou xls) pour des notes de frais (par exemple)
 * Ajouter des points GPS intermédiaires pour afficher les trajets complets (interval de 5 minutes)

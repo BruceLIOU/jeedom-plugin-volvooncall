@@ -1,12 +1,48 @@
 <?php
+/* This file is part of Jeedom.
+ *
+ * Jeedom is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Jeedom is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
+ */
+
+/* * ***************************Includes********************************* */
 // Function VOC
 class volvooncall_api
 {
+
     private $VocUsername;
     private $VocPassword;
     private $VocRegion;
 
+    public function switchRegion(){
+        switch ($this->VocRegion) {
+            case 'eu':
+                $domain = '';
+                break;
+            case 'na':
+                $domain = '-na';
+                break;
+            case 'ch':
+                $domain = '-ch';
+                break;
+            default:
+                $domain = '';
+        }
+        return $domain;
+    }
+
     private $api_url = 'https://vocapi.wirelesscar.net/customerapi/rest/v3.0';
+
 
     private $ACCOUNT = '/customeraccounts';
     private $ACCOUNT_RELATION = '/vehicle-account-relations/';
@@ -21,7 +57,7 @@ class volvooncall_api
       return true;
     }
 
-    private function _request($url) {
+    private function _request($url , $post = null, $postFields = null) {
         $ch = curl_init();
       
         // Default CURL options
@@ -40,6 +76,14 @@ class volvooncall_api
             'X-os-type: Android',
             'X-os-version: 22',
             'Accept: */*'));
+        if (!empty($post))
+        {
+            curl_setopt($ch, CURLOPT_POST, true);
+        }
+        if (!empty($postFields))
+        {
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $postFields);
+        }
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     
         // Execute request
@@ -83,6 +127,15 @@ class volvooncall_api
         else {
             return true;
         }
+    }
+    public function getTestUrl() {
+        $this->_checkAuth();
+   
+        $result = $this->_request($this->api_url . $this->ACCOUNT);
+        $url = $result["result"]['account'];
+
+        //return json_decode($idAccount);
+        return $url;
     }
 
     public function getAccount() {
@@ -154,8 +207,90 @@ class volvooncall_api
         //print_r($result["result"]);
     
         return $result["result"];
-        //return json_decode($result["result"]);
+        //return json_decode($result->body, true);
     }
+
+    // Command POST
+    // Verify by attributes if lockSupported is true
+    public function postLock($vin) {
+        $this->_checkAuth();
+
+        $post = 'POST';
     
+        $result = $this->_request($this->api_url . $this->VEHICLE . $vin . '/lock', $post);
+        //print_r($result["result"]);
+    
+        return $result["result"];
+        //return json_decode($result->body, true);
+    }
+
+    // Verify by attributes if unlockSupported is true
+    public function postUnLock($vin) {
+        $this->_checkAuth();
+
+        $post = 'POST';
+    
+        $result = $this->_request($this->api_url . $this->VEHICLE . $vin . '/unlock', $post);
+        //print_r($result["result"]);
+    
+        return $result["result"];
+        //return json_decode($result->body, true);
+    }
+
+    // Verify by attributes if remoteHeaterSupported is true
+    public function postHeaterStart($vin) {
+        $this->_checkAuth();
+
+        $post = 'POST';
+        $postFields = '/heater/start';
+    
+        $result = $this->_request($this->api_url . $this->VEHICLE . $vin . $postFields, $post, $postFields);
+        //print_r($result["result"]);
+    
+        return $result["result"];
+        //return json_decode($result->body, true);
+    }
+
+    // Verify by attributes if remoteHeaterSupported is true
+    public function postHeaterStop($vin) {
+        $this->_checkAuth();
+
+        $post = 'POST';
+        $postFields = '/heater/stop';
+    
+        $result = $this->_request($this->api_url . $this->VEHICLE . $vin . $postFields, $post, $postFields);
+        //print_r($result["result"]);
+    
+        return $result["result"];
+        //return json_decode($result->body, true);
+    }
+
+    // Verify by attributes if preclimatizationSupported is true
+    public function postPreclimatizationStart($vin) {
+        $this->_checkAuth();
+
+        $post = 'POST';
+        $postFields = '/preclimatization/start';
+    
+        $result = $this->_request($this->api_url . $this->VEHICLE . $vin . $postFields, $post, $postFields);
+        //print_r($result["result"]);
+    
+        return $result["result"];
+        //return json_decode($result->body, true);
+    }
+
+    // Verify by attributes if preclimatizationSupported is true
+    public function postPreclimatizationStop($vin) {
+        $this->_checkAuth();
+
+        $post = 'POST';
+        $postFields = '/preclimatization/stop';
+    
+        $result = $this->_request($this->api_url . $this->VEHICLE . $vin . $postFields, $post, $postFields);
+        //print_r($result["result"]);
+    
+        return $result["result"];
+        //return json_decode($result->body, true);
+    }
 }
 ?>

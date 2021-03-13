@@ -10,7 +10,11 @@
         $('.iconCmd#uid#').empty();
         if ('#state#' == 'CablePluggedInCar_Charging') {
             $('.iconCmd#uid#').append('<i class="icon_green icon jeedomapp-prise"></i><span id="plugged" style="padding-top:4px; display:block; font-size: 12px;">Connectée</span>');
-        } else {
+        }
+        else if ('#state#' == 'CablePluggedInCar_FullyCharged'){
+            $('.iconCmd#uid#').append('<i class="icon_green icon jeedomapp-prise"></i><span id="plugged_charged" style="padding-top:4px;display:block; font-size: 12px;">Connectée</span>');
+        }
+        else {
             $('.iconCmd#uid#').append('<i class="icon_red icon jeedomapp-prise-off2"></i><span id="unplugged" style="padding-top:4px;display:block; font-size: 12px;">Pas connectée</span>');
         }
     </script>

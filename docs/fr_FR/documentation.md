@@ -77,7 +77,9 @@ Une image d'un Volvo XC40 est proposé en background.<br>
 ** Bonus avec le plugin HTML display pour un affichage dans un design**<br>
 Créer un design <br>
 Ajouter un lien (avec l'id de votre design) en bas de tableau pour accéder au détail du véhicule.<br>
-<pre><a href="/index.php?v=d&p=plan&plan_id=60" class="btn btn-primary btn-volvooncall">Accéder à plus d'informations</a></pre>
+<pre>
+  <a href="/index.php?v=d&p=plan&plan_id=60" class="btn btn-primary btn-volvooncall">Accéder à plus d'informations</a>
+</pre>
 Créer un template HTML (plugin HTML display) avec le code fournit (docs/TBL_html_display.html) en adaptant le code selon vos commandes (commentaires dans le code)
 <p align="left">
   <img src="../images/config_widget.png" width="700" title="Widget dashboard">

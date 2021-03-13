@@ -15,18 +15,18 @@
  - Création widget
  - Ajout code HTML (plugin HTML display) pour affichage détaillé dans un desgin
 
-# 04/03/2021 - Branche dev
+# 04/03/2021
  - Création des commandes Sensors (pneus, portes, fenêtres) et de ses templates
  - Création du panel (en cours de développement)
  - Fix template widget
  - Fix HTML display
 
- # 10/03/2021 - Branche dev
+ # 10/03/2021
  - Intégration des trajets (HTML display)
  - Fix panel
  - CSS
 
-  # 13/03/2021 - Branche dev
+  # 13/03/2021
  - Commandes selon le type de véhicule et les attributs supportés
  - Ajout widget pour la "distance de la maison"
  - CSS

@@ -10,10 +10,13 @@ Cette APi fonctionne avec une authentification basique.
 ## Prérequis :
 - Abonnement Volvooncall actif
 
+## Prérequis
+* Abonnement Volvooncall actif
+
 Testé avec VOLVO :
-- XC40 Hybride
-- XC40 Essence
-- XC60 Diesel
+* XC40 Hybride
+* XC40 Essence
+* XC60 Diesel
 
 ## Documentation
 [Documentation](/docs/fr_FR/documentation.md)

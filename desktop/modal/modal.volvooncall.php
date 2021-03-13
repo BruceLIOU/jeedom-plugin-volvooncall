@@ -19,6 +19,7 @@
 if (!isConnect('admin')) {
     throw new Exception('{{401 - Accès non autorisé}}');
 }
+echo 'Hello Word';
 ?>
 
 Exemple de modale

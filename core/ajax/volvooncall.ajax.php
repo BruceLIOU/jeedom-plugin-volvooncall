@@ -35,7 +35,7 @@ function get_car_trips_gps($vin, $ts_start, $ts_end)
   // Lecture des trajets
   // -------------------
   // ouverture du fichier de log: trajets
-  $fn_car = dirname(__FILE__).CARS_FILES_DIR.$vin.'/trips.json';
+  $fn_car = dirname(__FILE__).CARS_FILES_DIR.$vin.'/trips.log';
   $fcar = fopen($fn_car, "r");
 
   // lecture des donnees
@@ -75,7 +75,7 @@ function get_car_trips_gps($vin, $ts_start, $ts_end)
   if ($fcar) {
     while (($buffer = fgets($fcar, 4096)) !== false) {
       // extrait les timestamps debut et fin du trajet
-      list($pts_ts, $pts_lat, $pts_lon, $pts_alt, $pts_batt, $pts_mlg, $pts_moving) = explode(",", $buffer);
+      list($pts_ts, $pts_lat, $pts_lon, $pts_batt, $pts_fuel, $pts_mlg, $pts_moving) = explode(",", $buffer);
       $pts_tsi = intval($pts_ts);
       // selectionne les trajets selon leur date depart&arrive
       if (($pts_tsi>=$first_ts) && ($pts_tsi<=$last_ts)) {
@@ -99,28 +99,29 @@ function get_car_trips_gps($vin, $ts_start, $ts_end)
 // ===========================================================
 function get_car_infos($vin)
 {
-  $session_volvooncall = new vocapi();
-  $session_volvooncall->login(config::byKey('VocUsername', 'volvooncall'), config::byKey('VocPassword', 'volvooncall'));
-  $login_ctr = $session_volvooncall->getAccount();   // Authentification
-  $info = [];
-  if ($login_ctr) {
-    // Recuperation de l'info type du vehicule
-    // $eqLogic = eqLogic::byLogicalId($vin,'peugeotcars');
-    // if (is_object($eqLogic)) {
-      // $cmd = $eqLogic->getCmd(null, "veh_type");
-      // if (is_object($cmd)) {
-        // $veh_type = $cmd->execCmd();
-      // }
-    // }
+  $session_volvooncall = new volvooncall_api();
+  $login = $session_volvooncall->login($this->getConfiguration('VocUsername'), $this->getConfiguration('VocPassword'));
 
+  $info = [];
+  if ($login) {
     // Section caractéristiques véhicule
     $vin = $session_volvooncall->getVin();
-    $ret = $session_volvooncall->getAttributes($vin);
-    if ($ret) {
-      log::add('volvooncall','debug','get_car_infos:success='.$ret);
-      $info["vin"] = $vin;
-      $info["short_label"] = $ret["vehicleType"];
-      $info["veh_type"] = $ret['fuelType'];
+    $retA = $session_volvooncall->getAttributes($vin);
+    $retS = $session_volvooncall->getStatus($vin);
+
+    if ($retA && $retS) {
+      log::add('volvooncall','debug','get_car_infos:success='.$retA);
+      $info["vin"]                    = $vin;
+      $info["vehicleType"]            = $retA["vehicleType"];
+      $info["fuelType"]               = $retA['fuelType'];
+      $info["modelYear"]              = $retA['modelYear'];
+      $info["fuelTankVolume"]         = $retA['fuelTankVolume'];
+      $info["registrationNumber"]     = $retA['registrationNumber'];
+
+      $info["averageSpeed"]           = $retS['averageSpeed'];
+      $info["averageFuelConsumption"] = $retS['averageFuelConsumption']/10;
+      $info["tripMeter1"]             = $retS['tripMeter1']/1000;
+      $info["tripMeter2"]             = $retS['tripMeter2']/1000;
     }
     else {
       log::add('volvooncall','error',"get_car_infos:Erreur d'accès à l'API pour informations sur le véhicule");
@@ -129,9 +130,6 @@ function get_car_infos($vin)
   else {
     log::add('volvooncall','error',"get_car_infos:Erreur login API pour informations sur le véhicule");
   }
-  
-  // Section version logiciels
-  //log::add('volvooncall','debug','get_car_infos:liste_logiciel='.$liste_logiciel);
 
   return $info;
 }

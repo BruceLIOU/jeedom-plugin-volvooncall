@@ -8,16 +8,15 @@
 	</div>
 	<script>
 		jeedom.cmd.update['#id#'] = function(_options){
-          if (_options.display_value == 0) {
+          if (_options.display_value <= 0) {
             $('.cmd[data-cmd_id=#id#] .state').hide();
           }
           else {   
-            let time = new Date ();
-            let duree = _options.display_value;
-            let heure = moment(time, 'HH:mm').add(duree, 'm').format('HH:mm');
+            let duree = '#state#';
+            let time = moment().add(duree, 'm').format('HH:mm');
 
             $('.cmd[data-cmd_id=#id#] .state').show();
-            $('.cmd[data-cmd_id=#id#] .state').append('<span style="color:black; font-size: 24px;">'+ heure +'</span>');
+            $('.cmd[data-cmd_id=#id#] .state').append('<span style="color:black; font-size: 24px;">'+ time +'</span>');
           }
 		
           $('.cmd[data-cmd_id=#id#]').attr('title','{{Date de valeur}} : '+_options.valueDate+'<br/>{{Date de collecte}} : '+_options.collectDate)

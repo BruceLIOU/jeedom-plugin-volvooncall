@@ -71,3 +71,20 @@
 .content_volcooncall tr.selected {
     opacity: 0.7;
 }
+.table-trip #TripDetailTable th{
+    padding: 8px;
+    border: 1px solid black;
+    text-align: center;
+    background-color: white;
+    color: black;
+    
+}
+.table-trip #TripDetailTable td{
+    padding: 8px;
+    border: 1px solid white;
+    text-align: center;
+    color: white
+}
+.ui-dialog-titlebar-close {
+    visibility: hidden;
+}

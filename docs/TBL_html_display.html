@@ -588,16 +588,84 @@
                             endGpsLon = tripEndLongitude;
                             
 
-                            planes = [
-                            ["Départ", tripStartLatitude, tripStartLongitude],
-                            ["Arrivée", tripEndLatitude, tripEndLongitude]
-                            ];
-
+                            var infoTrip = '<table id="TripDetailTable">';
+                            infoTrip += '    <thead>';
+                            infoTrip += '        <tr>';
+                            infoTrip += '           <th>ID</th>';
+                            infoTrip += '           <th>Date/Heure</th>';
+                            infoTrip += '           <th>Durée</th>';
+                            infoTrip += '           <th>Distance</th>';
+                            infoTrip += '           <th>Vitesse moyenne</th>';
+                            infoTrip += '           <th>Consommation moyenne (carburant)</th>';
+                            infoTrip += '           <th>Consommation moyenne (électrique)</th>';
+                            infoTrip += '           <th>Régénration moyenne (électrique)</th>';
+                            infoTrip += '           <th>GPS Lat. départ</th>';
+                            infoTrip += '           <th>GPS Lon. départ</th>';
+                            infoTrip += '           <th>GPS Lat. arrivée</th>';
+                            infoTrip += '           <th>GPS Lon. arrivée</th>';
+                            infoTrip += '        </tr>';
+                            infoTrip += '    </thead>';
+                            infoTrip += '    <tbody>';
+                            infoTrip += '        <tr>';
+                            infoTrip += '            <td>'+tripId+'</td>';
+                            infoTrip += '            <td>'+date_heure_str_start+'</td>';
+                            infoTrip += '            <td>'+duree_str+'</td>';
+                            infoTrip += '            <td>'+(distance/1000).toFixed(1)+" km"+'</td>';
+                            infoTrip += '            <td>'+tripVitesse+" km/h"+'</td>';
+                            infoTrip += '            <td>'+(tripFuelConsumption/1000).toFixed(2)+" l"+'</td>';
+                            infoTrip += '            <td>'+(tripElectricalConsumption/1000).toFixed(2)+" kWh"+'</td>';
+                            infoTrip += '            <td>'+(tripElectricalRegeneration/1000).toFixed(2)+" kWh"+'</td>';
+                            infoTrip += '            <td>'+startGpsLat+'</td>';
+                            infoTrip += '            <td>'+startGpsLon+'</td>';
+                            infoTrip += '            <td>'+endGpsLat+'</td>';
+                            infoTrip += '            <td>'+endGpsLon+'</td>';
+                            infoTrip += '        </tr>';
+                            infoTrip += '    </tbody>';
+                            infoTrip += '</table>';
+                            
                             var actions = [];
+
                             actions = [
-                            ["<a href='#' id='show_"+tripId+"'><span class='iconSel' ><i class='icon mdi-loupe'></i></span></a><a href='#' id='export_"+tripId+"'><span class='iconSel'><i class='icon mdi-file-export-outline'></i></span></a>"]
+                            ["<a id='show_"+tripId+"'><span class='iconSel' ><i class='icon mdi-loupe'></i></span></a><a id='export_"+tripId+"'><span class='iconSel'><i class='icon mdi-file-export-outline'></i></span></a>"]
                             ];
 
+                            var titleTrip = "Détail du trajet N°"+tripId;
+                            var linkTrip = '#show_'+tripId;
+
+                            function afficherPopupInformation(message) {
+                                $('body').append("<div class='table-trip' id='md_modaltrip' title='"+titleTrip+"'></div>");
+                                $("#md_modaltrip").html(infoTrip);
+
+                                var modaltrip = $("#md_modaltrip").dialog({
+                                    autoOpen: true,
+                                    width: 'auto',
+                                    buttons: [
+                                        {
+                                            text: "Fermer",
+                                            "class": 'ui-state-information',
+                                            click: function () {
+                                                $(this).dialog("close");
+                                                $('#md_modaltrip').remove();
+                                            }
+                                        }
+                                    ]
+                                });
+
+                                //$("#md_modaltrip").prev().addClass('ui-state-information');
+
+                                return modaltrip;
+                            }
+                            /*
+                            $(function() {
+                                // comportement du bouton devant ouvrir la boîte de dialogue
+                                $(linkTrip).click(function(event) {
+                                    event.preventDefault();
+                                    afficherPopupInformation(infoTrip);
+                                });
+                            });
+                            */
+
+                            
 
                             //alert(planesGPS);
 
@@ -804,6 +872,8 @@
                                 columns: columnsData
                             } );
 
+                            //$('#TripDetailTable').DataTable();
+
                             function addMarker(code,lat,lng){
                                 var p = L.marker([lat,lng]);
                                 p.bindPopup(code);
@@ -813,7 +883,7 @@
                               function removeLayer(marker){
                                 map.removeLayer(marker);
                               }
-
+                            
                             $('#trip_liste tbody').on('click', 'tr', function () {
                                 var line = table_trips.row(this).index();
                                 //alert( 'You clicked on line:'+line);
@@ -827,17 +897,10 @@
                                   
 
                                   map.removeLayer(markerHome);
-
-
                                   map.removeLayer(markerStart);
                                   map.removeLayer(markerEnd);
 
-                                  /*for (i=0;i<markerStart.length;i++) {
-                                    map.removeLayer(markerStart[i]);
-                                  }
-                                  for (i=0;i<markerEnd.length;i++) {
-                                    map.removeLayer(markerEnd[i]);
-                                  }*/
+
                                 }
                                 else {
                                     table_trips.$('tr.selected').removeClass('selected');
@@ -848,6 +911,7 @@
 
                                     
                                     if (fuelType == "Diesel" || fuelType == "Essence") {
+                                        
                                         markerStart = new L.marker([data[6],data[7]])
                                         .bindPopup("Départ")
                                         .addTo(map);
@@ -864,7 +928,7 @@
                                         .addTo(map);
                                     }
                                     else if (fuelType == "HEV") {
-                                        markerStart = new L.marker([data[8],data[9]])
+                                         markerStart = new L.marker([data[8],data[9]])
                                         .bindPopup("Départ")
                                         .addTo(map);
                                         markerEnd = new L.marker([data[10],data[11]])
@@ -874,15 +938,12 @@
 
 
 
-                                    map.panTo(markerStart.getLatLng());
+                                    map.panTo(markerEnd.getLatLng());
                                     
-                                    /*for (var i = 0; i < planes.length; i++) {
-                                        marker = new L.marker([planes[i][1],planes[i][2]])
-                                            .bindPopup(planes[i][0])
-                                            .addTo(map);
-                                    }*/
+
                                 }
-                              } );
+                            });
+                              
                               
 
                     });

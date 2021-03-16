@@ -5,7 +5,7 @@
 	"licence" : "AGPL",
 	"author" : "Bruce LIOU",
 	"require" : "4.0",
-	"language": "fr_FR",
+	"language": ["fr_FR"],
 	"category" : "devicecommunication",
 	"display" : "panel",
 	"hasDependency" : false,

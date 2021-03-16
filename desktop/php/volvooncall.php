@@ -24,7 +24,7 @@ $eqLogics = eqLogic::byType($plugin->getId());
 				<br>
 				<span>{{Configuration}}</span>
 			</div>
-			<div class="cursor eqLogicAction logoSecondary" onclick="window.open('https:\/\/bruceliou.github.io/volvooncall/docs/fr_FR/index.md', '_blank')">
+			<div class="cursor eqLogicAction logoSecondary" onclick="window.open('https:\/\/bruceliou.github.io/jeedom-plugin-volvooncall/fr_FR/index.md', '_blank')">
                 <i class="fas fa-book"></i>
                 <br>
                 <span>{{Documentation}}</span>

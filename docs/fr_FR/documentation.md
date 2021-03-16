@@ -49,7 +49,7 @@ Par source Github:
 * Remplir les champs:
   * ID logique du plugin : volvooncall
   * Utilisateur ou organisation du dépôt : BruceLIOU
-  * Nom du dépôt :  jeedom-plugin-volvooncall
+  * Nom du dépôt :  volvooncall
   * Branche : master
 * Aller dans le menu "plugins/objets connectés/Volvo On Call" de jeedom pour installer le nouveau plugin.
 

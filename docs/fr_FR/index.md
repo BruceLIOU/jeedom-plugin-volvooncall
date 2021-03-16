@@ -1,19 +1,19 @@
 # Documentation du plugin volvooncall
-<hr>
-
+---
 ## Notes importantes
---
-L'API utilisée est celle de Wirelesscar et n'a pas de documentation !
---
-VOLVO a tout d'abord opté pour ce choix pour un "clé en main" mais sont en train de développer leur propre API.<br>
-Vous pouvez la retrouver [ici](https://developer.volvocars.com/volvo-api).<br>
-Elle est assez prometteuse mais ne permet pas, pour le moment, de faire autant de chose que sa concurrente.<br>
 
-Un script python existe [ici](https://github.com/molobrakos/volvooncall) et je m'en suis largement inspiré ainsi que celui développé par Lelas pour les voitures Peugeot.<br>
+> L'API utilisée est celle de Wirelesscar et n'a pas de documentation !
+
+VOLVO a tout d'abord opté pour ce choix pour un "clé en main" mais sont en train de développer leur propre API.
+
+Vous pouvez la retrouver [ici](https://developer.volvocars.com/volvo-api).
+Elle est assez prometteuse mais ne permet pas, pour le moment, de faire autant de chose que sa concurrente.
+
+Un script python existe [ici](https://github.com/molobrakos/volvooncall) et je m'en suis largement inspiré ainsi que le plugin développé par Lelas pour les voitures Peugeot.<br>
 Merci à eux !
-<hr>
+---
+## Prérequis
 
-## Prérequis :
 - Abonnement Volvooncall actif
 
 ## Fonctions
@@ -43,7 +43,7 @@ Les informations disponibles dans les widgets sont:
 
 ## Installation
 Par le market:
->La version stable est en cours de validation par l'équipe Jeedom
+> La version stable est en cours de validation par l'équipe Jeedom
 * Cliquer sur le bouton "Installer beta"
 
 Par source Github:

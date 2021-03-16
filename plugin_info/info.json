@@ -1,0 +1,16 @@
+{
+	"id" : "volvooncall",
+	"name" : "Volvo On Call",
+	"description" : "Plugin permettent de récupéer les fonctionnalités de Volvo On Call",
+	"licence" : "AGPL",
+	"author" : "Bruce LIOU",
+	"require" : "4.0",
+	"language": "fr_FR",
+	"category" : "devicecommunication",
+	"display" : "panel",
+	"hasDependency" : false,
+	"hasOwnDeamon" : false,
+	"compatibility" : ["v4"],
+	"documentation" : "https://bruceliou.github.io/volvooncall/docs/#language#/documentation.md",
+	"changelog" : "https://bruceliou.github.io/volvooncall/docs/#language#/changelog.md"
+}

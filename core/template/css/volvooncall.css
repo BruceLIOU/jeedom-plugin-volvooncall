@@ -1,0 +1,90 @@
+.container_volvooncall{
+    position:relative;
+    width:auto;
+}
+.container_volvooncall a{
+    color: white !important;
+}
+.content_volcooncall {
+    background-color: #337ab7 !important;
+    padding: 8px;
+    color:#fff;
+}
+.content_volcooncall, h1, h2, h3, h4{
+    color:#fff;
+}
+.content_volcooncall .nav > li > a {
+    color: white !important;
+    background-color: cadetblue;
+}
+.content_volcooncall .nav-pills > li.active > a, .content_volcooncall .nav-pills > li.active > a:focus, .content_volcooncall .nav-pills > li.active > a:hover {
+    color: #fff;
+    background-color: #337ab7;
+    border-bottom: 1px solid white;
+}
+.content_volcooncall hr {
+    border: 1px solid white;
+}
+
+#car_cmd_tab .row {
+    text-align: center;
+}
+#car_cmd_tab .row i{
+    font-size: 45px;
+    cursor:pointer;
+}
+#car_cmd_tab .row i:hover{
+    color:dimgrey;
+}
+.content_volcooncall select, .content_volcooncall label, .content_volcooncall #trip_liste_info, .content_volcooncall #trip_liste_previous, .content_volcooncall #trip_liste_next{
+  color: white!important;
+}
+.content_volcooncall #trip_liste_paginate{
+    font-size:14px;
+    float: left;
+}
+.content_volcooncall .leaflet-control > a{
+    color: grey!important;
+}
+.content_volcooncall .iconSel i{
+    font-size:34px;
+}
+.content_volcooncall #table_resum th{
+    text-align: center;
+}
+.content_volcooncall th{
+    padding-left: 4px!important;
+}
+#car_stat_tab th, #car_stat_tab tr{
+    text-align: center;
+}
+.content_volcooncall table#trip_liste tr.odd > .sorting_1{
+    background-color: #232324;
+}
+.content_volcooncall table#trip_liste tr.even > .sorting_1{
+    background-color: #191919;
+}
+.content_volcooncall .dataTables_scrollBody .iconSel i{
+    font-size:14px;
+    margin-left:10px
+}
+.content_volcooncall tr.selected {
+    opacity: 0.7;
+}
+.table-trip #TripDetailTable th{
+    padding: 8px;
+    border: 1px solid black;
+    text-align: center;
+    background-color: white;
+    color: black;
+    
+}
+.table-trip #TripDetailTable td{
+    padding: 8px;
+    border: 1px solid white;
+    text-align: center;
+    color: white
+}
+.ui-dialog-titlebar-close {
+    visibility: hidden;
+}

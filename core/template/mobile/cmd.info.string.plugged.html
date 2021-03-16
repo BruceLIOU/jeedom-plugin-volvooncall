@@ -1,0 +1,21 @@
+<div style="width:80px;min-height:80px;" class="cmd #history# tooltips cmd-widget" data-type="info" data-subtype="numeric" data-cmd_id="#id#" data-cmd_uid="#uid#" title="Valeur du #valueDate#, collectée le #collectDate#">
+    <center>
+      <div class="title #hide_name#">
+        <span class='cmdName' style="font-weight: bold;font-size : 12px;">#name_display#</span>
+      </div>
+        <span style="font-size: 5.0em; margin-top: 6px; display: block;" class="iconCmd#uid#"></span>
+        
+    </center>
+    <script>
+        $('.iconCmd#uid#').empty();
+        if ('#state#' == 'CablePluggedInCar_Charging') {
+            $('.iconCmd#uid#').append('<i class="icon_green icon jeedomapp-prise"></i><span id="plugged" style="padding-top:4px; display:block; font-size: 12px;">Connectée</span>');
+        }
+        else if ('#state#' == 'CablePluggedInCar_FullyCharged'){
+            $('.iconCmd#uid#').append('<i class="icon_green icon jeedomapp-prise"></i><span id="plugged_charged" style="padding-top:4px;display:block; font-size: 12px;">Connectée</span>');
+        }
+        else {
+            $('.iconCmd#uid#').append('<i class="icon_red icon jeedomapp-prise-off2"></i><span id="unplugged" style="padding-top:4px;display:block; font-size: 12px;">Pas connectée</span>');
+        }
+    </script>
+</div>

@@ -1,0 +1,17 @@
+<div style="width:80px;min-height:80px;" class="cmd #history# tooltips cmd-widget" data-type="info" data-subtype="numeric" data-cmd_id="#id#" data-cmd_uid="#uid#" title="Valeur du #valueDate#, collectée le #collectDate#">
+  <center>
+    <div class="title #hide_name#">
+      <span class='cmdName' style="font-weight: bold;font-size : 12px;">#name_display#</span>
+    </div>
+      <span style="font-size: 3.0em; margin-top: 6px; display: block;" class="iconCmd#uid#"></span>
+      
+  </center>
+  <script>
+      $('.iconCmd#uid#').empty();
+      if ('#state#' == 'Normal') {
+          $('.iconCmd#uid#').append('<i class="icon_green fas fa-check"></i>');
+      } else{
+          $('.iconCmd#uid#').append('<i class="icon_red icon fas fa-times"></i>');
+      }
+  </script>
+</div>

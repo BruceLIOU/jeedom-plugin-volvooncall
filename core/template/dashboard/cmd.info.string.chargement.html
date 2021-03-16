@@ -1,0 +1,41 @@
+<div class="cmd cmd-widget #history#" data-type="info" data-subtype="numeric" data-template="tile" data-cmd_id="#id#" data-cmd_uid="#uid#" data-version="#version#" data-eqLogic_id="#eqLogic_id#">
+	<div class="title #hide_name#">
+		<div  class="cmdName">#name_display#</div>
+	</div>
+	<div class="content-sm">
+		<span class="pull-right state"></span>
+	</div>
+	<script>
+		jeedom.cmd.update['#id#'] = function(_options){
+
+          if (_options.display_value == "ChargeEnd") {
+
+              $('.cmd[data-cmd_id=#id#] .state').empty().append('<span id="chargeEnd" style="color:green;">Véhicule chargé</span>');
+          }
+          else if (_options.display_value == "PlugRemoved") {
+
+            $('.cmd[data-cmd_id=#id#] .state').empty().append('<span id="unPlugged" style="color:red;">Véhicule non branché</span>');
+          }
+          else if (_options.display_value == "Interrupted") {
+
+            $('.cmd[data-cmd_id=#id#] .state').empty().append('<span id="interrupted" style="color:red;">Charge interrompue</span>');
+          }
+          else {
+              $('.cmd[data-cmd_id=#id#] .state').empty().append('<span id="chargeInProgress" style="color:red;">Véhicule en charge</span>');
+            (function blink() {
+              $('.cmd[data-cmd_id=#id#] .state').fadeOut(500).fadeIn(500, blink);
+            })();
+          }
+		
+          $('.cmd[data-cmd_id=#id#]').attr('title','{{Date de valeur}} : '+_options.valueDate+'<br/>{{Date de collecte}} : '+_options.collectDate)
+
+          //hide end time charging if full or unplugged
+          // change data-line id with your
+          if ( !$('#chargeInProgress').length ) {
+            $('.tableCmdcss[data-line="4"] center').empty();
+            $('.tableCmdcss[data-line="4"]').css('height', '80px');
+          }
+        }
+		jeedom.cmd.update['#id#']({display_value:'#state#',valueDate:'#valueDate#',collectDate:'#collectDate#',alertLevel:'#alertLevel#'});
+	</script>
+</div>

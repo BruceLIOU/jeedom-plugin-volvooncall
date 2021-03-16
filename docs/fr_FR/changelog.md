@@ -21,12 +21,12 @@
  - Fix template widget
  - Fix HTML display
 
- # 10/03/2021
+# 10/03/2021
  - Intégration des trajets (HTML display)
  - Fix panel
  - CSS
 
-  # 13/03/2021
+# 13/03/2021
  - Commandes selon le type de véhicule et les attributs supportés
  - Ajout widget pour la "distance de la maison"
  - CSS

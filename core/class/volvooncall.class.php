@@ -83,9 +83,9 @@ class volvooncall extends eqLogic
     log::add('volvooncall', 'debug', 'Mise à jour périodique');
     foreach (self::byType('volvooncall') as $eqLogic) {
       $eqLogic->updateData();
-      $eqLogic->record_pts_gps();
+      //$eqLogic->record_pts_gps();
     }
-    $eqLogic->trips();
+    //$eqLogic->trips();
   }
 
   // Fonction exécutée automatiquement après la suppression de l'équipement 
@@ -1234,9 +1234,9 @@ class volvooncallCmd extends cmd
       log::add('volvooncall', 'info', "Refresh data");
       foreach (eqLogic::byType('volvooncall') as $eqLogic) {
         $eqLogic->updateData();
-        $eqLogic->record_pts_gps();
+        //$eqLogic->record_pts_gps();
       }
-      $eqLogic->trips();
+      //$eqLogic->trips();
     }
   }
 

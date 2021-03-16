@@ -11,6 +11,6 @@
 	"hasDependency" : false,
 	"hasOwnDeamon" : false,
 	"compatibility" : ["rpi","v4"],
-	"documentation" : "https://bruceliou.github.io/jeedom-plugin-volvooncall/#language#/documentation.html",
+	"documentation" : "https://bruceliou.github.io/jeedom-plugin-volvooncall/#language#/index.html",
 	"changelog" : "https://bruceliou.github.io/jeedom-plugin-volvooncall/#language#/changelog.html"
 }

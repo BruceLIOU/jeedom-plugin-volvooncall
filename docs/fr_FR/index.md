@@ -42,6 +42,10 @@ Les informations disponibles dans les widgets sont:
 </p>
 
 ## Installation
+Par le market:
+>La version stable est en cours de validation par l'équipe Jeedom
+* Cliquer sur le bouton "Installer beta"
+
 Par source Github:
 * Aller dans Jeedom menu Plugins / Gestion des plugins
 * Sélectionner le symbole + (Ajouter un plugin)
@@ -58,8 +62,9 @@ Sur la page configuration du plugin, saisir vos identifiants de compte Volvo On 
 
 ## Configuration
 Une fois l'installation effectuée:<br>
-Sur l'onglet "**Equipement**", choisissez l'objet parent et rendez le actif et visible.<br>
-Renseigner vos identifiants Volvo On Call ainsi que votre région (Europe par défaut)*.<br>
+* Cliquer sur "Ajouter"
+* Sur l'onglet "**Equipement**", choisissez l'objet parent et rendez le actif et visible.<br>
+* Renseigner vos identifiants Volvo On Call ainsi que votre région (Europe par défaut)*.<br>
 *Fonction en cours de développement
 <p align="left">
   <img src="../images/config_equipement.png" width="700" title="Configuration équipement">

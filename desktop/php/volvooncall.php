@@ -24,7 +24,7 @@ $eqLogics = eqLogic::byType($plugin->getId());
 				<br>
 				<span>{{Configuration}}</span>
 			</div>
-			<div class="cursor eqLogicAction logoSecondary" onclick="window.open('https:\/\/bruceliou.github.io/volvooncall/docs/fr_FR/documentation.md', '_blank')">
+			<div class="cursor eqLogicAction logoSecondary" onclick="window.open('https:\/\/bruceliou.github.io/volvooncall/docs/fr_FR/index.md', '_blank')">
                 <i class="fas fa-book"></i>
                 <br>
                 <span>{{Documentation}}</span>
@@ -69,7 +69,7 @@ $eqLogics = eqLogic::byType($plugin->getId());
 		<!-- Onglets -->
 		<ul class="nav nav-tabs" role="tablist">
 			<li role="presentation"><a href="#" class="eqLogicAction" aria-controls="home" role="tab" data-toggle="tab" data-action="returnToThumbnailDisplay"><i class="fas fa-arrow-circle-left"></i></a></li>
-			<li role="presentation" class="active"><a href="#eqlogictab" aria-controls="home" role="tab" data-toggle="tab"><i class="fas fa-tachometer-alt"></i><span class="hidden-xs"> {{Équipement}}</span></a></li>
+			<li role="presentation" class="active"><a href="#eqlogictab" aria-controls="home" role="tab" data-toggle="tab"><i class="fas fa-tachometer-alt"></i><span class="hidden-xs"> {{Voiture}}</span></a></li>
 			<li role="presentation"><a href="#commandtab" aria-controls="home" role="tab" data-toggle="tab"><i class="fas fa-list"></i><span class="hidden-xs"> {{Commandes}}</span></a></li>
 		</ul>
 		<div class="tab-content">

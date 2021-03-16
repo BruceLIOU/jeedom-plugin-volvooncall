@@ -19,6 +19,6 @@ Testé avec VOLVO :
 * XC60 Diesel
 
 ## Documentation
-[Documentation](/docs/fr_FR/documentation.md)
+[Documentation](/docs/fr_FR/index.md)
 ## Changelog
 [Changelog](/docs/fr_FR/changelog.md)
